@@ -10,12 +10,12 @@
     "firebase": "^9.17.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
+
     "react-loader-spinner": "^5.3.4",
-=======
+
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
->>>>>>> 571bde8765525911db68d4e801fdc82ae437828a
+
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"

@@ -25,9 +25,9 @@ const VideoDetails = ({ video }) => {
       </div>
       <div className="">
         {/*  */}
-        <video className="max-h-96">
+        {/* <video className="max-h-96">
           <source src="./images/vid.mp4" />
-        </video>
+        </video> */}
       </div>
     </div>
   );
