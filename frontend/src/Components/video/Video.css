@@ -1,0 +1,26 @@
+.thumbnail-img {
+  object-fit: cover;
+  border-radius: 4px;
+  height: 200px;
+  width: 400px;
+}
+
+.infos {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+
+.infos .authorImage img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.infos .video-infos ul .title {
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  font-size: 15px;
+}
