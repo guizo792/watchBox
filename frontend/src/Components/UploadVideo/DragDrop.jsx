@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
+import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
+import { useSelector, useDispatch } from "react-redux";
 
 // firebase imports
 import {
@@ -11,29 +13,50 @@ import {
 } from "firebase/storage";
 
 import { database } from "../../Config/firebaseConfig";
+import {
+  savVideoDetails,
+  setUploaded,
+  setUploadingProgress,
+  setVideoUploading,
+} from "../../store/video/video.action";
 
 const DragDrop = () => {
+  const videoToUpload = useSelector((state) => state.videoToUploadDetails);
+
+  // local state to store file and loading state
   const [loading, setLoading] = useState(false);
-  const [videoName, setVideoName] = useState("");
-  const [videoURL, setVideoURL] = useState(null);
+  const [video, setVideo] = useState("");
+
+  const dispatch = useDispatch();
 
   const handelChange = (e) => {
     //
     const fileToUpload = e.target.files[0];
     setLoading((prevLoading) => !loading);
-    setVideoName(fileToUpload.name);
+    setVideo(fileToUpload);
+    dispatch(
+      savVideoDetails({
+        videoName: fileToUpload.name,
+      })
+    );
+  };
+
+  const handelSumbit = () => {
+    //
+    dispatch(setVideoUploading());
 
     const databaseRef = ref(
       database,
-      "videos/" + `${Date.now()}-${fileToUpload.name}`
+      "videos/" + `${Date.now()}-${videoToUpload.videoName}`
     );
 
-    const uploadTask = uploadBytesResumable(databaseRef, fileToUpload);
+    const uploadTask = uploadBytesResumable(databaseRef, video);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
         const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        dispatch(setUploadingProgress(progress * 100));
       },
       (error) => {
         console.log(error);
@@ -41,42 +64,34 @@ const DragDrop = () => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           //
-          setVideoURL(downloadURL);
-          console.log(downloadURL);
+          dispatch(
+            savVideoDetails({
+              videoURL: downloadURL,
+            })
+          );
+          dispatch(setUploaded(true));
         });
       }
     );
   };
 
   return (
-    <div class="max-w-xl mx-auto mt-12">
-      <label class="relative flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-800 focus:outline-none ">
+    <div className="max-w-xl mx-auto mt-12">
+      <label className="relative flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-800 focus:outline-none overflow-hidden">
         {!loading && (
           <>
-            <span class="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6 text-gray-800"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                />
-              </svg>
-              <span class="font-medium text-gray-600">
+            <span className="flex items-center space-x-2">
+              <UploadIcon />
+              <span className="font-medium text-gray-600">
                 Drop files to Attach, or
-                <span class="text-blue-600 underline">browse</span>
+                <span className="text-blue-600 underline">browse</span>
               </span>
             </span>
             <input
               type="file"
               name="file_upload"
-              class="hidden"
+              className="hidden"
+              accept="video/*"
               onChange={(e) => handelChange(e)}
             />
           </>
@@ -91,18 +106,37 @@ const DragDrop = () => {
             wrapperStyle={{ margin: "auto 0" }}
             visible={loading}
           />
-          {videoName && (
+          {video.name && (
             <span className="absolute top-0">
               <p
                 className="text-lg font-medium text-gray-800
              tracking-wider"
               >
-                {videoName}
+                {video.name}
               </p>
             </span>
           )}
         </span>
       </label>
+      <div className="mt-4 ">
+        {!videoToUpload.isUploading ? (
+          <button
+            className="block bg-green-600 w-20 col-span-1 rounded shadow-2xl text-sm font-semibold text-white transition duration-500 ease-in-out py-2 hover:shadow-2xl"
+            onClick={handelSumbit}
+          >
+            Upload file
+          </button>
+        ) : (
+          <div className="w-full bg-gray-200 rounded-full dark:bg-gray-800 mt-2">
+            <div
+              className="bg-main text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition ease-in-out duration-500 "
+              style={{ width: videoToUpload.progressUploading }}
+            >
+              {videoToUpload.progressUploading}
+            </div>
+          </div>
+        )}
+      </div>
       <div className="mt-8">
         <img
           src="./images/uploadAn.gif"
