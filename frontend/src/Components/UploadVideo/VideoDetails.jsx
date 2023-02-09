@@ -1,22 +1,25 @@
 import React, { useRef, useState } from "react";
-
 import { ReactComponent as Shape } from "../../assets/shape1.svg";
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 import { GrFormClose } from "react-icons/gr";
 import Fade from "react-reveal/Fade";
 
+//firebase imports
+
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+
+import { database } from "../../Config/firebaseConfig";
+
 // redux imports
 import { useSelector, useDispatch } from "react-redux";
-
-const initialState = {
-  tags: [],
-};
+import { savVideoDetails } from "../../store/video/video.action";
+import { ThreeDots } from "react-loader-spinner";
 
 const VideoDetails = ({ video }) => {
   // video to upload state
   const videoToUpload = useSelector((state) => state.videoToUploadDetails);
-
-  console.log(videoToUpload.videoDetails);
+  const [tags, setTags] = useState([]);
+  const dispatch = useDispatch();
 
   //
   const tagRef = useRef();
@@ -25,13 +28,26 @@ const VideoDetails = ({ video }) => {
     const tagValue = tagRef.current?.value;
     if (tagValue !== "") {
       tagRef.current.value = "";
-      // setVideoDetails((prevDetails) => {
-      //   return {
-      //     ...prevDetails,
-      //     tags: [...prevDetails.tags, tagValue],
-      //   };
-      // });
+      setTags((prevTags) => [...prevTags, tagValue]);
+      dispatch(
+        savVideoDetails({
+          tags: [...tags, tagValue],
+        })
+      );
     }
+  };
+
+  //
+  const handelChange = (e, isSelect) => {
+    //
+
+    dispatch(
+      savVideoDetails({
+        [e.target.name]: e.target.value,
+      })
+    );
+
+    console.log(videoToUpload.videoDetails);
   };
 
   return (
@@ -55,6 +71,7 @@ const VideoDetails = ({ video }) => {
               name="title"
               type="text"
               placeholder="Title"
+              onChange={(e) => handelChange(e, false)}
             />
           </div>
           <div className="mb-4">
@@ -68,6 +85,7 @@ const VideoDetails = ({ video }) => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="description"
               name="description"
+              onChange={(e) => handelChange(e, false)}
               type="text"
               placeholder="video description"
             />
@@ -83,6 +101,7 @@ const VideoDetails = ({ video }) => {
               className="shadow  border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="status"
               name="status"
+              onChange={(e) => handelChange(e, true)}
             >
               <option selected disabled>
                 choose video status
@@ -116,34 +135,23 @@ const VideoDetails = ({ video }) => {
               </button>
             </div>
             <div className=" flex mt-4 gap-4 flex-wrap px-8 justify-center">
-              {videoToUpload.videoDetails.videoTags?.map((tag, index) => {
+              {tags?.map((tag, index) => {
                 return (
                   <Fade top>
-                    <Tag title={tag} key={index} index={index} />
+                    <Tag
+                      title={tag}
+                      key={index}
+                      index={index}
+                      setTags={setTags}
+                      tags={tags}
+                    />
                   </Fade>
                 );
               })}
             </div>
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="thumbline"
-            >
-              Video thumbline
-            </label>
-            <div className="grid grid-cols-4 gap-8 items-center">
-              <div className="flex items-center justify-center col-span-3">
-                <InputImage />
-              </div>
-              <button
-                type="button"
-                className="bg-green-400 w-30 h-10 col-span-1 rounded shadow-2xl text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-600"
-              >
-                upload photo
-              </button>
-            </div>
-          </div>
+
+          <InputImage />
 
           {/* btn submit  */}
           <button className="mt-5 bg-main px-4 py-2 col-span-1 rounded shadow-md text-sm font-semibold text-white transition duration-500 ease-in-out hover:scale-110 hover:shadow-2xl">
@@ -169,14 +177,19 @@ const VideoDetails = ({ video }) => {
 };
 
 // define tag componenet
-const Tag = ({ title, setVideoDetails, index }) => {
+const Tag = ({ title, index, setTags, tags }) => {
+  const dispatch = useDispatch();
+
+  //
   const deleteTag = () => {
-    setVideoDetails((prevDetails) => {
-      return {
-        ...prevDetails,
-        tags: prevDetails.tags.filter((tag, position) => index !== position),
-      };
+    setTags((prevTags) => {
+      return prevTags.filter((tag, position) => index !== position);
     });
+    dispatch(
+      savVideoDetails({
+        tags: tags,
+      })
+    );
   };
   return (
     <div className="px-1 rounded-lg text-xs font-semibold shadow-md text-white bg-gray-800 flex gap-2 items-center py-1">
@@ -192,25 +205,114 @@ const Tag = ({ title, setVideoDetails, index }) => {
 };
 
 const InputImage = () => {
+  const videoToUpload = useSelector((state) => state.videoToUploadDetails);
+  const [loading, setLoading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+
+  //
+  const dispatch = useDispatch();
+
+  //
+  const imageRef = useRef();
+  const handelChange = (e) => {
+    //
+    setLoading(true);
+  };
+
+  const handelUpload = () => {
+    const databaseRef = ref(
+      database,
+      "images/" + `${Date.now()}-${imageRef.current?.files[0].name}`
+    );
+
+    const uploadTask = uploadBytesResumable(
+      databaseRef,
+      imageRef.current?.files[0]
+    );
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          //
+
+          setUploaded(true);
+          dispatch(
+            savVideoDetails({
+              videoThumbline: downloadURL,
+            })
+          );
+        });
+      }
+    );
+  };
+
   return (
-    <label
-      for="thmblineImage"
-      className="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer  dark:border-gray-600 shadow appearance-none py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-    >
-      <div className="flex flex-col items-center justify-center ">
-        <UploadIcon style={{ width: "35px", height: "35px" }} />
-        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-          <span className="font-semibold">Click to upload</span> or drag and
-          drop
-        </p>
+    <>
+      <div className="mb-4">
+        <label
+          className="block text-gray-800 text-sm font-semibold mb-2"
+          htmlFor="thumbline"
+        >
+          Video thumbline
+        </label>
+        <div className="grid grid-cols-4 gap-8 items-center">
+          {uploaded ? (
+            <div className="mt-4 col-span-4">
+              <img
+                src={videoToUpload.videoDetails?.videoThumbline}
+                alt=""
+                className="rounded-lg h-72"
+              />
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-center col-span-3">
+                <label
+                  for="thmblineImage"
+                  className="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer  dark:border-gray-600 shadow appearance-none py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
+                >
+                  <div className="flex flex-col items-center justify-center ">
+                    {!loading ? (
+                      <>
+                        <UploadIcon style={{ width: "35px", height: "35px" }} />
+                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                          <span className="font-semibold">Click to upload</span>{" "}
+                          or drag and drop
+                        </p>
+                      </>
+                    ) : (
+                      <ThreeDots />
+                    )}
+                  </div>
+                  <input
+                    id="thmblineImage"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handelChange(e)}
+                    ref={imageRef}
+                  />
+                </label>
+              </div>
+              <button
+                type="button"
+                className="bg-green-400 w-30 h-10 col-span-1 rounded shadow-2xl text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-600"
+                onClick={handelUpload}
+              >
+                upload photo
+              </button>
+            </>
+          )}
+        </div>
       </div>
-      <input
-        id="thmblineImage"
-        type="file"
-        accept="image/*"
-        className="hidden"
-      />
-    </label>
+    </>
   );
 };
 

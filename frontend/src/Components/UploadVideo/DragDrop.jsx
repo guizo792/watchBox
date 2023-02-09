@@ -4,13 +4,7 @@ import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 import { useSelector, useDispatch } from "react-redux";
 
 // firebase imports
-import {
-  getStorage,
-  ref,
-  getDownloadURL,
-  uploadBytesResumable,
-  deleteObject,
-} from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import { database } from "../../Config/firebaseConfig";
 import {
@@ -132,7 +126,7 @@ const DragDrop = () => {
               className="bg-main text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition ease-in-out duration-500 "
               style={{ width: videoToUpload.progressUploading }}
             >
-              {videoToUpload.progressUploading}
+              {videoToUpload.progressUploading.split(".")[0]}
             </div>
           </div>
         )}
