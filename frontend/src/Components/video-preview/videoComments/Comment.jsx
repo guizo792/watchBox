@@ -30,7 +30,7 @@ const Comment = ({
         <img
           src="/images/channel3.jpg"
           alt="user"
-          className="min-w-[4rem] min-h-[4rem] max-w-[4rem] max-h-[4rem] rounded-full border-[3px] border-pink-700 border-solid"
+          className="min-w-[2rem] min-h-[2rem] max-w-[2rem] max-h-[2rem] rounded-full border-[2px] border-pink-700 border-solid"
         />
       </div>
       <div className="flex flex-col gap-2">

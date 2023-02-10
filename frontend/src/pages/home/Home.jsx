@@ -59,7 +59,7 @@ export const videos = [
 const Home = () => {
   return (
     <div className="home-container">
-      <div className="sidebar-nav">
+      <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[100vh]">
         <ul className="sidebar-nav-links">
           <Link className="sidebar-nav-link">
             <Icon icon="ic:round-home" className="sidebar-nav-icon" />
@@ -80,11 +80,7 @@ const Home = () => {
       </div>
       <div className="videos-section">
         {videos.map((video) => (
-          <VideoComponent
-            video={video}
-            key={video.id}
-            to={"/video?id=2kl322kj232KLJFD"}
-          />
+          <VideoComponent video={video} key={video.id} />
         ))}
       </div>
     </div>

@@ -4,7 +4,7 @@ import "./Video.css";
 
 const VideoComponent = ({ video }) => {
   return (
-    <VideoContainer to={"/video?id=video.id|||2kl322kj232KLJFD"}>
+    <VideoContainer to={"/videos?id=video.id|||2kl322kj232KLJFD"}>
       <ThumbnailImage className="thumbnail-img">
         <img
           src={`./images/${video.thumbnailImage}`}
