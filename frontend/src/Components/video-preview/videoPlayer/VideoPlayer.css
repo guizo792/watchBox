@@ -1,0 +1,12 @@
+.video-react-big-play-button {
+  height: 80px !important;
+  width: 80px !important;
+  border-radius: 50% !important;
+}
+
+.video-react-big-play-button:before {
+  font-size: 3rem !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -30%) !important;
+}
