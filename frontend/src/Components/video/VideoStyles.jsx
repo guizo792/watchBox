@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const VideoContainer = styled.div`
+export const VideoContainer = styled(Link)`
   display: flex;
   flex-direction: column;
   padding: 0 0 20px;

@@ -3,10 +3,15 @@
   gap: 20px;
 }
 
+@media only screen and (max-width: 635px) {
+  .home-container {
+    flex-wrap: wrap;
+  }
+}
+
 .sidebar-nav {
-  height: 100vh;
+  /* height: 100vh; */
   padding: 1rem;
-  border-right: solid #44444477 1px;
   color: #1f2937;
 }
 
@@ -59,4 +64,5 @@
   justify-content: center;
   align-items: center;
   padding-top: 2rem;
+  border-left: solid #44444477 1px;
 }

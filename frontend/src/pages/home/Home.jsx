@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import "./Home.css";
 import { Link } from "react-router-dom";
 
-const videos = [
+export const videos = [
   {
     id: "1",
     title: "Learning web development",
@@ -80,7 +80,11 @@ const Home = () => {
       </div>
       <div className="videos-section">
         {videos.map((video) => (
-          <VideoComponent video={video} key={video.id} />
+          <VideoComponent
+            video={video}
+            key={video.id}
+            to={"/video?id=2kl322kj232KLJFD"}
+          />
         ))}
       </div>
     </div>
