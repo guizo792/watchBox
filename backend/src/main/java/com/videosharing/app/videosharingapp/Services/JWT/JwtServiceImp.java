@@ -5,12 +5,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
+@Service
 public class JwtServiceImp implements JwtService{
 
     @Autowired
@@ -18,13 +19,15 @@ public class JwtServiceImp implements JwtService{
 
 
     @Override
-    public String extractEmail(String jwtToken) {
-        return null;
+    public String extractUsername(String jwtToken) {
+
+        return extractClaim(jwtToken ,Claims::getSubject);
     }
 
     @Override
     public Date extractExpiration(String jwtToken) {
-        return null;
+
+        return extractClaim(jwtToken ,Claims::getExpiration);
     }
 
     @Override
@@ -61,11 +64,12 @@ public class JwtServiceImp implements JwtService{
 
     @Override
     public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
-        return false;
+        String username =extractUsername(jwtToken) ;
+        return (username.equals(userDetails.getUsername()) && !istTokenExpired(jwtToken)) ;
     }
 
     @Override
     public boolean istTokenExpired(String jwtToken) {
-        return false;
+        return extractExpiration(jwtToken).before(new Date());
     }
 }

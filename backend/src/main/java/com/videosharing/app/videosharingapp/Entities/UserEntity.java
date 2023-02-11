@@ -1,9 +1,11 @@
 package com.videosharing.app.videosharingapp.Entities;
 
+import com.videosharing.app.videosharingapp.model.Users.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -19,7 +21,13 @@ public class UserEntity {
     private String id ;
     private String firstName;
     private String lastName ;
-    private String emailAddress ;
+
+    @Indexed(unique = true)
+    private String username ;
+
+
+    private Role role ;
+
     private String password ;
     private String profilePicture;
     private Set<String> subscribedToUsers ;

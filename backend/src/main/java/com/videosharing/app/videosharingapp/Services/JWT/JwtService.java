@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public interface JwtService {
-    String extractEmail(String jwtToken) ;
+    String extractUsername(String jwtToken) ;
     Date extractExpiration(String jwtToken) ;
     Claims extractAllClaims(String jwtToken) ;
     <T> T extractClaim(String token, Function<Claims ,T> claimsResolver) ;
