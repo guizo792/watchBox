@@ -11,7 +11,7 @@ function App() {
       <Route path="/" element={<Navigation />}>
         <Route index element={<Home />} />
         <Route path="/upload-video" element={<UploadVideo />} />
-        <Route path="/video" element={<VideoPreview />} />
+        <Route path="/videos" element={<VideoPreview />} />
       </Route>
     </Routes>
   );

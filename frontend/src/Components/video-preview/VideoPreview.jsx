@@ -3,10 +3,11 @@ import Comments from "./videoComments/Comments";
 import VideoInfos from "./videoInfos/VideoInfos";
 import VideoPlayer from "./videoPlayer/VideoPlayer";
 import { ReactComponent as Verified } from "../../assets/verified.svg";
+import { Link } from "react-router-dom";
 
 const VideoPreview = () => {
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-[7%] ml-[5%] mt-10">
+    <div className="grid grid-cols-3 grid-rows-2 ml-[5%] mt-10">
       <div className="col-span-2 ">
         <div className="video-container">
           <VideoPlayer />
@@ -15,13 +16,13 @@ const VideoPreview = () => {
           <VideoInfos />
         </div>
       </div>
-      <div className="recommendations-container flex flex-col gap-5 row-span-2">
+      <div className="recommendations-container flex flex-col gap-5 row-span-2 ml-[10%]">
         <div className="text-lg font-bold tracking-wider self-start">
           Recommendations
         </div>
         <div className="flex flex-col gap-6">
           {videos.map((video) => (
-            <div>
+            <Link to={"/videos?id=8923hkfk1237"}>
               <div className="">
                 <img
                   src={`./images/${video.thumbnailImage}`}
@@ -40,7 +41,7 @@ const VideoPreview = () => {
                   <li className="text-sm">{video.views} views</li>
                 </ul>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

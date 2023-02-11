@@ -62,7 +62,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
       <h3 className="text-2xl mb-[20px]">Comments</h3>
       <div className="text-xl">Write comment</div>
       <CommentForm submitLabel="Write" handleSubmit={addComment} />
-      <div className="mt-[40px] flex flex-col gap-30">
+      <div className="mt-[40px] flex flex-col gap-6">
         {rootComments.map((rootComment) => (
           <Comment
             key={rootComment.id}
