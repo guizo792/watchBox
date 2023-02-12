@@ -16,5 +16,3 @@ export const app =
 
 // cloud storage db
 export const database = getStorage(app);
-
-console.log(process.env.REACT_APP_STORAGE_BUCKET);

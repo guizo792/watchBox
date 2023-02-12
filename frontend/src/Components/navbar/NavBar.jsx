@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 import { ReactComponent as NotificationIcon } from "../../assets/notification.svg";
+import { useSelector } from "react-redux";
 
 const NavBar = () => {
+  // menu dropdown state :
+  const [isOpen, setIsOpen] = useState(false);
+
+  // global states : application user state
+  const appUser = useSelector((state) => state.appUser);
+
   return (
     <nav className="bg-gray-800 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -116,58 +123,69 @@ const NavBar = () => {
             </button>
 
             <div className="relative ml-3">
-              <div>
-                <div
-                  role="button"
-                  className=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  id="dropdownDefaultButton"
-                  data-dropdown-toggle="dropdown"
-                >
-                  {" "}
-                  <img
-                    className="h-8 w-8 rounded-full"
-                    src="./images/user.png"
-                    alt=""
-                  />
-                </div>
-              </div>
-
-              <div
-                className="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu"
-                id="dropdown"
-                aria-labelledby="dropdownDefaultButton"
+              <button
+                className=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                data-dropdown-toggle="dropdown"
+                onClick={() => setIsOpen((prevState) => !prevState)}
               >
-                <a
-                  href="#a"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabIndex="-1"
-                  id="user-menu-item-0"
+                <img
+                  className="h-8 w-8 rounded-full"
+                  src="./images/user.png"
+                  alt="profile "
+                />
+              </button>
+
+              {isOpen && (
+                <div
+                  className=" absolute divide-y right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  role="menu"
+                  onMouseLeave={() => setIsOpen((prevState) => !prevState)}
                 >
-                  Your Profile
-                </a>
-                <a
-                  href="#aa"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabIndex="-1"
-                  id="user-menu-item-1"
-                >
-                  Settings
-                </a>
-                <a
-                  href="#aa"
-                  className="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabIndex="-1"
-                  id="user-menu-item-2"
-                >
-                  Sign out
-                </a>
-              </div>
+                  {appUser.isLoggedIn ? (
+                    <>
+                      <a
+                        href="#a"
+                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
+                        role="menuitem"
+                        tabIndex="-1"
+                        id="user-menu-item-0"
+                      >
+                        Your Profile
+                      </a>
+                      <a
+                        href="#aa"
+                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
+                        role="menuitem"
+                        tabIndex="-1"
+                        id="user-menu-item-1"
+                      >
+                        Settings
+                      </a>
+                      <a
+                        href="#aa"
+                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
+                        role="menuitem"
+                        tabIndex="-1"
+                        id="user-menu-item-2"
+                      >
+                        Sign out
+                      </a>
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        href="#aa"
+                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
+                        role="menuitem"
+                        tabIndex="-1"
+                        id="user-menu-item-2"
+                      >
+                        Login
+                      </a>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

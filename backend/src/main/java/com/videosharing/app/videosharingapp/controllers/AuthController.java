@@ -20,7 +20,7 @@ public class AuthController {
     @Autowired
     AuthenticationService authenticationService;
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public ResponseEntity<String> testingRoute(){
         //
         return ResponseEntity.ok("Hello from authentication route");
