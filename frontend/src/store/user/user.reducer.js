@@ -1,5 +1,5 @@
 const INITIAL_STATE = {
-  currentUser: null,
+  currentUser: JSON.parse(localStorage.getItem("user")) || null,
   isLoggedIn: false,
 };
 
@@ -11,8 +11,11 @@ export const userReducer = (state = INITIAL_STATE, action) => {
 
     case "SET_USER_LOGGED_IN":
       return {
-        ...state,
-        currentUser: { ...state.currentUser, ...action.payload },
+        currentUser: {
+          ...state.currentUser,
+          ...action.payload,
+        },
+        isLoggedIn: true,
       };
     default:
       return state;

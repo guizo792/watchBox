@@ -93,6 +93,7 @@ public class AuthenticationServiceImp implements AuthenticationService{
                 .jwtToken(token)
                 .lastName(user.getLastName())
                 .firstName(user.getFirstName())
+                .username(user.getUsername())
                 .profilePicture(user.getProfilePicture())
                 .build() ;
     }

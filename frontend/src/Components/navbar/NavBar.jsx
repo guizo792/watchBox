@@ -12,6 +12,8 @@ const NavBar = () => {
   // global states : application user state
   const appUser = useSelector((state) => state.appUser);
 
+  //console.log(appUser);
+
   return (
     <nav className="bg-gray-800 sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -130,7 +132,11 @@ const NavBar = () => {
               >
                 <img
                   className="h-8 w-8 rounded-full"
-                  src="./images/user.png"
+                  src={
+                    !appUser.isLoggedIn
+                      ? "./images/user.png"
+                      : appUser?.currentUser?.profilePicture
+                  }
                   alt="profile "
                 />
               </button>
