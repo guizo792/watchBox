@@ -14,7 +14,7 @@
 	<name>video-sharing-app</name>
 	<description>Video sharing application</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 

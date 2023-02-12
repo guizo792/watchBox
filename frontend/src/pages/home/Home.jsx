@@ -59,7 +59,7 @@ export const videos = [
 const Home = () => {
   return (
     <div className="home-container">
-      <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[100vh]">
+      <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[50vh]">
         <ul className="sidebar-nav-links">
           <Link className="sidebar-nav-link">
             <Icon icon="ic:round-home" className="sidebar-nav-icon" />

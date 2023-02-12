@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const VideoPreview = () => {
   return (
-    <div className="grid grid-cols-3 grid-rows-2 ml-[5%] mt-10">
+    <div className="grid grid-cols-1 grid-rows-3 ml-[5%] mt-10 sm:grid-cols-3 sm:grid-rows-2">
       <div className="col-span-2 ">
         <div className="video-container">
           <VideoPlayer />
