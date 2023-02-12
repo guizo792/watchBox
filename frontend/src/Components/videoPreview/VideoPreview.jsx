@@ -1,11 +1,42 @@
+import { Link, useSearchParams } from "react-router-dom";
 import { videos } from "../../pages/home/Home";
 import Comments from "./videoComments/Comments";
 import VideoInfos from "./videoInfos/VideoInfos";
 import VideoPlayer from "./videoPlayer/VideoPlayer";
 import { ReactComponent as Verified } from "../../assets/verified.svg";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  fetchVideosFailure,
+  fetchVideosStart,
+  fetchVideosSuccess,
+} from "../../store/videosServices/videosServices.action";
+import { getAllVideos } from "../../services/videoServices";
 
 const VideoPreview = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const videosData = useSelector((state) => state.videosServices);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchVideosStart());
+    const getVideosData = async () => {
+      const fetchData = async () => {
+        return await getAllVideos();
+      };
+      try {
+        const videos = await fetchData();
+        if (videos.data.data) {
+          dispatch(fetchVideosSuccess(videos.data.data));
+        }
+      } catch (err) {
+        dispatch(fetchVideosFailure(err));
+      }
+    };
+
+    getVideosData();
+  }, []);
+  console.log(videosData);
   return (
     <div className="grid grid-cols-1 grid-rows-3 ml-[5%] mt-10 sm:grid-cols-3 sm:grid-rows-2">
       <div className="col-span-2 ">

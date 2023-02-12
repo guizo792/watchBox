@@ -2,6 +2,8 @@ package com.videosharing.app.videosharingapp.controllers;
 
 
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
+import com.videosharing.app.videosharingapp.Entities.VideoStatus;
+import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +46,25 @@ public class VideoController {
     }
 
     @PostMapping("/videos")
-    public ResponseEntity<VideoEntity> addVideo(@RequestBody VideoEntity video) {
+    public ResponseEntity<VideoEntity> addVideo(@RequestBody VideoDetails video) {
         try {
-            VideoEntity v = videoRepository.save(video);
+            System.out.println("Request BODY: " + video);
+            VideoEntity createdVideo = new VideoEntity();
+            createdVideo.setTitle(video.getTitle());
+            createdVideo.setDescription(video.getDescription());
+            createdVideo.setUserId(video.getUserId());
+            createdVideo.setTags(video.getTags());
+            createdVideo.setVideoUrl(video.getVideoURL());
+            createdVideo.setThumbnailUrl(video.getThumbnailUrl());
+            if (video.getVideoStatus() != null && video.getVideoStatus().equals("public")) {
+                createdVideo.setVideoStatus(VideoStatus.PUBLIC);
+            } else if (video.getVideoStatus() != null && video.getVideoStatus().equals("private")) {
+                createdVideo.setVideoStatus(VideoStatus.PRIVATE);
+            } else {
+                createdVideo.setVideoStatus(VideoStatus.UNLISTED);
+            }
+            System.out.println(createdVideo);
+            VideoEntity v = videoRepository.save(createdVideo);
             if (videoRepository.existsById(v.getId())) {
                 return new ResponseEntity<VideoEntity>(v, HttpStatus.CREATED);
             }

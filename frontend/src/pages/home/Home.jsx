@@ -4,6 +4,14 @@ import { Icon } from "@iconify/react";
 
 import "./Home.css";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllVideos } from "../../services/videoServices";
+import { useEffect } from "react";
+import {
+  fetchVideosFailure,
+  fetchVideosStart,
+  fetchVideosSuccess,
+} from "../../store/videosServices/videosServices.action";
 
 export const videos = [
   {
@@ -57,6 +65,30 @@ export const videos = [
 ];
 
 const Home = () => {
+  const videosData = useSelector((state) => state.videosServices);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchVideosStart());
+    const getVideosData = async () => {
+      const fetchData = async () => {
+        return await getAllVideos();
+      };
+      try {
+        const videos = await fetchData();
+        console.log(videos.data.data);
+        if (videos.data.data) {
+          dispatch(fetchVideosSuccess(videos.data.data));
+          console.log(videosData);
+        }
+      } catch (err) {
+        dispatch(fetchVideosFailure(err));
+      }
+    };
+
+    getVideosData();
+  }, []);
+
   return (
     <div className="home-container">
       <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[50vh]">
@@ -79,7 +111,7 @@ const Home = () => {
         </ul>
       </div>
       <div className="videos-section">
-        {videos.map((video) => (
+        {videosData.videos.map((video) => (
           <VideoComponent video={video} key={video.id} />
         ))}
       </div>

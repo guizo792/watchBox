@@ -12,8 +12,9 @@ import { database } from "../../Config/firebaseConfig";
 
 // redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { savVideoDetails } from "../../store/video/video.action";
+import { savVideoDetails, setUploaded } from "../../store/video/video.action";
 import { ThreeDots } from "react-loader-spinner";
+import { createVideo } from "../../services/videoServices";
 
 const VideoDetails = ({ video }) => {
   // video to upload state
@@ -50,6 +51,18 @@ const VideoDetails = ({ video }) => {
     console.log(videoToUpload.videoDetails);
   };
 
+  const handleSavingVideoDetails = async (event) => {
+    event.preventDefault();
+
+    if (!videoToUpload.videoDetails) {
+      throw new Error("Please try again 💥");
+    }
+
+    console.log(videoToUpload);
+    await createVideo(videoToUpload.videoDetails);
+    dispatch(setUploaded(true));
+  };
+
   return (
     <div className=" mt-8 grid grid-cols-2 max-w-6xl mx-auto gap-8 items-start mb-8">
       <div className="col-span-1">
@@ -61,7 +74,7 @@ const VideoDetails = ({ video }) => {
           <div className="mb-4">
             <label
               className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="Title"
+              htmlFor="title"
             >
               Title
             </label>
@@ -100,7 +113,7 @@ const VideoDetails = ({ video }) => {
             <select
               className="shadow  border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="status"
-              name="status"
+              name="videoStatus"
               onChange={(e) => handelChange(e, true)}
             >
               <option selected disabled>
@@ -137,10 +150,9 @@ const VideoDetails = ({ video }) => {
             <div className=" flex mt-4 gap-4 flex-wrap px-8 justify-center">
               {tags?.map((tag, index) => {
                 return (
-                  <Fade top>
+                  <Fade top key={index}>
                     <Tag
                       title={tag}
-                      key={index}
                       index={index}
                       setTags={setTags}
                       tags={tags}
@@ -154,7 +166,10 @@ const VideoDetails = ({ video }) => {
           <InputImage />
 
           {/* btn submit  */}
-          <button className="mt-5 bg-main px-4 py-2 col-span-1 rounded shadow-md text-sm font-semibold text-white transition duration-500 ease-in-out hover:scale-110 hover:shadow-2xl">
+          <button
+            className="mt-5 bg-main px-4 py-2 col-span-1 rounded shadow-md text-sm font-semibold text-white transition duration-500 ease-in-out hover:scale-110 hover:shadow-2xl"
+            onClick={(e) => handleSavingVideoDetails(e)}
+          >
             Save Details
           </button>
         </form>
@@ -245,7 +260,7 @@ const InputImage = () => {
           setUploaded(true);
           dispatch(
             savVideoDetails({
-              videoThumbline: downloadURL,
+              thumbnailUrl: downloadURL,
             })
           );
         });
@@ -258,15 +273,15 @@ const InputImage = () => {
       <div className="mb-4">
         <label
           className="block text-gray-800 text-sm font-semibold mb-2"
-          htmlFor="thumbline"
+          htmlFor="thumbnail"
         >
-          Video thumbline
+          Video thumhnail image
         </label>
         <div className="grid grid-cols-4 gap-8 items-center">
           {uploaded ? (
             <div className="mt-4 col-span-4">
               <img
-                src={videoToUpload.videoDetails?.videoThumbline}
+                src={videoToUpload.videoDetails?.thumbnailUrl}
                 alt=""
                 className="rounded-lg h-72"
               />
@@ -275,7 +290,7 @@ const InputImage = () => {
             <>
               <div className="flex items-center justify-center col-span-3">
                 <label
-                  for="thmblineImage"
+                  htmlFor="thmblineImage"
                   className="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer  dark:border-gray-600 shadow appearance-none py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
                 >
                   <div className="flex flex-col items-center justify-center ">
@@ -293,6 +308,7 @@ const InputImage = () => {
                   </div>
                   <input
                     id="thmblineImage"
+                    name="thumbnailUrl"
                     type="file"
                     accept="image/*"
                     className="hidden"

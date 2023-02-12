@@ -13,7 +13,7 @@ public class ResponseHandler{
                 HttpStatus httpStatus, List<VideoEntity> data, Integer results
         ) {
             Map<String, Object> response = new HashMap<>();
-            response.put("status", httpStatus);
+            response.put("statusCode", httpStatus);
             response.put("data", data);
             response.put("results", results);
 

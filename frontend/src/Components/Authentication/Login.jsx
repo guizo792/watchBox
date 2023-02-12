@@ -88,7 +88,7 @@ const Login = () => {
           <div className="mb-6">
             <label
               htmlFor="username"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Your username
             </label>
@@ -106,7 +106,7 @@ const Login = () => {
           <div className="mb-6 relative">
             <label
               htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Your password
             </label>
@@ -142,8 +142,8 @@ const Login = () => {
               />
             </div>
             <label
-              for="remember"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              htmlFor="remember"
+              class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
               Remember me
             </label>

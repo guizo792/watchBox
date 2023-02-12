@@ -17,12 +17,12 @@ public class VideoEntity {
     private String description;
     private String title;
     private String userId;
-    private Integer likes;
-    private Integer dislikes;
+    private Integer likes = 0;
+    private Integer dislikes = 0;
     private List<String> tags;
-    private String url;
+    private String videoUrl;
     private VideoStatus videoStatus;
-    private Integer viewsCount;
+    private Integer viewsCount = 0;
     private String thumbnailUrl;
     private List<CommentEntity> comments;
 }
