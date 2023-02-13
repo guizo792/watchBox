@@ -60,9 +60,10 @@
 .videos-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 2.4rem;
+  gap: 2rem;
   justify-content: center;
   align-items: center;
   padding-top: 2rem;
   border-left: solid #44444477 1px;
+  margin: 0 auto;
 }

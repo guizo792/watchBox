@@ -12,6 +12,7 @@ import {
   fetchVideosStart,
   fetchVideosSuccess,
 } from "../../store/videosServices/videosServices.action";
+import LoadingSpinner from "../../Components/loadingSpinner/spinner";
 
 export const videos = [
   {
@@ -76,10 +77,10 @@ const Home = () => {
       };
       try {
         const videos = await fetchData();
-        console.log(videos.data.data);
+        // console.log(videos.data.data);
         if (videos.data.data) {
           dispatch(fetchVideosSuccess(videos.data.data));
-          console.log(videosData);
+          // console.log(videosData);
         }
       } catch (err) {
         dispatch(fetchVideosFailure(err));
@@ -91,9 +92,9 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[50vh]">
+      <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[80vh]">
         <ul className="sidebar-nav-links">
-          <Link className="sidebar-nav-link">
+          <Link to={"/"} className="sidebar-nav-link">
             <Icon icon="ic:round-home" className="sidebar-nav-icon" />
             <span>Home</span>
           </Link>
@@ -110,11 +111,13 @@ const Home = () => {
           </Link>
         </ul>
       </div>
-      <div className="videos-section">
-        {videosData.videos.map((video) => (
-          <VideoComponent video={video} key={video.id} />
-        ))}
+      <div className="videos-section pl-5">
+        {!videosData.isFetching &&
+          videosData.videos.map((video) => (
+            <VideoComponent video={video} key={video.id} />
+          ))}
       </div>
+      {videosData.isFetching && <LoadingSpinner />}
     </div>
   );
 };

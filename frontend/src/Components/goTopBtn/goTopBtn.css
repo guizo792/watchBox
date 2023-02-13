@@ -1,0 +1,32 @@
+.gotop-btn {
+  background-color: #b83280;
+  border: 2px solid #fff;
+  height: 40px;
+  width: 40px;
+  border-radius: 0.8rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.4s;
+  position: fixed;
+  bottom: 1.6rem;
+  right: 4rem;
+  z-index: 99;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  font-weight: bold;
+}
+.gotop-btn:hover {
+  background: #fff;
+  color: #b83280;
+  border: 2px solid #b83280;
+}
+
+.gotop-btn.active {
+  bottom: 3.2rem;
+  pointer-events: auto;
+  opacity: 1;
+}

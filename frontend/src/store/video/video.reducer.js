@@ -1,4 +1,4 @@
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
   videoDetails: null,
   isUploading: false,
   progressUploading: "0%",

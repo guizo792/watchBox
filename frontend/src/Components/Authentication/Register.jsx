@@ -113,7 +113,7 @@ const Register = () => {
               <div className="mb-6">
                 <label
                   htmlFor="username"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your username
                 </label>
@@ -131,7 +131,7 @@ const Register = () => {
               <div className="mb-6">
                 <label
                   htmlFor="firstName"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your firstName
                 </label>
@@ -149,7 +149,7 @@ const Register = () => {
               <div className="mb-6">
                 <label
                   htmlFor="lastName"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your lastName
                 </label>
@@ -167,7 +167,7 @@ const Register = () => {
               <div className="mb-6 relative">
                 <label
                   htmlFor="password"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Your password
                 </label>
@@ -346,7 +346,7 @@ const UploadProfilePic = ({ setNewUser }) => {
     <>
       <div className="flex items-center justify-center col-span-3">
         <label
-          htmlFor="thmblineImage"
+          htmlFor="profilePricture"
           className="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer  dark:border-gray-600 shadow appearance-none py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
         >
           {imageFile === null ? (

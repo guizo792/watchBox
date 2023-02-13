@@ -23,7 +23,7 @@ export const getVideo = async (id) => {
       method: "GET",
       url: API_URL + "videos/" + id,
     });
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (err) {
     console.error(err);

@@ -12,7 +12,12 @@ import { database } from "../../Config/firebaseConfig";
 
 // redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { savVideoDetails, setUploaded } from "../../store/video/video.action";
+import {
+  savVideoDetails,
+  setUploaded,
+  setUploadingProgress,
+  setVideoUploading,
+} from "../../store/video/video.action";
 import { ThreeDots } from "react-loader-spinner";
 import { createVideo } from "../../services/videoServices";
 
@@ -58,9 +63,13 @@ const VideoDetails = ({ video }) => {
       throw new Error("Please try again 💥");
     }
 
-    console.log(videoToUpload);
-    await createVideo(videoToUpload.videoDetails);
-    dispatch(setUploaded(true));
+    const res = await createVideo(videoToUpload.videoDetails);
+    if (res.status === 201) {
+      dispatch(setUploaded(false));
+      dispatch(setUploadingProgress(0));
+      dispatch(setVideoUploading());
+      videoToUpload.videoDetails = {};
+    }
   };
 
   return (
@@ -94,7 +103,7 @@ const VideoDetails = ({ video }) => {
             >
               Description
             </label>
-            <input
+            <textarea
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="description"
               name="description"

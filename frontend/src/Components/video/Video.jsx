@@ -19,12 +19,14 @@ const VideoComponent = ({ video }) => {
           <img
             src={`./images/channel1.jpeg`}
             alt="channel"
-            className="channel-img"
+            className="channel-img min-w-[3rem] min-h-[3rem]"
           />
         </div>
         <div className="video-infos">
           <ul>
-            <li className="title">{video.title}</li>
+            <li className="title max-w-[100%] max-h-[1.4rem] overflow-hidden">
+              {video.title}
+            </li>
             <li>channel name (user.📷)</li>
             <li>{viewsCountFormatter(video.viewsCount)} views</li>
           </ul>

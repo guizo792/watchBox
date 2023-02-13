@@ -1,0 +1,17 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 18rem;
+  transition: 0.6s ease;
+  background-color: #3824243a;
+  border-radius: 4px;
+}
+
+.overlay:hover {
+  display: hidden;
+  border: 1px solid #1d1a1a7a;
+}
