@@ -1,6 +1,8 @@
 package com.videosharing.app.videosharingapp.Services.Videos;
 
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
+import com.videosharing.app.videosharingapp.Entities.VideoStatus;
+import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.VideoNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +36,24 @@ public class IVideoServiceImpl implements IVideoService {
     }
 
     @Override
-    public VideoEntity addVideo(VideoEntity video) {
-        return videoRepository.save(video);
+    public VideoEntity addVideo(VideoDetails video) {
+        System.out.println("Request BODY: " + video);
+        VideoEntity createdVideo = new VideoEntity();
+        createdVideo.setTitle(video.getTitle());
+        createdVideo.setDescription(video.getDescription());
+        createdVideo.setUserId(video.getUserId());
+        createdVideo.setTags(video.getTags());
+        createdVideo.setVideoUrl(video.getVideoURL());
+        createdVideo.setThumbnailUrl(video.getThumbnailUrl());
+        if (video.getVideoStatus() != null && video.getVideoStatus().equals("public")) {
+            createdVideo.setVideoStatus(VideoStatus.PUBLIC);
+        } else if (video.getVideoStatus() != null && video.getVideoStatus().equals("private")) {
+            createdVideo.setVideoStatus(VideoStatus.PRIVATE);
+        } else {
+            createdVideo.setVideoStatus(VideoStatus.UNLISTED);
+        }
+        System.out.println(createdVideo);
+        return videoRepository.save(createdVideo);
     }
 
     @Override

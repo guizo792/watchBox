@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import "./Home.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllVideos } from "../../services/videoServices";
+import { getAllVideos } from "../../services/videoService";
 import { useEffect } from "react";
 import {
   fetchVideosFailure,
@@ -92,7 +92,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <div className="sidebar-nav sticky top-16 left-0 z-50 sm:h-[80vh]">
+      <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
         <ul className="sidebar-nav-links">
           <Link to={"/"} className="sidebar-nav-link">
             <Icon icon="ic:round-home" className="sidebar-nav-icon" />

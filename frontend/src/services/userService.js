@@ -33,6 +33,7 @@ export const login = async (user) => {
   try {
     const response = await axios.post(API_BASE_URL + "login", user);
     const data = response.data;
+    console.log(data);
     localStorage.setItem(
       "user",
       JSON.stringify({

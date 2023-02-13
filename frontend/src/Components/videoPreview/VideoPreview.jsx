@@ -10,7 +10,7 @@ import {
   fetchVideoStart,
   fetchVideoSuccess,
 } from "../../store/videosServices/videosServices.action";
-import { getVideo } from "../../services/videoServices";
+import { getVideo } from "../../services/videoService";
 import { countFormatter } from "../../utils/countFormatter";
 import LoadingSpinner from "../loadingSpinner/spinner";
 
@@ -18,7 +18,11 @@ import "./videoPreview.css";
 
 const VideoPreview = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  // Global videos state
   const videosData = useSelector((state) => state.videosServices);
+  // Global user state
+  const appUser = useSelector((state) => state.appUser);
+
   const dispatch = useDispatch();
   const idParam = searchParams.get("id");
 
@@ -43,6 +47,8 @@ const VideoPreview = () => {
 
     getVideoData();
   }, [idParam]);
+
+  console.log(appUser?.currentUser);
 
   return (
     <>

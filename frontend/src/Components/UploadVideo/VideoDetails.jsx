@@ -19,7 +19,7 @@ import {
   setVideoUploading,
 } from "../../store/video/video.action";
 import { ThreeDots } from "react-loader-spinner";
-import { createVideo } from "../../services/videoServices";
+import { createVideo } from "../../services/videoService";
 
 const VideoDetails = ({ video }) => {
   // video to upload state

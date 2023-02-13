@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +17,7 @@ public class CommentEntity {
     private String author;
     private Integer likeCount;
     private Integer dislikeCount;
+    private String userId;
+    private String parentId;
+    private Date createdAt;
 }

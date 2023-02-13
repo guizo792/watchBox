@@ -13,6 +13,7 @@
   /* height: 100vh; */
   padding: 1rem;
   color: #1f2937;
+  transition: all 0.3s;
 }
 
 .sidebar-nav-links {
@@ -20,12 +21,15 @@
   flex-direction: column;
   gap: 1.4rem;
   font-size: 1.2rem;
+  padding: 1rem 0.6rem;
 }
 
 .sidebar-nav-link {
   display: flex;
   gap: 1rem;
   align-items: center;
+  padding-left: 4px;
+  transition: all 0.3s;
 }
 
 .sidebar-nav-link span {
@@ -61,9 +65,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+
   justify-content: center;
   align-items: center;
   padding-top: 2rem;
   border-left: solid #44444477 1px;
   margin: 0 auto;
+}
+
+.sidebar-nav-link:hover,
+.sidebar-nav-link:active {
+  -webkit-transform: translateX(3px);
+  transform: translateX(3px);
 }

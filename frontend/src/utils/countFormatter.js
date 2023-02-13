@@ -28,5 +28,5 @@ export function countFormatter(input) {
     }
   }
 
-  return input.toString();
+  return input?.toString();
 }

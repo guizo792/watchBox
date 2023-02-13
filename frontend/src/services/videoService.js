@@ -2,13 +2,13 @@ import axios from "axios";
 
 axios.defaults.withCredentials = false;
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = "http://localhost:8080/api/";
 
 export const getAllVideos = async () => {
   try {
     const res = await axios({
       method: "GET",
-      url: API_URL + "videos",
+      url: API_BASE_URL + "videos",
     });
     // console.log(res);
     return res;
@@ -21,7 +21,7 @@ export const getVideo = async (id) => {
   try {
     const res = await axios({
       method: "GET",
-      url: API_URL + "videos/" + id,
+      url: API_BASE_URL + "videos/" + id,
     });
     // console.log(res);
     return res;
@@ -34,7 +34,7 @@ export const createVideo = async (videoDetails) => {
   try {
     const res = await axios({
       method: "POST",
-      url: API_URL + "videos",
+      url: API_BASE_URL + "videos",
       data: videoDetails,
     });
     return res;

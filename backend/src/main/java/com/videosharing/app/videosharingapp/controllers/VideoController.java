@@ -51,9 +51,14 @@ public class VideoController {
     }
 
     @PostMapping("/videos")
-    public ResponseEntity<VideoEntity> addVideo(@RequestBody VideoEntity video) {
+    public ResponseEntity<VideoEntity> addVideo(@RequestBody VideoDetails video) {
         try {
-            return new ResponseEntity<VideoEntity>(videoService.addVideo(video), HttpStatus.CREATED);
+            VideoEntity v = videoService.addVideo(video);
+            if (videoRepository.existsById(v.getId())) {
+                return new ResponseEntity<VideoEntity>(v, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity("There was a problem adding the video, Please try again!", HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity("There was a problem adding the video, Please try again!", HttpStatus.BAD_REQUEST);
