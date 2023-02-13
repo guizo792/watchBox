@@ -1,6 +1,8 @@
 package com.videosharing.app.videosharingapp.controllers;
 
 import com.videosharing.app.videosharingapp.Entities.CommentEntity;
+import com.videosharing.app.videosharingapp.Entities.VideoEntity;
+import com.videosharing.app.videosharingapp.Services.Comments.ICommentService;
 import com.videosharing.app.videosharingapp.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ public class CommentController {
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    ICommentService commentService;
+
     @GetMapping("/comments/test")
     public ResponseEntity<String> testingRoute(){
         //
@@ -24,25 +29,24 @@ public class CommentController {
 
     @GetMapping("/comments")
     public ResponseEntity<List<CommentEntity>> getAllComments(){
-        List<CommentEntity> comments = commentRepository.findAll();
-        return new ResponseEntity<List<CommentEntity>>(comments, HttpStatus.OK);
+        return new ResponseEntity<List<CommentEntity>>(commentService.getAllComments(), HttpStatus.OK);
     }
 
     @GetMapping("/comments/{id}")
     public ResponseEntity<CommentEntity> getComment(@PathVariable String id){
         try {
-            CommentEntity comment = commentRepository.findById(id).get();
+            CommentEntity comment = commentService.getComment(id);
             return new ResponseEntity<CommentEntity>(comment, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity("No comment found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No comment with the provided id, Please try again!", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/comments")
     public ResponseEntity<CommentEntity> addComment(@RequestBody CommentEntity comment) {
         try {
-            return new ResponseEntity<CommentEntity>(commentRepository.save(comment), HttpStatus.CREATED);
+            return new ResponseEntity<CommentEntity>(commentService.addComment(comment), HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity("There was a problem adding the comment, Please try again!", HttpStatus.BAD_REQUEST);
@@ -52,12 +56,8 @@ public class CommentController {
     @DeleteMapping(path = "/comments/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable String id) {
         try {
-            Boolean commentExist = commentRepository.findById(id).isPresent();
-            if (commentExist) {
-                commentRepository.deleteById(id);
-                return new ResponseEntity<String>("comment deleted successfully", HttpStatus.NO_CONTENT);
-            }
-            throw new Exception("The id provided doesn't match any comment");
+            commentService.deleteComment(id);
+            return new ResponseEntity<String>("Comment deleted successfully", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity("There was a problem deleting the comment", HttpStatus.BAD_REQUEST);
@@ -67,23 +67,12 @@ public class CommentController {
     @PutMapping(path = "/comments/{id}")
     public ResponseEntity<CommentEntity> updateComment(@PathVariable String id, @RequestBody CommentEntity c) {
         try {
-            CommentEntity comment = commentRepository.findById(id).get();
-            c.setId(comment.getId());
-
-        } catch(Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity("There is no comment with the provided id", HttpStatus.BAD_GATEWAY);
-
-        }
-
-        try {
-
-            return new ResponseEntity<CommentEntity>(commentRepository.save(c), HttpStatus.CREATED);
+            CommentEntity comment = commentService.updateComment(id, c);
+            return new ResponseEntity<CommentEntity>(comment , HttpStatus.CREATED);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity("There was a problem editing the comment", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity("There was a problem editing the comment informations", HttpStatus.BAD_GATEWAY);
         }
-
     }
 }

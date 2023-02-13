@@ -1,7 +1,7 @@
 import { VideoContainer, ThumbnailImage } from "./VideoStyles.jsx";
 
 import "./Video.css";
-import { viewsCountFormatter } from "../../utils/viewsCountFormatter.js";
+import { countFormatter } from "../../utils/countFormatter";
 
 const VideoComponent = ({ video }) => {
   return (
@@ -28,7 +28,7 @@ const VideoComponent = ({ video }) => {
               {video.title}
             </li>
             <li>channel name (user.📷)</li>
-            <li>{viewsCountFormatter(video.viewsCount)} views</li>
+            <li>{countFormatter(video.viewsCount)} views</li>
           </ul>
         </div>
       </div>

@@ -3,10 +3,13 @@ package com.videosharing.app.videosharingapp.Services.Videos;
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.VideoNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
+@RequiredArgsConstructor
 public class IVideoServiceImpl implements IVideoService {
 
     @Autowired

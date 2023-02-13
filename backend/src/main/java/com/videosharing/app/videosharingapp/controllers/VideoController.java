@@ -3,6 +3,8 @@ package com.videosharing.app.videosharingapp.controllers;
 
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.Entities.VideoStatus;
+import com.videosharing.app.videosharingapp.Services.Videos.IVideoService;
+import com.videosharing.app.videosharingapp.Services.Videos.IVideoServiceImpl;
 import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.ResponseHandler;
@@ -21,6 +23,9 @@ public class VideoController {
     @Autowired
     VideoRepository videoRepository;
 
+    @Autowired
+    IVideoService videoService;
+
     @GetMapping("/test")
     public ResponseEntity<String> testingRoute() {
         //
@@ -29,62 +34,37 @@ public class VideoController {
 
     @GetMapping("/videos")
     public ResponseEntity<Object> getAllVideos() {
-        List<VideoEntity> videos = videoRepository.findAll();
+        List<VideoEntity> videos = videoService.getAllVideos();
         return ResponseHandler.responseBuilder(HttpStatus.OK, videos, videos.size());
-//        return new ResponseEntity<List<VideoEntity>>(videoRepository.findAll(), HttpStatus.OK);
+//        return new ResponseEntity<List<VideoEntity>>(videoService.getAllVideos(), HttpStatus.OK);
     }
 
     @GetMapping("/videos/{id}")
-    public ResponseEntity<VideoEntity> getVideo(@PathVariable String id) {
+    public ResponseEntity<VideoEntity> getVideo(@PathVariable String id){
         try {
-            VideoEntity video = videoRepository.findById(id).get();
+            VideoEntity video = videoService.getVideo(id);
             return new ResponseEntity<VideoEntity>(video, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity("There is no video with this id", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No video with the provided id, Please try again!", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/videos")
-    public ResponseEntity<VideoEntity> addVideo(@RequestBody VideoDetails video) {
+    public ResponseEntity<VideoEntity> addVideo(@RequestBody VideoEntity video) {
         try {
-            System.out.println("Request BODY: " + video);
-            VideoEntity createdVideo = new VideoEntity();
-            createdVideo.setTitle(video.getTitle());
-            createdVideo.setDescription(video.getDescription());
-            createdVideo.setUserId(video.getUserId());
-            createdVideo.setTags(video.getTags());
-            createdVideo.setVideoUrl(video.getVideoURL());
-            createdVideo.setThumbnailUrl(video.getThumbnailUrl());
-            if (video.getVideoStatus() != null && video.getVideoStatus().equals("public")) {
-                createdVideo.setVideoStatus(VideoStatus.PUBLIC);
-            } else if (video.getVideoStatus() != null && video.getVideoStatus().equals("private")) {
-                createdVideo.setVideoStatus(VideoStatus.PRIVATE);
-            } else {
-                createdVideo.setVideoStatus(VideoStatus.UNLISTED);
-            }
-            System.out.println(createdVideo);
-            VideoEntity v = videoRepository.save(createdVideo);
-            if (videoRepository.existsById(v.getId())) {
-                return new ResponseEntity<VideoEntity>(v, HttpStatus.CREATED);
-            }
-            return new ResponseEntity("There was a problem adding the video, Please try again!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<VideoEntity>(videoService.addVideo(video), HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity("There was a problem adding the video, Please try again!", HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @DeleteMapping(path = "/videos/{id}")
     public ResponseEntity<String> deleteVideo(@PathVariable String id) {
         try {
-            Boolean videoExist = videoRepository.findById(id).isPresent();
-            if (videoExist) {
-                videoRepository.deleteById(id);
-                return new ResponseEntity<String>("Video deleted successfully", HttpStatus.NO_CONTENT);
-            }
-            throw new Exception("The id provided doesn't match any video");
+            videoService.deleteVideo(id);
+            return new ResponseEntity<String>("Video deleted successfully", HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity("There was a problem deleting the video", HttpStatus.BAD_REQUEST);
@@ -94,18 +74,8 @@ public class VideoController {
     @PutMapping(path = "/videos/{id}")
     public ResponseEntity<VideoEntity> updateVideo(@PathVariable String id, @RequestBody VideoEntity v) {
         try {
-            VideoEntity video = videoRepository.findById(id).get();
-            v.setId(video.getId());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity("There is no video with the provided id", HttpStatus.BAD_GATEWAY);
-
-        }
-
-        try {
-
-            return new ResponseEntity<VideoEntity>(videoRepository.save(v), HttpStatus.CREATED);
+            VideoEntity video = videoService.updateVideo(id, v);
+            return new ResponseEntity<VideoEntity>(video , HttpStatus.CREATED);
 
         } catch (Exception e) {
             e.printStackTrace();

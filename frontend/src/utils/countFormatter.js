@@ -13,7 +13,7 @@ const ranges = [
   },
 ];
 
-export function viewsCountFormatter(input) {
+export function countFormatter(input) {
   for (let index = ranges.length - 1; index >= 0; index--) {
     if (input > ranges[index].divider) {
       let quotient = input / ranges[index].divider;

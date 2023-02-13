@@ -11,7 +11,7 @@ import {
   fetchVideoSuccess,
 } from "../../store/videosServices/videosServices.action";
 import { getVideo } from "../../services/videoServices";
-import { viewsCountFormatter } from "../../utils/viewsCountFormatter";
+import { countFormatter } from "../../utils/countFormatter";
 import LoadingSpinner from "../loadingSpinner/spinner";
 
 import "./videoPreview.css";
@@ -85,7 +85,7 @@ const VideoPreview = () => {
                           <Verified className="fill-black	" />
                         </li>
                         <li className="text-sm">
-                          {viewsCountFormatter(video.viewsCount)} views
+                          {countFormatter(video.viewsCount)} views
                         </li>
                       </ul>
                     </div>

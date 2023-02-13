@@ -2,6 +2,7 @@ import { ReactComponent as ArrowUp } from "../../../assets/arrow-up.svg";
 import { ReactComponent as ArrowDown } from "../../../assets/arrow-down.svg";
 import { ReactComponent as Share } from "../../../assets/share.svg";
 import { ReactComponent as Download } from "../../../assets/download.svg";
+import { countFormatter } from "../../../utils/countFormatter";
 
 const VideoInfos = ({ video }) => {
   return (
@@ -37,14 +38,16 @@ const VideoInfos = ({ video }) => {
             className="like flex flex-nowrap items-center gap-2"
           >
             <ArrowUp className="w-8 h-8" />
-            <span className="text-[18px]">{video.likes}</span>
+            <span className="text-[18px]">{countFormatter(video.likes)}</span>
           </button>
           <button
             title="Dislike"
             className="dislike flex flex-nowrap items-center gap-2 "
           >
             <ArrowDown className="w-8 h-8" />{" "}
-            <span className="text-[18px]">{video.dislikes}</span>
+            <span className="text-[18px]">
+              {countFormatter(video.dislikes)}
+            </span>
           </button>
         </div>
         <button title="Share" className="share-btn">
