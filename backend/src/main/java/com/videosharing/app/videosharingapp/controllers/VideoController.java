@@ -29,7 +29,7 @@ public class VideoController {
     @GetMapping("/test")
     public ResponseEntity<String> testingRoute() {
         //
-        return ResponseEntity.ok("Hello from authentication route");
+        return ResponseEntity.ok("video route testing");
     }
 
     @GetMapping("/videos")

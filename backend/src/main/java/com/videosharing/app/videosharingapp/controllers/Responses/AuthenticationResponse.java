@@ -17,4 +17,5 @@ public class AuthenticationResponse {
     private String lastName ;
     private String firstName ;
     private String profilePicture ;
+    private String id ;
 }

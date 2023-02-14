@@ -66,6 +66,7 @@ public class AuthenticationServiceImp implements AuthenticationService{
                 .firstName(userDetailsImp.getFirstName())
                 .lastName(userDetailsImp.getLastName())
                 .profilePicture(userDetailsImp.getProfilePicture())
+                .id(userDetailsImp.getId())
                 .build() ;
     }
 
@@ -85,16 +86,17 @@ public class AuthenticationServiceImp implements AuthenticationService{
         // save the new user to db
         UserEntity userEntity =new UserEntity() ;
         BeanUtils.copyProperties(user,userEntity);
-        userRepository.save(userEntity) ;
+        UserEntity userSaved =userRepository.save(userEntity) ;
         //generate jwt token
         String token =jwtService.generateToken(user) ;
 
         return AuthenticationResponse.builder()
                 .jwtToken(token)
-                .lastName(user.getLastName())
-                .firstName(user.getFirstName())
-                .username(user.getUsername())
-                .profilePicture(user.getProfilePicture())
+                .lastName(userSaved.getLastName())
+                .firstName(userSaved.getFirstName())
+                .username(userSaved.getUsername())
+                .id(userSaved.getId())
+                .profilePicture(userSaved.getProfilePicture())
                 .build() ;
     }
 }
