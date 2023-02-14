@@ -66,7 +66,16 @@ public class IVideoServiceImpl implements IVideoService {
     public VideoEntity updateVideo(String id, VideoEntity v) {
         throwExceptionIfNotExist(id);
         VideoEntity video = videoRepository.findById(id).get();
-        v.setId(video.getId());
-        return videoRepository.save(v);
+        if (v.getDescription() != null) video.setDescription(v.getDescription());
+        if (v.getTitle() != null) video.setTitle(v.getTitle());
+        if (v.getLikes() != 0) video.setLikes(v.getLikes());
+        if (v.getDislikes() != 0) video.setDislikes(v.getDislikes());
+        if (v.getTags() != null) video.setTags(v.getTags());
+        if (v.getVideoUrl() != null) video.setVideoUrl(v.getVideoUrl());
+        if (v.getUserId() != null) video.setUserId(v.getUserId());
+        if (v.getVideoStatus() != null) video.setVideoStatus(v.getVideoStatus());
+        if (v.getViewsCount() != 0) video.setViewsCount(v.getViewsCount());
+        if (v.getThumbnailUrl() != null) video.setThumbnailUrl(v.getThumbnailUrl());
+        return videoRepository.save(video);
     }
 }

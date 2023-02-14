@@ -24,5 +24,4 @@ public class VideoEntity {
     private VideoStatus videoStatus;
     private Integer viewsCount = 0;
     private String thumbnailUrl;
-    private List<CommentEntity> comments;
 }

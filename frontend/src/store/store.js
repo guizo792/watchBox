@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { commentsReducer } from "./comment/comment.reducer";
 import { userReducer } from "./user/user.reducer";
 
 // reducers
@@ -10,5 +11,6 @@ export const store = configureStore({
     videoToUploadDetails: videoReducer,
     appUser: userReducer,
     videosServices: videosServicesReducer,
+    comment: commentsReducer,
   },
 });
