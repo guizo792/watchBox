@@ -41,7 +41,7 @@ const VideoPreview = () => {
           // console.log(videosData);
         }
       } catch (err) {
-        console.log("💥💥💥💥" + err);
+        throw err;
       }
     };
 

@@ -13,7 +13,7 @@ export const getAllVideos = async () => {
     // console.log(res);
     return res;
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 
@@ -26,7 +26,7 @@ export const getVideo = async (id) => {
     // console.log(res);
     return res;
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
 
@@ -39,6 +39,6 @@ export const createVideo = async (videoDetails) => {
     });
     return res;
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };

@@ -4,7 +4,7 @@ axios.defaults.withCredentials = false;
 
 const API_BASE_URL = "http://localhost:8080/api/";
 
-export const getAllVideos = async () => {
+export const getAllComments = async () => {
   try {
     const res = await axios({
       method: "GET",
@@ -13,6 +13,19 @@ export const getAllVideos = async () => {
     console.log(res);
     return res;
   } catch (err) {
-    console.error(err);
+    return err;
+  }
+};
+
+export const createComment = async (commentDetails) => {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: API_BASE_URL + "comments",
+      data: commentDetails,
+    });
+    return res;
+  } catch (err) {
+    return err;
   }
 };

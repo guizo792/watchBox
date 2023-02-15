@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import CommentForm from "./CommentForm";
 
 const Comment = ({
@@ -11,6 +12,8 @@ const Comment = ({
   parentId = null,
   currentUserId,
 }) => {
+  const dispatch = useDispatch();
+
   const isEditing =
     activeComment &&
     activeComment.id === comment.id &&
@@ -23,7 +26,6 @@ const Comment = ({
   const canReply = Boolean(currentUserId);
   const canEdit = currentUserId === comment.userId;
   const replyId = parentId ? parentId : comment.id;
-  const createdAt = new Date(comment.createdAt).toLocaleDateString();
   return (
     <div key={comment.id} className="flex gap-5">
       <div>
@@ -36,16 +38,16 @@ const Comment = ({
       <div className="flex flex-col gap-2">
         <div className="flex items-center text-[19px] gap-5">
           <div className="font-bold text-pink-800 tracking-wider	">
-            {comment.username}
+            {comment.author}
           </div>
-          <div>{createdAt}</div>
+          <div>{new Date(comment?.createdAt).toLocaleDateString()}</div>
         </div>
-        {!isEditing && <div className="comment-text">{comment.body}</div>}
+        {!isEditing && <div className="comment-text">{comment.text}</div>}
         {isEditing && (
           <CommentForm
             submitLabel="Update"
             hasCancelButton
-            initialText={comment.body}
+            initialText={comment.text}
             handleSubmit={(text) => updateComment(text, comment.id)}
             handleCancel={() => {
               setActiveComment(null);

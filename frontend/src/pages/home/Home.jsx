@@ -78,7 +78,7 @@ const Home = () => {
       try {
         const videos = await fetchData();
         // console.log(videos.data.data);
-        if (videos.data.data) {
+        if (videos?.data?.data) {
           dispatch(fetchVideosSuccess(videos.data.data));
           // console.log(videosData);
         }
