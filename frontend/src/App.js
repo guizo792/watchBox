@@ -8,6 +8,7 @@ import Login from "./Components/Authentication/Login";
 import Register from "./Components/Authentication/Register";
 import { Fragment } from "react";
 import GoTopBtn from "./Components/goTopBtn/goTopBtn";
+import UserProfile from "./Components/userProfile/UserProfile";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/upload-video" element={<UploadVideo />} />
           <Route path="/videos" element={<VideoPreview />} />
+          <Route path="/user/profile" element={<UserProfile />} />
         </Route>
         <Route path="/auth">
           <Route path="login" element={<Login />} />

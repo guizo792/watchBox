@@ -19,14 +19,14 @@ const DragDrop = () => {
 
   // local state to store file and loading state
   const [loading, setLoading] = useState(false);
-  const [video, setVideo] = useState("");
+  const [video, setVideo] = useState(null);
 
   const dispatch = useDispatch();
 
   const handelChange = (e) => {
     //
     const fileToUpload = e.target.files[0];
-    setLoading((prevLoading) => !loading);
+    setLoading((prevLoading) => !prevLoading);
     setVideo(fileToUpload);
     dispatch(
       savVideoDetails({
@@ -37,36 +37,37 @@ const DragDrop = () => {
 
   const handelSumbit = () => {
     //
-    dispatch(setVideoUploading());
+    if (video !== null) {
+      dispatch(setVideoUploading());
+      const databaseRef = ref(
+        database,
+        "videos/" + `${Date.now()}-${video.name}`
+      );
 
-    const databaseRef = ref(
-      database,
-      "videos/" + `${Date.now()}-${videoToUpload.videoName}`
-    );
+      const uploadTask = uploadBytesResumable(databaseRef, video);
 
-    const uploadTask = uploadBytesResumable(databaseRef, video);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = snapshot.bytesTransferred / snapshot.totalBytes;
-        dispatch(setUploadingProgress(progress * 100));
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          //
-          dispatch(
-            savVideoDetails({
-              videoURL: downloadURL,
-            })
-          );
-          dispatch(setUploaded(true));
-        });
-      }
-    );
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+          dispatch(setUploadingProgress(progress * 100));
+        },
+        (error) => {
+          console.log(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            //
+            dispatch(
+              savVideoDetails({
+                videoURL: downloadURL,
+              })
+            );
+            dispatch(setUploaded(true));
+          });
+        }
+      );
+    }
   };
 
   return (
@@ -87,6 +88,7 @@ const DragDrop = () => {
               className="hidden"
               accept="video/*"
               onChange={(e) => handelChange(e)}
+              required
             />
           </>
         )}
@@ -100,13 +102,13 @@ const DragDrop = () => {
             wrapperStyle={{ margin: "auto 0" }}
             visible={loading}
           />
-          {video.name && (
+          {video?.name && (
             <span className="absolute top-0">
               <p
                 className="text-lg font-medium text-gray-800
              tracking-wider"
               >
-                {video.name}
+                {video?.name}
               </p>
             </span>
           )}
@@ -124,9 +126,9 @@ const DragDrop = () => {
           <div className="w-full bg-gray-200 rounded-full dark:bg-gray-800 mt-2">
             <div
               className="bg-main text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition ease-in-out duration-500 "
-              style={{ width: videoToUpload.progressUploading }}
+              style={{ width: videoToUpload.progressUploading + "%" }}
             >
-              {videoToUpload.progressUploading.split(".")[0]}
+              {Math.floor(videoToUpload.progressUploading) + "%"}
             </div>
           </div>
         )}

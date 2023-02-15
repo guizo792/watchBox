@@ -104,25 +104,29 @@ const NavBar = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 gap-3">
-            <Link
-              to={"/upload-video"}
-              type="button"
-              className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              <UploadIcon
-                style={{ width: "24px", height: "24px" }}
-                title="upload video"
-              />
-            </Link>
-            <button
-              type="button"
-              className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              <NotificationIcon
-                style={{ width: "24px", height: "24px" }}
-                title="notifications"
-              />
-            </button>
+            {appUser?.isLoggedIn && (
+              <>
+                <Link
+                  to={"/upload-video"}
+                  type="button"
+                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                >
+                  <UploadIcon
+                    style={{ width: "24px", height: "24px" }}
+                    title="upload video"
+                  />
+                </Link>
+                <button
+                  type="button"
+                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                >
+                  <NotificationIcon
+                    style={{ width: "24px", height: "24px" }}
+                    title="notifications"
+                  />
+                </button>
+              </>
+            )}
 
             <div className="relative ml-3">
               <button
@@ -149,15 +153,15 @@ const NavBar = () => {
                 >
                   {appUser.isLoggedIn ? (
                     <>
-                      <a
-                        href="#a"
+                      <Link
+                        to="/user/profile"
                         className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
                         role="menuitem"
                         tabIndex="-1"
                         id="user-menu-item-0"
                       >
                         Your Profile
-                      </a>
+                      </Link>
                       <a
                         href="#aa"
                         className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
@@ -167,27 +171,28 @@ const NavBar = () => {
                       >
                         Settings
                       </a>
-                      <a
-                        href="#aa"
+                      <Link
+                        to="/auth/login"
                         className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
                         role="menuitem"
                         tabIndex="-1"
                         id="user-menu-item-2"
+                        onClick={() => localStorage.clear()}
                       >
                         Sign out
-                      </a>
+                      </Link>
                     </>
                   ) : (
                     <>
-                      <a
-                        href="#aa"
+                      <Link
+                        to="/auth/login"
                         className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
                         role="menuitem"
                         tabIndex="-1"
                         id="user-menu-item-2"
                       >
                         Login
-                      </a>
+                      </Link>
                     </>
                   )}
                 </div>

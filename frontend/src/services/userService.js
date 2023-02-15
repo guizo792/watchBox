@@ -9,13 +9,15 @@ export const register = async (newUser) => {
       ...newUser,
     });
 
+    const data = response.data;
     localStorage.setItem(
       "user",
       JSON.stringify({
-        username: newUser.username,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        profilePicture: newUser.profilePicture,
+        username: data.username,
+        id: data.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        profilePicture: data.profilePicture,
       })
     );
 
@@ -40,6 +42,7 @@ export const login = async (user) => {
         username: data.username,
         firstName: data.firstName,
         lastName: data.lastName,
+        id: data.id,
         profilePicture: data.profilePicture,
       })
     );

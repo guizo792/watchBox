@@ -19,7 +19,7 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
 
   const [alert, setALert] = useState({
-    show: true,
+    show: false,
     msg: "",
   });
 

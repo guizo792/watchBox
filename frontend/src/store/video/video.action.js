@@ -14,7 +14,7 @@ export const setVideoUploading = () => {
 export const setUploadingProgress = (progress) => {
   return {
     type: "SET_PROGRESS",
-    payload: progress + "%",
+    payload: progress,
   };
 };
 

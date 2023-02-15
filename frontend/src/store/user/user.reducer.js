@@ -1,7 +1,9 @@
 const INITIAL_STATE = {
   currentUser: JSON.parse(localStorage.getItem("user")) || null,
-  isLoggedIn: false,
+  isLoggedIn: JSON.parse(localStorage.getItem("user")) === null ? false : true,
 };
+
+console.log(INITIAL_STATE);
 
 export const userReducer = (state = INITIAL_STATE, action) => {
   //

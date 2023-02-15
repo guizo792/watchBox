@@ -20,7 +20,7 @@ const GoTopBtn = () => {
       }
     });
   }, []);
-  return <button class="gotop-btn">⇡</button>;
+  return <button className="gotop-btn">⇡</button>;
 };
 
 export default GoTopBtn;

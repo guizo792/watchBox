@@ -35,7 +35,7 @@ const Register = () => {
   });
 
   //global state
-  const appUser = useSelector((state) => state.appUser);
+  // const appUser = useSelector((state) => state.appUser);
   const dsipatch = useDispatch();
 
   //console.log(appUser);
