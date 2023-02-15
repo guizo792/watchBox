@@ -10,7 +10,7 @@ const UserProfile = () => {
         <div className="col-span-1">
           <ImageProfile />
         </div>
-        <div className="col-span-3 bg-gray-800">
+        <div className="col-span-3 bg-gray-800 rounded-md">
           <GeneralDetails />
         </div>
       </div>
