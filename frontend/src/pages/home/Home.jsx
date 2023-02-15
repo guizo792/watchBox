@@ -15,59 +15,6 @@ import {
 
 import LoadingSpinner from "../../Components/loadingSpinner/spinner";
 
-import { ReactComponent as Image404 } from "../../assets/404Img.svg";
-
-export const videos = [
-  {
-    id: "1",
-    title: "Learning web development",
-    channel: "Modern Web",
-    views: "345K",
-    thumbnailImage: "webdev.jpg",
-    channelImage: "channel1.jpeg",
-  },
-  {
-    id: "2",
-    title: "Cooking chinese food",
-    channel: "Asian Food",
-    views: "1.2M",
-    thumbnailImage: "chineseFood.jpg",
-    channelImage: "channel3.jpg",
-  },
-  {
-    id: "3",
-    title: "Traveling to DUBAI",
-    channel: "TimTours",
-    views: "4.3M",
-    thumbnailImage: "travel.jpg",
-    channelImage: "channel2.jpeg",
-  },
-  {
-    id: "4",
-    title: "Learning web development",
-    channel: "Modern Web",
-    views: "345K",
-    thumbnailImage: "webdev.jpg",
-    channelImage: "channel2.jpeg",
-  },
-  {
-    id: "5",
-    title: "Cooking chinese food",
-    channel: "Asian Food",
-    views: "1.2M",
-    thumbnailImage: "chineseFood.jpg",
-    channelImage: "channel1.jpeg",
-  },
-  {
-    id: "6",
-    title: "Traveling to DUBAI",
-    channel: "TimTours",
-    views: "4.3M",
-    thumbnailImage: "travel.jpg",
-    channelImage: "channel3.jpg",
-  },
-];
-
 const Home = () => {
   const videosData = useSelector((state) => state.videosServices);
   const dispatch = useDispatch();
@@ -83,8 +30,11 @@ const Home = () => {
         if (videos?.data?.data) {
           dispatch(fetchVideosSuccess(videos.data.data));
           // console.log(videosData);
+        } else {
+          dispatch(fetchVideosFailure("There was an error fetching videos"));
         }
       } catch (err) {
+        console.log(err);
         dispatch(fetchVideosFailure(err));
       }
     };
@@ -124,6 +74,11 @@ const Home = () => {
         )}
       </div>
       {videosData.isFetching && <LoadingSpinner />}
+      {videosData.error && (
+        <div className="font-sm text-red text-center min-w-[90%] min-h-[100%] flex items-center justify-center">
+          {"error 🛑🛑🛑" + videosData.error}
+        </div>
+      )}
     </div>
   );
 };

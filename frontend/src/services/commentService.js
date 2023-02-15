@@ -29,3 +29,28 @@ export const createComment = async (commentDetails) => {
     return err;
   }
 };
+
+export const updateComment = async (id, commentDetails) => {
+  try {
+    const res = await axios({
+      method: "PUT",
+      url: API_BASE_URL + "comments/" + id,
+      data: commentDetails,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const deleteComment = async (id) => {
+  try {
+    const res = await axios({
+      method: "DELETE",
+      url: API_BASE_URL + "comments/" + id,
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+};

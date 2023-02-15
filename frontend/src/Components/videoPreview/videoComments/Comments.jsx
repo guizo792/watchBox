@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import {
-  updateComment as updateCommentApi,
-  deleteComment as deleteCommentApi,
-} from "./commentsApi";
+// import {
+//   updateComment as updateCommentApi,
+//   deleteComment as deleteCommentApi,
+// } from "./commentsApi";
 import { getAllComments } from "../../../services/commentService";
 import {
   fetchCommentsFailure,
@@ -14,36 +14,46 @@ import {
 } from "../../../store/comment/comment.action";
 import { useSearchParams } from "react-router-dom";
 import { createComment } from "../../../services/commentService";
+import {
+  deleteComment as deleteCommentApi,
+  updateComment as updateCommentApi,
+} from "../../../services/commentService";
 
 const Comments = ({ commentsUrl, currentUserId }) => {
   const commentsDetails = useSelector((state) => state.commentsDetails);
-  const currentUser = useSelector((state) => state.appUser);
+  const currentUserData = useSelector((state) => state.appUser);
+  // const videosData = useSelector((state) => state.videosServices);
+
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const idParam = searchParams.get("id");
 
   const [backendComments, setBackendComments] = useState([]);
+  // const [currentVideoComments, setCurrentVideoComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
-  const rootComments = backendComments.filter(
-    (backendComment) => backendComment.parentId === null
+  let currentRootComments = useRef([]);
+  currentRootComments.current = backendComments.filter(
+    (backendComment) =>
+      backendComment?.parentId === null && backendComment?.videoId === idParam
   );
 
-  const currentVideoComments = backendComments.filter(
-    (backendComment) => backendComment.videoId === idParam
-  );
+  console.log(currentRootComments.current);
+  // if (rootComments) {
+  //   setCurrentVideoComments((backendComments) => {
+  //     console.log("here is current comments updating");
+  //     return backendComments.filter(
+  //       (backendComment) => backendComment?.videoId === idParam
+  //     );
+  //   });
+  // }
 
   useEffect(() => {
     dispatch(fetchCommentsStart());
     const getCommentsData = async () => {
-      const fetchData = async () => {
-        return await getAllComments(searchParams.get("id"), "userId");
-      };
       try {
-        const comments = await fetchData();
+        const comments = await getAllComments();
         // console.log(video.data);
         if (comments.data) {
-          console.log("hiiiiiiiiiiiiiiiiiiiii       11111111");
-          console.log(comments.data);
           setBackendComments(comments.data);
           dispatch(fetchCommentsSuccess(comments.data));
         }
@@ -53,58 +63,77 @@ const Comments = ({ commentsUrl, currentUserId }) => {
     };
 
     getCommentsData();
-  }, [idParam]);
+  }, [dispatch, idParam]);
+
+  useEffect(() => {
+    console.log("heeeeeeeeeeeeeeeeeey");
+    console.log(currentRootComments.current);
+    console.log(backendComments);
+    currentRootComments.current = backendComments.filter(
+      (backendComment) =>
+        backendComment?.parentId === null && backendComment?.videoId === idParam
+    );
+  }, [backendComments, idParam]);
 
   const getReplies = (commentId) =>
     backendComments
-      .filter((backendComment) => backendComment.parentId === commentId)
+      .filter((backendComment) => backendComment?.parentId === commentId)
       .sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
+
   const addComment = async (text, parentId) => {
-    const res = await createComment({
-      text,
-      parentId,
-      videoId: idParam,
-      createdAt: Date.now(),
-      userId: currentUserId,
-      // userId: currentUser.id,
-      // author: currentUser: username,
-    });
-    if (res.status !== 201) {
-      throw new Error("There was an error creating the comment, try again!");
-    }
-    if (res?.data?.data) {
-      const comment = res?.data?.data;
-      setBackendComments([comment, ...backendComments], () => {
-        console.log([comment, ...backendComments]);
-        console.log(backendComments);
+    if (currentUserData.currentUser) {
+      const res = await createComment({
+        text,
+        parentId,
+        videoId: idParam,
+        createdAt: Date.now(),
+        userId: currentUserData.currentUser.id,
+        author: currentUserData.currentUser.username,
       });
-      console.log(commentsDetails.comments);
-      setActiveComment(null);
-      fetchCommentsSuccess();
-      console.log(commentsDetails.comments);
+      if (res.status !== 201) {
+        throw new Error("There was an error creating the comment, try again!");
+      }
+      if (res?.data?.data) {
+        const comment = res?.data?.data;
+        const newBackendComments = [comment, ...backendComments];
+        setBackendComments(newBackendComments);
+
+        console.log(currentRootComments);
+        console.log(backendComments);
+        console.log(newBackendComments);
+        console.log(commentsDetails.comments);
+        setActiveComment(null);
+        fetchCommentsSuccess();
+        console.log(commentsDetails.comments);
+      }
+    } else {
+      console.error("Please login to post comments ⚠");
     }
   };
-
   const updateComment = (text, commentId) => {
-    updateCommentApi(text).then(() => {
-      const updatedBackendComments = backendComments.map((backendComment) => {
-        if (backendComment.id === commentId) {
-          return { ...backendComment, body: text };
-        }
-        return backendComment;
+    updateCommentApi(commentId, { text })
+      .then((res) => {
+        const updatedBackendComments = backendComments.map((backendComment) => {
+          if (backendComment?.id === commentId) {
+            return { ...backendComment, body: res?.data?.data?.text };
+          }
+          return backendComment;
+        });
+        setBackendComments(updatedBackendComments);
+        setActiveComment(null);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      setBackendComments(updatedBackendComments);
-      setActiveComment(null);
-    });
   };
   const deleteComment = (commentId) => {
     if (window.confirm("Are you sure you want to remove comment?")) {
-      deleteCommentApi().then(() => {
+      deleteCommentApi(commentId).then(() => {
         const updatedBackendComments = backendComments.filter(
-          (backendComment) => backendComment.id !== commentId
+          (backendComment) => backendComment?.id !== commentId
         );
         setBackendComments(updatedBackendComments);
       });
@@ -117,7 +146,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
       <div className="text-xl">Write comment</div>
       <CommentForm submitLabel="Write" handleSubmit={addComment} />
       <div className="mt-[40px] flex flex-col gap-6">
-        {currentVideoComments.map((currentVideoComment) => (
+        {currentRootComments.current.map((currentVideoComment) => (
           <Comment
             key={currentVideoComment.id}
             comment={currentVideoComment}

@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import CommentForm from "./CommentForm";
 
 const Comment = ({
@@ -9,11 +8,9 @@ const Comment = ({
   updateComment,
   deleteComment,
   addComment,
-  parentId = null,
+  parentId,
   currentUserId,
 }) => {
-  const dispatch = useDispatch();
-
   const isEditing =
     activeComment &&
     activeComment.id === comment.id &&

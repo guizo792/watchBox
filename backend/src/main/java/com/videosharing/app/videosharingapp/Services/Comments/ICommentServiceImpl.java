@@ -46,10 +46,14 @@ public class ICommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public CommentEntity updateComment(String id, CommentEntity v) {
+    public CommentEntity updateComment(String id, CommentEntity c) {
         throwExceptionIfNotExist(id);
             CommentEntity comment = commentRepository.findById(id).get();
-        v.setId(comment.getId());
-        return commentRepository.save(v);
+            if (c.getText() != null) comment.setText(c.getText());
+            if (c.getAuthor() != null) comment.setText(c.getAuthor());
+            if (c.getLikeCount() != null) comment.setLikeCount(c.getLikeCount());
+            if (c.getDislikeCount() != null) comment.setDislikeCount(c.getDislikeCount());
+            if (c.getCreatedAt() != null) comment.setCreatedAt(c.getCreatedAt());
+        return commentRepository.save(comment);
     }
 }

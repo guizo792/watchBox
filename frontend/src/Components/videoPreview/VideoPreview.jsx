@@ -23,6 +23,8 @@ const VideoPreview = () => {
   // Global user state
   const appUser = useSelector((state) => state.appUser);
 
+  const [fetchingError, setFetchingError] = useState(null);
+
   const dispatch = useDispatch();
   const idParam = searchParams.get("id");
 
@@ -30,30 +32,32 @@ const VideoPreview = () => {
     dispatch(fetchVideoStart());
     const getVideoData = async () => {
       const fetchData = async () => {
-        return await getVideo(searchParams.get("id"));
+        if (idParam) return await getVideo(searchParams.get("id"));
+        return new Error("There is no video found");
       };
       try {
         const video = await fetchData();
-        // console.log(video.data);
+        console.log(video);
         if (video.data) {
           // console.log(video.data);
           dispatch(fetchVideoSuccess(video.data));
           // console.log(videosData);
         }
+        if (video instanceof Error) {
+          setFetchingError(video?.response?.data);
+        }
       } catch (err) {
-        throw err;
+        console.log(err);
       }
     };
 
     getVideoData();
   }, [idParam]);
 
-  console.log(appUser?.currentUser);
-
   return (
     <>
       <div className="grid grid-cols-1 grid-rows-3 ml-[5%] mt-10 sm:grid-cols-3 sm:grid-rows-2">
-        {!videosData.isFetching && (
+        {!fetchingError && !videosData.isFetching && (
           <>
             <div className="col-span-2 ">
               <div className="video-container">
@@ -68,41 +72,47 @@ const VideoPreview = () => {
                 Recommendations
               </div>
               <div className="flex flex-col gap-6">
-                {videosData.videos.map((video) => (
-                  <Link
-                    to={`/videos?id=${video.id}`}
-                    key={video.id}
-                    className=""
-                  >
-                    <div className="relative">
-                      <img
-                        src={`${video.thumbnailUrl}`}
-                        alt="video thumbnail"
-                        className="rounded-[4px] h-[9rem] w-[18rem] "
-                        loading="lazy"
-                      />
-                      <div className="overlay"></div>
-                    </div>
-                    <div className="video-infos">
-                      <ul className="flex flex-col">
-                        <li className="text-md font-medium">{video.title}</li>
-                        <li className="flex gap-2 items-center text-sm text-pink-800 font-medium">
-                          {"video.channel"}
-                          <Verified className="fill-black	" />
-                        </li>
-                        <li className="text-sm">
-                          {countFormatter(video.viewsCount)} views
-                        </li>
-                      </ul>
-                    </div>
-                  </Link>
-                ))}
+                {videosData.videos &&
+                  videosData.videos.map((video) => (
+                    <Link
+                      to={`/videos?id=${video.id}`}
+                      key={video.id}
+                      className=""
+                    >
+                      <div className="relative">
+                        <img
+                          src={`${video.thumbnailUrl}`}
+                          alt="video thumbnail"
+                          className="rounded-[4px] h-[9rem] w-[18rem] "
+                          loading="lazy"
+                        />
+                        <div className="overlay"></div>
+                      </div>
+                      <div className="video-infos">
+                        <ul className="flex flex-col">
+                          <li className="text-md font-medium">{video.title}</li>
+                          <li className="flex gap-2 items-center text-sm text-pink-800 font-medium">
+                            {"video.channel"}
+                            <Verified className="fill-black	" />
+                          </li>
+                          <li className="text-sm">
+                            {countFormatter(video.viewsCount)} views
+                          </li>
+                        </ul>
+                      </div>
+                    </Link>
+                  ))}
               </div>
             </div>
             <div className="comments-container col-span-2 ">
-              <Comments currentUserId="1" />
+              <Comments currentUserId={appUser?.currentUser?.id} />
             </div>
           </>
+        )}
+        {fetchingError && (
+          <div className="font-sm text-red text-center min-w-[90%] min-h-[100%] flex items-center justify-center col-span-3 row-span-2 mt-20">
+            {"error 🛑🛑🛑" + fetchingError}
+          </div>
         )}
       </div>
       {videosData.isFetching && <LoadingSpinner className="self-start" />}

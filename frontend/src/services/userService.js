@@ -42,6 +42,7 @@ export const login = async (user) => {
     localStorage.setItem(
       "user",
       JSON.stringify({
+        id: data.id,
         username: data.username,
         firstName: data.firstName,
         lastName: data.lastName,
