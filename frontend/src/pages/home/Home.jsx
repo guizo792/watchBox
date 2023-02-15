@@ -36,6 +36,7 @@ const Home = () => {
       } catch (err) {
         console.log(err);
         dispatch(fetchVideosFailure(err));
+        console.log(videosData.errorFetching);
       }
     };
     getVideosData();
@@ -74,11 +75,6 @@ const Home = () => {
         )}
       </div>
       {videosData.isFetching && <LoadingSpinner />}
-      {videosData.error && (
-        <div className="font-sm text-red text-center min-w-[90%] min-h-[100%] flex items-center justify-center">
-          {"error 🛑🛑🛑" + videosData.error}
-        </div>
-      )}
     </div>
   );
 };

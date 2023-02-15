@@ -7,6 +7,7 @@ import { ReactComponent as Verified } from "../../assets/verified.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
+  fetchVideoFailure,
   fetchVideoStart,
   fetchVideoSuccess,
 } from "../../store/videosServices/videosServices.action";
@@ -22,29 +23,27 @@ const VideoPreview = () => {
   const videosData = useSelector((state) => state.videosServices);
   // Global user state
   const appUser = useSelector((state) => state.appUser);
-
-  const [fetchingError, setFetchingError] = useState(null);
-
   const dispatch = useDispatch();
   const idParam = searchParams.get("id");
 
   useEffect(() => {
     dispatch(fetchVideoStart());
     const getVideoData = async () => {
-      const fetchData = async () => {
-        if (idParam) return await getVideo(searchParams.get("id"));
-        return new Error("There is no video found");
-      };
       try {
-        const video = await fetchData();
+        let video;
+        if (idParam) video = await getVideo(searchParams.get("id"));
         console.log(video);
         if (video.data) {
           // console.log(video.data);
           dispatch(fetchVideoSuccess(video.data));
+          dispatch(fetchVideoFailure(null));
           // console.log(videosData);
         }
-        if (video instanceof Error) {
-          setFetchingError(video?.response?.data);
+
+        if (video.name === "AxiosError") {
+          console.log(video.name, video.response);
+          dispatch(fetchVideoFailure(video.response));
+          console.log(videosData.error);
         }
       } catch (err) {
         console.log(err);
@@ -56,8 +55,8 @@ const VideoPreview = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 grid-rows-3 ml-[5%] mt-10 sm:grid-cols-3 sm:grid-rows-2">
-        {!fetchingError && !videosData.isFetching && (
+      <div className="grid grid-cols-1 grid-rows-3 ml-[5%] mt-10 sm:grid-cols-3 sm:grid-rows-3">
+        {!videosData.error && !videosData.isFetching && videosData.video && (
           <>
             <div className="col-span-2 ">
               <div className="video-container">
@@ -67,7 +66,7 @@ const VideoPreview = () => {
                 <VideoInfos video={videosData.video} />
               </div>
             </div>
-            <div className="recommendations-container flex flex-col gap-5 row-span-2 ml-[10%]">
+            <div className="recommendations-container flex flex-col gap-5 row-span-3 ml-[10%]">
               <div className="text-lg font-bold tracking-wider self-start">
                 Recommendations
               </div>
@@ -109,10 +108,15 @@ const VideoPreview = () => {
             </div>
           </>
         )}
-        {fetchingError && (
-          <div className="font-sm text-red text-center min-w-[90%] min-h-[100%] flex items-center justify-center col-span-3 row-span-2 mt-20">
-            {"error 🛑🛑🛑" + fetchingError}
-          </div>
+
+        {videosData.error && (
+          <>
+            <img
+              src="/images/img404.png"
+              alt=""
+              className="h-full w-full col-span-full row-span-full"
+            />
+          </>
         )}
       </div>
       {videosData.isFetching && <LoadingSpinner className="self-start" />}

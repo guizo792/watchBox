@@ -29,30 +29,19 @@ const Comments = ({ commentsUrl, currentUserId }) => {
   const idParam = searchParams.get("id");
 
   const [backendComments, setBackendComments] = useState([]);
-  // const [currentVideoComments, setCurrentVideoComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   let currentRootComments = useRef([]);
-  currentRootComments.current = backendComments.filter(
+
+  currentRootComments.current = backendComments?.filter(
     (backendComment) =>
       backendComment?.parentId === null && backendComment?.videoId === idParam
   );
-
-  console.log(currentRootComments.current);
-  // if (rootComments) {
-  //   setCurrentVideoComments((backendComments) => {
-  //     console.log("here is current comments updating");
-  //     return backendComments.filter(
-  //       (backendComment) => backendComment?.videoId === idParam
-  //     );
-  //   });
-  // }
 
   useEffect(() => {
     dispatch(fetchCommentsStart());
     const getCommentsData = async () => {
       try {
         const comments = await getAllComments();
-        // console.log(video.data);
         if (comments.data) {
           setBackendComments(comments.data);
           dispatch(fetchCommentsSuccess(comments.data));
@@ -66,9 +55,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
   }, [dispatch, idParam]);
 
   useEffect(() => {
-    console.log("heeeeeeeeeeeeeeeeeey");
     console.log(currentRootComments.current);
-    console.log(backendComments);
     currentRootComments.current = backendComments.filter(
       (backendComment) =>
         backendComment?.parentId === null && backendComment?.videoId === idParam
@@ -82,48 +69,47 @@ const Comments = ({ commentsUrl, currentUserId }) => {
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
-
-  const addComment = async (text, parentId) => {
+  const addComment = (text, parentId) => {
+    console.log(currentRootComments.current);
     if (currentUserData.currentUser) {
-      const res = await createComment({
+      createComment({
         text,
         parentId,
         videoId: idParam,
         createdAt: Date.now(),
         userId: currentUserData.currentUser.id,
         author: currentUserData.currentUser.username,
+      }).then((res) => {
+        if (res?.data) {
+          const comment = res?.data;
+          const newBackendComments = [comment, ...backendComments];
+          setBackendComments(newBackendComments);
+          setActiveComment(null);
+          fetchCommentsSuccess();
+        } else {
+          console.log(res);
+        }
       });
-      if (res.status !== 201) {
-        throw new Error("There was an error creating the comment, try again!");
-      }
-      if (res?.data?.data) {
-        const comment = res?.data?.data;
-        const newBackendComments = [comment, ...backendComments];
-        setBackendComments(newBackendComments);
-
-        console.log(currentRootComments);
-        console.log(backendComments);
-        console.log(newBackendComments);
-        console.log(commentsDetails.comments);
-        setActiveComment(null);
-        fetchCommentsSuccess();
-        console.log(commentsDetails.comments);
-      }
     } else {
-      console.error("Please login to post comments ⚠");
+      alert("Please login to post comments ⚠");
     }
   };
+
   const updateComment = (text, commentId) => {
     updateCommentApi(commentId, { text })
-      .then((res) => {
-        const updatedBackendComments = backendComments.map((backendComment) => {
+      .then(async (res) => {
+        const updatedComments = backendComments.map((backendComment) => {
           if (backendComment?.id === commentId) {
-            return { ...backendComment, body: res?.data?.data?.text };
+            return { ...backendComment, body: data?.text };
           }
           return backendComment;
         });
+        const updatedBackendComments = await Promise.all(updatedComments);
+        console.log(updatedBackendComments);
+        const data = res.data;
         setBackendComments(updatedBackendComments);
         setActiveComment(null);
+        console.log(updatedBackendComments, backendComments);
       })
       .catch((err) => {
         console.log(err);
