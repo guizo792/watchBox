@@ -9,10 +9,13 @@ import { getAllVideos } from "../../services/videoService";
 import { useEffect } from "react";
 import {
   fetchVideosFailure,
-  fetchVideosStart,
   fetchVideosSuccess,
+  fetchVideoStart,
 } from "../../store/videosServices/videosServices.action";
+
 import LoadingSpinner from "../../Components/loadingSpinner/spinner";
+
+import { ReactComponent as Image404 } from "../../assets/404Img.svg";
 
 export const videos = [
   {
@@ -69,14 +72,13 @@ const Home = () => {
   const videosData = useSelector((state) => state.videosServices);
   const dispatch = useDispatch();
 
+  console.log(videosData);
+
   useEffect(() => {
-    dispatch(fetchVideosStart());
     const getVideosData = async () => {
-      const fetchData = async () => {
-        return await getAllVideos();
-      };
       try {
-        const videos = await fetchData();
+        dispatch(fetchVideoStart());
+        const videos = await getAllVideos();
         // console.log(videos.data.data);
         if (videos?.data?.data) {
           dispatch(fetchVideosSuccess(videos.data.data));
@@ -86,7 +88,6 @@ const Home = () => {
         dispatch(fetchVideosFailure(err));
       }
     };
-
     getVideosData();
   }, []);
 
@@ -112,10 +113,15 @@ const Home = () => {
         </ul>
       </div>
       <div className="videos-section pl-5">
-        {!videosData.isFetching &&
+        {!videosData.isFetching && videosData.videos.length === 0 ? (
+          <>
+            <img src="/images/img404.png" alt="" className="h-full w-full" />
+          </>
+        ) : (
           videosData.videos.map((video) => (
             <VideoComponent video={video} key={video.id} />
-          ))}
+          ))
+        )}
       </div>
       {videosData.isFetching && <LoadingSpinner />}
     </div>

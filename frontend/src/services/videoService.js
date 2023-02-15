@@ -13,7 +13,7 @@ export const getAllVideos = async () => {
     // console.log(res);
     return res;
   } catch (err) {
-    return err;
+    throw new Error(err);
   }
 };
 

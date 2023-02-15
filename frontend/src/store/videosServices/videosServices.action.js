@@ -10,16 +10,17 @@ export const fetchVideosSuccess = (videos) => {
   };
 };
 
-export const fetchVideosFailure = (error) => {
+export const fetchVideosFailure = () => {
+  console.log("heeeeeeeeeere");
   return {
     type: "FETCH_VIDEOS_FAILURE",
-    payload: error,
+    payload: "error could not fetch videos",
   };
 };
 
 // Fetching specific video
 export const fetchVideoStart = () => {
-  return { type: "FETCH_VIDEO_START" };
+  return { type: "FETCH_VIDEOS_STARTED" };
 };
 
 export const fetchVideoSuccess = (video) => {
