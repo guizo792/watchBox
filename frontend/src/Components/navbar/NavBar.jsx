@@ -61,7 +61,7 @@ const NavBar = () => {
             <Link to={"/"} className="flex flex-shrink-0 items-center">
               <img
                 className="block h-9 w-auto lg:hidden"
-                src="./images/logo.png"
+                src="/images/logo.png"
                 alt="share it"
               />
               <img
@@ -138,7 +138,7 @@ const NavBar = () => {
                   className="h-8 w-8 rounded-full"
                   src={
                     !appUser.isLoggedIn
-                      ? "./images/user.png"
+                      ? "/images/user.png"
                       : appUser?.currentUser?.profilePicture
                   }
                   alt="profile "

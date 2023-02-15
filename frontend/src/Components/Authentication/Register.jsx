@@ -277,7 +277,7 @@ const Register = () => {
 
       {alert.show && (
         <span className="absolute top-1/2 left-0 right-0">
-          <Alert msg={alert.msg} show={setALert} />
+          <Alert show={setALert} />
         </span>
       )}
     </section>

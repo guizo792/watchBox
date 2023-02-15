@@ -3,6 +3,7 @@ package com.videosharing.app.videosharingapp.controllers;
 
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
 import com.videosharing.app.videosharingapp.Services.Users.UsersService;
+import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -34,11 +36,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUserDetails(@PathVariable String id,@RequestBody UserEntity userNewDetails) {
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUserDetails(@PathVariable String id,@RequestBody UserEntity userNewDetails) {
         try {
-            UserEntity updatedUser =usersService.updateUser(id,userNewDetails) ;
-            return new ResponseEntity<UserEntity>(updatedUser,HttpStatus.OK) ;
+            UserResponse updatedUser =usersService.updateUser(id,userNewDetails) ;
+            return new ResponseEntity<UserResponse>(updatedUser,HttpStatus.OK) ;
         }catch (UserNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND) ;
         }

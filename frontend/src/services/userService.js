@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080/auth/";
+const API_BASE_URL_USERS = "http://localhost:8080/api/users/";
 
+// registe a new user account
 export const register = async (newUser) => {
   //
   try {
@@ -29,6 +31,7 @@ export const register = async (newUser) => {
   }
 };
 
+// sign in
 export const login = async (user) => {
   //
   console.log(user);
@@ -52,5 +55,17 @@ export const login = async (user) => {
     //
     console.log(error);
     throw new Error("Bad request");
+  }
+};
+
+// update users data
+
+export const updateUser = async (idUser, user) => {
+  //
+  try {
+    const response = await axios.put(API_BASE_URL_USERS + idUser, user);
+    return response.data;
+  } catch (error) {
+    throw new Error("couldn't update user: ");
   }
 };

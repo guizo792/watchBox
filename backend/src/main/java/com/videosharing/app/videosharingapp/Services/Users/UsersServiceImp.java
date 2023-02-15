@@ -1,12 +1,21 @@
 package com.videosharing.app.videosharingapp.Services.Users;
 
+import com.mongodb.client.result.UpdateResult;
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
+import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
 import com.videosharing.app.videosharingapp.repositories.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -14,6 +23,9 @@ public class UsersServiceImp implements UsersService{
 
     @Autowired
     UserRepository userRepository ;
+
+    @Autowired
+    MongoTemplate mongoTemplate ;
 
 
     @Override
@@ -31,22 +43,35 @@ public class UsersServiceImp implements UsersService{
     }
 
     @Override
-    public UserEntity updateUser(String id, UserEntity newUserDetails) throws UserNotFoundException {
-         UserEntity user ;
+    public UserResponse updateUser(String id, UserEntity newUserDetails) throws UserNotFoundException {
+        UpdateResult updatedUser;
          try{
-             // find user if exist
-             user =userRepository.findById(id).get();
 
-             // new user details with old id
-             newUserDetails.setId(user.getId());
+             Query query =new Query(Criteria.where("id").is(id)) ;
+             Update update =new Update() ;
+
+             Optional.ofNullable(newUserDetails.getFirstName()).ifPresent(e -> update.set("firstName", newUserDetails.getFirstName()));
+             Optional.ofNullable(newUserDetails.getLastName()).ifPresent(e -> update.set("lastName", newUserDetails.getLastName()));
+             Optional.ofNullable(newUserDetails.getUsername()).ifPresent(e -> update.set("username", newUserDetails.getUsername()));
+             Optional.ofNullable(newUserDetails.getProfilePicture()).ifPresent(e -> update.set("profilePicture", newUserDetails.getProfilePicture()));
+
+             updatedUser =mongoTemplate.updateFirst(query, update, UserEntity.class);
+
+             // return updated user
+             // get user from db
+             UserEntity userDb= userRepository.findById(id).get();
+             // create response object and set properties
+             UserResponse userUpdated =new UserResponse();
+             BeanUtils.copyProperties(userDb,userUpdated);
+
              //
-             userRepository.save(newUserDetails) ;
+             return userUpdated ;
 
          }catch(Exception e){
              //
              throw new UserNotFoundException("No such user matches the provided id  ") ;
          }
-        return newUserDetails ;
+
     }
 
     @Override

@@ -2,6 +2,7 @@ import React from "react";
 
 import { FaUserEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function GeneralDetails() {
   //
@@ -10,9 +11,12 @@ function GeneralDetails() {
     <div className="w-full py-3 px-4 text-white">
       <h1 className="tracking-wider font-bold text-xl">
         Your general infromation
-        <span className="inline-block float-right cursor-pointer">
+        <Link
+          to={"./update"}
+          className="inline-block float-right cursor-pointer"
+        >
           <FaUserEdit size={25} />
-        </span>
+        </Link>
         <span className="w-20 border border-b-3 border-main block mt-1"></span>
       </h1>
       <div className="mt-8 max-w-2xl mx-auto">

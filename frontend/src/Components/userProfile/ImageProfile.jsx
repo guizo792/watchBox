@@ -22,7 +22,7 @@ const ImageProfile = () => {
         </p>
       </div>
       <div className="mt-4">
-        <ButtonMain name="change profile pic" icon="" />
+        <ButtonMain name="change profile pic" icon="" upload={true} />
       </div>
     </div>
   );
