@@ -42,3 +42,20 @@ export const createVideo = async (videoDetails) => {
     return err;
   }
 };
+
+// TODO : create video like Function
+export const likeVideo = async (idVideo, idUser, likesNumber) => {
+  try {
+    const resUser = await axios.put(API_BASE_URL + "users/" + idUser, {
+      likedVideos: [idVideo],
+    });
+
+    const resVideo = await axios.put(API_BASE_URL + "videos/" + idVideo, {
+      likes: likesNumber,
+    });
+
+    return { resUser, resVideo };
+  } catch (error) {
+    throw new Error("user already liked this video");
+  }
+};

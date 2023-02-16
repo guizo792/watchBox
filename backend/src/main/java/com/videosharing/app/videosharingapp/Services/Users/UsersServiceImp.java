@@ -56,7 +56,7 @@ public class UsersServiceImp implements UsersService{
              UserEntity userDb= userRepository.findById(id).get();
              Query query =new Query(Criteria.where("id").is(id)) ;
              Update update =new Update() ;
-
+             System.out.println("......." + update);
              Optional.ofNullable(newUserDetails.getFirstName()).ifPresent(e -> update.set("firstName", newUserDetails.getFirstName()));
              Optional.ofNullable(newUserDetails.getLastName()).ifPresent(e -> update.set("lastName", newUserDetails.getLastName()));
              Optional.ofNullable(newUserDetails.getUsername()).ifPresent(e -> update.set("username", newUserDetails.getUsername()));
@@ -70,18 +70,14 @@ public class UsersServiceImp implements UsersService{
                  boolean added =likedVideos.add((String) (newUserDetails.getLikedVideos().toArray())[0]);
                  boolean isDisliked =dislikedVideos.contains((String) (newUserDetails.getLikedVideos().toArray())[0]) ;
 
-                 if(added==true && isDisliked==false ) {
+                 if(added && !isDisliked) {
                      update.set("likedVideos", likedVideos);
-                     userDb.setLikedVideos(likedVideos);
-                     System.out.println("heeeere 1");
-                 }else if(added==true && isDisliked){
+                 }else if(added){
 
                      dislikedVideos.remove((String) (newUserDetails.getLikedVideos().toArray())[0]);
                      userDb.setDislikedVideos(dislikedVideos);
                      update.set("dislikedVideos",dislikedVideos);
-
                      update.set("likedVideos", likedVideos);
-                     userDb.setLikedVideos(likedVideos);
 
                  } else {
                      throw new ExpressionException("the user already liked this video") ;
@@ -97,21 +93,13 @@ public class UsersServiceImp implements UsersService{
                  boolean added =dislikedVideos.add((String) (newUserDetails.getDislikedVideos().toArray())[0]);
                  boolean isLiked =likedVideos.contains((String) (newUserDetails.getDislikedVideos().toArray())[0]) ;
 
-                 if(added==true && isLiked ==false) {
-
+                 if(added && !isLiked) {
                      update.set("dislikedVideos", dislikedVideos);
-                     userDb.setDislikedVideos(dislikedVideos);
-
-                 }else if (isLiked==true && added==true ){
-
-                     System.out.println("dkjhfdkhjfd");
+                 }else if (added){
                      likedVideos.remove((String) (newUserDetails.getDislikedVideos().toArray())[0]) ;
-
                      update.set("likedVideos",likedVideos);
-                     userDb.setLikedVideos(likedVideos);
-
                      update.set("dislikedVideos", dislikedVideos);
-                     userDb.setDislikedVideos(dislikedVideos);
+
                  }
 
                  else{
@@ -119,19 +107,23 @@ public class UsersServiceImp implements UsersService{
                  }
              });
 
-
-             updatedUser =mongoTemplate.updateFirst(query, update, UserEntity.class);
-             // return updated user
-             // create response object and set properties
-             UserResponse userUpdated =new UserResponse();
-             BeanUtils.copyProperties(userDb,userUpdated);
-             //
-             return userUpdated ;
+             System.out.println(update);
+            if(!update.toString().equals("{}")){
+                updatedUser =mongoTemplate.updateFirst(query, update, UserEntity.class);
+                // return updated user
+                // create response object and set properties
+                UserResponse userUpdated =new UserResponse();
+                BeanUtils.copyProperties(userRepository.findById(id).get(),userUpdated);
+                //
+                return userUpdated ;
+            }else {
+                throw  new Exception("update body is not correct !!");
+            }
 
          }catch(ExpressionException e){
              throw new LikesException(e.getMessage()) ;
          }catch(Exception e) {
-             throw new UserNotFoundException("No such user matches the provided id  ") ;
+             throw new UserNotFoundException(e.getMessage()) ;
 
          }
 
