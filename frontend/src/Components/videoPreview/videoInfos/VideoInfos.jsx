@@ -5,8 +5,6 @@ import { ReactComponent as Download } from "../../../assets/download.svg";
 import { countFormatter } from "../../../utils/countFormatter";
 
 const VideoInfos = ({ video }) => {
-  console.log(video);
-
   return (
     <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5">
       <div className="title font-medium text-xl	">{video.title}</div>
@@ -39,8 +37,10 @@ const VideoInfos = ({ video }) => {
             title="Like"
             className="like flex flex-nowrap items-center gap-2"
           >
-            <ArrowUp className="w-8 h-8" />
-            <span className="text-[18px]">{countFormatter(video.likes)}</span>
+            <ArrowUp className="w-8 h-8 " />
+            <span className="text-[18px] text-red">
+              {countFormatter(video.likes)}
+            </span>
           </button>
           <button
             title="Dislike"
@@ -56,9 +56,15 @@ const VideoInfos = ({ video }) => {
           <Share className="w-8 h-8" />
         </button>
 
-        <button title="Download" className="download-btn">
+        <a
+          type="button"
+          title="Download"
+          className="download-btn"
+          href={video.videoUrl}
+          download={video.title}
+        >
           <Download className="w-8 h-8" />
-        </button>
+        </a>
       </div>
       <div className="p-3 border-solid border-black border-[1px] rounded flex flex-col gap-2">
         <div className="text-md text-gray-600 font-medium">

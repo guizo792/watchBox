@@ -50,7 +50,6 @@ public class ICommentServiceImpl implements ICommentService {
         throwExceptionIfNotExist(id);
             CommentEntity comment = commentRepository.findById(id).get();
             if (c.getText() != null) comment.setText(c.getText());
-            if (c.getAuthor() != null) comment.setText(c.getAuthor());
             if (c.getLikeCount() != null) comment.setLikeCount(c.getLikeCount());
             if (c.getDislikeCount() != null) comment.setDislikeCount(c.getDislikeCount());
             if (c.getCreatedAt() != null) comment.setCreatedAt(c.getCreatedAt());

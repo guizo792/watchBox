@@ -2,17 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-
-// import {
-//   updateComment as updateCommentApi,
-//   deleteComment as deleteCommentApi,
-// } from "./commentsApi";
-
+import LoadingSpinner from "../../loadingSpinner/spinner";
 import { getAllComments } from "../../../services/commentService";
 import {
   fetchCommentsFailure,
   fetchCommentsStart,
   fetchCommentsSuccess,
+  fetchCommentSuccess,
 } from "../../../store/comment/comment.action";
 import { useSearchParams } from "react-router-dom";
 import { createComment } from "../../../services/commentService";
@@ -22,9 +18,8 @@ import {
 } from "../../../services/commentService";
 
 const Comments = ({ commentsUrl, currentUserId }) => {
-  const commentsDetails = useSelector((state) => state.commentsDetails);
+  const commentsDetails = useSelector((state) => state.comment);
   const currentUserData = useSelector((state) => state.appUser);
-
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
@@ -33,12 +28,13 @@ const Comments = ({ commentsUrl, currentUserId }) => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   let currentRootComments = useRef([]);
+  // let updatedBackendComments = useRef([]);
 
-  currentRootComments.current = backendComments?.filter(
-    (backendComment) =>
-      backendComment?.parentId === null && backendComment?.videoId === idParam
-  );
-
+  if (backendComments)
+    currentRootComments.current = backendComments?.filter(
+      (backendComment) =>
+        backendComment?.parentId === null && backendComment?.videoId === idParam
+    );
   useEffect(() => {
     dispatch(fetchCommentsStart());
     const getCommentsData = async () => {
@@ -58,7 +54,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
 
   useEffect(() => {
     //console.log(currentRootComments.current);
-    currentRootComments.current = backendComments.filter(
+    currentRootComments.current = backendComments?.filter(
       (backendComment) =>
         backendComment?.parentId === null && backendComment?.videoId === idParam
     );
@@ -66,7 +62,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
 
   const getReplies = (commentId) =>
     backendComments
-      .filter((backendComment) => backendComment?.parentId === commentId)
+      ?.filter((backendComment) => backendComment?.parentId === commentId)
       .sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -99,19 +95,16 @@ const Comments = ({ commentsUrl, currentUserId }) => {
 
   const updateComment = (text, commentId) => {
     updateCommentApi(commentId, { text })
-      .then(async (res) => {
-        const updatedComments = backendComments.map((backendComment) => {
-          if (backendComment?.id === commentId) {
-            return { ...backendComment, body: data?.text };
-          }
-          return backendComment;
+      .then((res) => {
+        setBackendComments((backendComments) => {
+          return backendComments.map((backendComment) => {
+            if (backendComment?.id === commentId) {
+              return { ...backendComment, text: res.data.text };
+            } else return backendComment;
+          });
         });
-        const updatedBackendComments = await Promise.all(updatedComments);
-        //console.log(updatedBackendComments);
-        const data = res.data;
-        setBackendComments(updatedBackendComments);
+
         setActiveComment(null);
-        //console.log(updatedBackendComments, backendComments);
       })
       .catch((err) => {
         console.log(err);
@@ -120,7 +113,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
   const deleteComment = (commentId) => {
     if (window.confirm("Are you sure you want to remove comment?")) {
       deleteCommentApi(commentId).then(() => {
-        const updatedBackendComments = backendComments.filter(
+        const updatedBackendComments = backendComments?.filter(
           (backendComment) => backendComment?.id !== commentId
         );
         setBackendComments(updatedBackendComments);
@@ -134,19 +127,26 @@ const Comments = ({ commentsUrl, currentUserId }) => {
       <div className="text-xl">Write comment</div>
       <CommentForm submitLabel="Write" handleSubmit={addComment} />
       <div className="mt-[40px] flex flex-col gap-6">
-        {currentRootComments.current.map((currentVideoComment) => (
-          <Comment
-            key={currentVideoComment.id}
-            comment={currentVideoComment}
-            replies={getReplies(currentVideoComment.id)}
-            activeComment={activeComment}
-            setActiveComment={setActiveComment}
-            addComment={addComment}
-            deleteComment={deleteComment}
-            updateComment={updateComment}
-            currentUserId={currentUserId}
-          />
-        ))}
+        {commentsDetails.isFetching ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            {currentRootComments.current?.map((currentVideoComment) => (
+              <Comment
+                key={currentVideoComment.id}
+                comment={currentVideoComment}
+                replies={getReplies(currentVideoComment.id)}
+                activeComment={activeComment}
+                setActiveComment={setActiveComment}
+                addComment={addComment}
+                deleteComment={deleteComment}
+                updateComment={updateComment}
+                currentUserId={currentUserId}
+                authorId={currentVideoComment?.userId}
+              />
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

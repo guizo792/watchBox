@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getUser } from "../../../services/userService";
 import CommentForm from "./CommentForm";
 
 const Comment = ({
@@ -10,7 +12,9 @@ const Comment = ({
   addComment,
   parentId,
   currentUserId,
+  authorId,
 }) => {
+  const [commentAuthor, setCommentAuthor] = useState(null);
   const isEditing =
     activeComment &&
     activeComment.id === comment.id &&
@@ -24,11 +28,18 @@ const Comment = ({
   const canEdit = currentUserId === comment.userId;
   const replyId = parentId ? parentId : comment.id;
 
+  useEffect(() => {
+    if (authorId) {
+      getUser(authorId).then((res) => {
+        setCommentAuthor(res);
+      });
+    }
+  }, []);
   return (
     <div key={comment.id} className="flex gap-5">
       <div>
         <img
-          src="/images/channel3.jpg"
+          src={`${commentAuthor?.profilePicture}`}
           alt="user"
           className="min-w-[2rem] min-h-[2rem] max-w-[2rem] max-h-[2rem] rounded-full border-[2px] border-pink-700 border-solid"
         />
@@ -36,7 +47,7 @@ const Comment = ({
       <div className="flex flex-col gap-2">
         <div className="flex items-center text-[19px] gap-5">
           <div className="font-bold text-pink-800 tracking-wider	">
-            {comment.author}
+            {commentAuthor?.username}
           </div>
           <div>{new Date(comment?.createdAt).toLocaleDateString()}</div>
         </div>
@@ -95,7 +106,7 @@ const Comment = ({
             }}
           />
         )}
-        {replies.length > 0 && (
+        {replies?.length > 0 && (
           <div className="replies">
             {replies.map((reply) => (
               <Comment
@@ -109,6 +120,7 @@ const Comment = ({
                 parentId={comment.id}
                 replies={[]}
                 currentUserId={currentUserId}
+                authorId={reply?.userId}
               />
             ))}
           </div>

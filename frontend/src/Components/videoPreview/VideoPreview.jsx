@@ -54,18 +54,21 @@ const VideoPreview = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 grid-rows-3 ml-[5%] mt-10 sm:grid-cols-3 sm:grid-rows-3">
+      <div className="grid grid-cols-2 ml-[5%] mt-10 md:grid-cols-3">
         {!videosData.error && !videosData.isFetching && videosData.video && (
           <>
-            <div className="col-span-2 ">
+            <div className="col-span-2">
               <div className="video-container">
                 <VideoPlayer video={videosData.video} />
               </div>
               <div className="video-infos-container">
                 <VideoInfos video={videosData.video} />
               </div>
+              <div className="comments-container col-span-2 ">
+                <Comments currentUserId={appUser?.currentUser?.id} />
+              </div>
             </div>
-            <div className="recommendations-container flex flex-col gap-5 row-span-3 ml-[10%]">
+            <div className="recommendations-container flex flex-col gap-5 row-span-2 ml-[10%]">
               <div className="text-lg font-bold tracking-wider self-start">
                 Recommendations
               </div>
@@ -101,9 +104,6 @@ const VideoPreview = () => {
                     </Link>
                   ))}
               </div>
-            </div>
-            <div className="comments-container col-span-2 ">
-              <Comments currentUserId={appUser?.currentUser?.id} />
             </div>
           </>
         )}
