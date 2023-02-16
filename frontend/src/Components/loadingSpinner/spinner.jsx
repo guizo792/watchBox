@@ -1,7 +1,7 @@
 import { SpinnerContainer, SpinnerOverlay } from "./spinnerStyles";
 
 const LoadingSpinner = () => {
-  console.log("loading ...");
+  // console.log("loading ...");
   return (
     <SpinnerOverlay>
       <SpinnerContainer />

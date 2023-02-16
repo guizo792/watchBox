@@ -32,7 +32,6 @@ const VideoPreview = () => {
       try {
         let video;
         if (idParam) video = await getVideo(searchParams.get("id"));
-        console.log(video);
         if (video.data) {
           // console.log(video.data);
           dispatch(fetchVideoSuccess(video.data));
@@ -41,12 +40,12 @@ const VideoPreview = () => {
         }
 
         if (video.name === "AxiosError") {
-          console.log(video.name, video.response);
+          //console.log(video.name, video.response);
           dispatch(fetchVideoFailure(video.response));
-          console.log(videosData.error);
+          //console.log(videosData.error);
         }
       } catch (err) {
-        console.log(err);
+        //.log(err);
       }
     };
 

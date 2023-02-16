@@ -5,6 +5,8 @@ import { ReactComponent as Download } from "../../../assets/download.svg";
 import { countFormatter } from "../../../utils/countFormatter";
 
 const VideoInfos = ({ video }) => {
+  console.log(video);
+
   return (
     <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5">
       <div className="title font-medium text-xl	">{video.title}</div>

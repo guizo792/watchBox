@@ -23,6 +23,7 @@ const Comment = ({
   const canReply = Boolean(currentUserId);
   const canEdit = currentUserId === comment.userId;
   const replyId = parentId ? parentId : comment.id;
+
   return (
     <div key={comment.id} className="flex gap-5">
       <div>

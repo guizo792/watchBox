@@ -19,7 +19,7 @@ const Home = () => {
   const videosData = useSelector((state) => state.videosServices);
   const dispatch = useDispatch();
 
-  console.log(videosData);
+  //console.log(videosData);
 
   useEffect(() => {
     const getVideosData = async () => {
@@ -34,9 +34,9 @@ const Home = () => {
           dispatch(fetchVideosFailure("There was an error fetching videos"));
         }
       } catch (err) {
-        console.log(err);
+        //console.log(err);
         dispatch(fetchVideosFailure(err));
-        console.log(videosData.errorFetching);
+        //console.log(videosData.errorFetching);
       }
     };
     getVideosData();

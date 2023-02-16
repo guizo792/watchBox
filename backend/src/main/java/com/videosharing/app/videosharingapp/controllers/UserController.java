@@ -7,6 +7,7 @@ import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +38,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUserDetails(@PathVariable String id,@RequestBody UserEntity userNewDetails) {
+    public ResponseEntity updateUserDetails(@PathVariable String id,@RequestBody UserEntity userNewDetails) {
         try {
             UserResponse updatedUser =usersService.updateUser(id,userNewDetails) ;
             return new ResponseEntity<UserResponse>(updatedUser,HttpStatus.OK) ;
-        }catch (UserNotFoundException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND) ;
+        }catch (ExpressionException e ){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST) ;
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND) ;
         }
     }
 }

@@ -10,7 +10,7 @@ export const getAllComments = async () => {
       method: "GET",
       url: API_BASE_URL + "comments",
     });
-    console.log(res);
+    //console.log(res);
     return res;
   } catch (err) {
     return err;

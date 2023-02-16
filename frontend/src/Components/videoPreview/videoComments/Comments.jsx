@@ -2,10 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
+
 // import {
 //   updateComment as updateCommentApi,
 //   deleteComment as deleteCommentApi,
 // } from "./commentsApi";
+
 import { getAllComments } from "../../../services/commentService";
 import {
   fetchCommentsFailure,
@@ -22,7 +24,7 @@ import {
 const Comments = ({ commentsUrl, currentUserId }) => {
   const commentsDetails = useSelector((state) => state.commentsDetails);
   const currentUserData = useSelector((state) => state.appUser);
-  // const videosData = useSelector((state) => state.videosServices);
+
 
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
@@ -55,7 +57,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
   }, [dispatch, idParam]);
 
   useEffect(() => {
-    console.log(currentRootComments.current);
+    //console.log(currentRootComments.current);
     currentRootComments.current = backendComments.filter(
       (backendComment) =>
         backendComment?.parentId === null && backendComment?.videoId === idParam
@@ -70,7 +72,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
   const addComment = (text, parentId) => {
-    console.log(currentRootComments.current);
+    //console.log(currentRootComments.current);
     if (currentUserData.currentUser) {
       createComment({
         text,
@@ -87,7 +89,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
           setActiveComment(null);
           fetchCommentsSuccess();
         } else {
-          console.log(res);
+          //console.log(res);
         }
       });
     } else {
@@ -105,11 +107,11 @@ const Comments = ({ commentsUrl, currentUserId }) => {
           return backendComment;
         });
         const updatedBackendComments = await Promise.all(updatedComments);
-        console.log(updatedBackendComments);
+        //console.log(updatedBackendComments);
         const data = res.data;
         setBackendComments(updatedBackendComments);
         setActiveComment(null);
-        console.log(updatedBackendComments, backendComments);
+        //console.log(updatedBackendComments, backendComments);
       })
       .catch((err) => {
         console.log(err);

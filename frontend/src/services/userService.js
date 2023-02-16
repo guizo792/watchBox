@@ -26,7 +26,7 @@ export const register = async (newUser) => {
     return response.data;
   } catch (error) {
     //
-    console.log(error);
+    //console.log(error);
     throw new Error("Bad request");
   }
 };
@@ -34,11 +34,11 @@ export const register = async (newUser) => {
 // sign in
 export const login = async (user) => {
   //
-  console.log(user);
+  //console.log(user);
   try {
     const response = await axios.post(API_BASE_URL + "login", user);
     const data = response.data;
-    console.log(data);
+    //console.log(data);
     localStorage.setItem(
       "user",
       JSON.stringify({
@@ -46,7 +46,6 @@ export const login = async (user) => {
         username: data.username,
         firstName: data.firstName,
         lastName: data.lastName,
-        id: data.id,
         profilePicture: data.profilePicture,
       })
     );
@@ -54,7 +53,7 @@ export const login = async (user) => {
     return data;
   } catch (error) {
     //
-    console.log(error);
+    //console.log(error);
     throw new Error("Bad request");
   }
 };
