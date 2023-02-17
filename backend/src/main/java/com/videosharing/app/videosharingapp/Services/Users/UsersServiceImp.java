@@ -123,7 +123,7 @@ public class UsersServiceImp implements UsersService{
              });
 
              // update subscribers List when a subscribe request is coming from another user
-             Optional.ofNullable(newUserDetails.getSubscribedToUsers()).ifPresent(e -> {
+             Optional.ofNullable(newUserDetails.getSubscribers()).ifPresent(e -> {
 
                  Set<String> subscribers = userDb.getSubscribers()!=null ? userDb.getSubscribers(): new HashSet<String>();
 
