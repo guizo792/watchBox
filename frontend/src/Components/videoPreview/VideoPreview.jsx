@@ -89,7 +89,7 @@ const VideoPreview = () => {
                         />
                         <div className="overlay"></div>
                       </div>
-                      <div className="video-infos">
+                      <div className="video-infos w-[18rem]">
                         <ul className="flex flex-col">
                           <li className="text-md font-medium">{video.title}</li>
                           <li className="flex gap-2 items-center text-sm text-pink-800 font-medium">

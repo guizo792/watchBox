@@ -138,14 +138,16 @@ const VideoInfos = ({ video }) => {
         <div className="channel flex gap-5 flex-nowrap items-center">
           <div className="channel-img ">
             <img
-              src="./images/channel1.jpeg"
+              src={`${
+                videoUser?.profilePicture || "/images/defaultProfile.jpg"
+              }`}
               alt="channel"
               className="w-14 h-14 rounded-full border-[3px] border-pink-700 border-solid"
             />
           </div>
           <div className="flex flex-col justify-around">
             <div className="channel-name font-medium text-[16px]">
-              {videoUser?.username}
+              {videoUser?.username || "No name"}
             </div>
             <div className="channel-subscribers text-[16px]">32.3K subs</div>
           </div>
@@ -222,9 +224,11 @@ const VideoInfos = ({ video }) => {
       <div className="p-3 border-solid border-black border-[1px] rounded flex flex-col gap-2">
         <div className="text-md text-gray-600 font-medium">
           {video.viewsCount && video?.viewsCount?.toLocaleString("en-US")} views
-          Sep 7, 2021
+          {video.createdAt}
         </div>
-        <div className="text-black-900">{video.description}</div>
+        <div className="text-black-900">
+          {video.description || "No description"}
+        </div>
         <div className="tags flex gap-4 flex-wrap">
           {video.tags?.map((tag, index) => (
             <span
