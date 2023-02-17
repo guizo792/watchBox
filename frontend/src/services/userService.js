@@ -69,3 +69,13 @@ export const updateUser = async (idUser, user) => {
     throw new Error("couldn't update user: ");
   }
 };
+
+// Get user data by id
+export const getUser = async (idUser) => {
+  try {
+    const response = await axios.get(API_BASE_URL_USERS + idUser);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};

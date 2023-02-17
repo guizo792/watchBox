@@ -15,7 +15,6 @@ public class CommentEntity {
     @Id
     private String id;
     private String text;
-    private String author;
     private Integer likeCount;
     private Integer dislikeCount;
     private String userId;

@@ -1,6 +1,4 @@
-//import { ReactComponent as ArrowUp } from "../../../assets/arrow-up.svg";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
-//import { ReactComponent as ArrowDown } from "../../../assets/arrow-down.svg";
 import { ReactComponent as Share } from "../../../assets/share.svg";
 import { ReactComponent as Download } from "../../../assets/download.svg";
 import { countFormatter } from "../../../utils/countFormatter";
@@ -140,9 +138,15 @@ const VideoInfos = ({ video }) => {
           <Share className="w-8 h-8" />
         </button>
 
-        <button title="Download" className="download-btn">
+        <a
+          type="button"
+          title="Download"
+          className="download-btn"
+          href={video.videoUrl}
+          download={video.title}
+        >
           <Download className="w-8 h-8" />
-        </button>
+        </a>
       </div>
       <div className="p-3 border-solid border-black border-[1px] rounded flex flex-col gap-2">
         <div className="text-md text-gray-600 font-medium">
