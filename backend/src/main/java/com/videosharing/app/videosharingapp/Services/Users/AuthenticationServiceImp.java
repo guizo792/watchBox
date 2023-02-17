@@ -67,6 +67,11 @@ public class AuthenticationServiceImp implements AuthenticationService{
                 .lastName(userDetailsImp.getLastName())
                 .profilePicture(userDetailsImp.getProfilePicture())
                 .id(userDetailsImp.getId())
+                .likedVideos(user.getLikedVideos())
+                .subscribedToUsers(user.getSubscribedToUsers())
+                .subscribers(user.getSubscribers())
+                .videoHistory(user.getVideoHistory())
+                .dislikedVideos(user.getDislikedVideos())
                 .build() ;
     }
 
@@ -97,6 +102,11 @@ public class AuthenticationServiceImp implements AuthenticationService{
                 .username(userSaved.getUsername())
                 .id(userSaved.getId())
                 .profilePicture(userSaved.getProfilePicture())
+                .likedVideos(userSaved.getLikedVideos())
+                .subscribedToUsers(userSaved.getSubscribedToUsers())
+                .subscribers(userSaved.getSubscribers())
+                .videoHistory(userSaved.getVideoHistory())
+                .dislikedVideos(userSaved.getDislikedVideos())
                 .build() ;
     }
 }

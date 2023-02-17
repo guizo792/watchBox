@@ -1,11 +1,84 @@
-import { ReactComponent as ArrowUp } from "../../../assets/arrow-up.svg";
-import { ReactComponent as ArrowDown } from "../../../assets/arrow-down.svg";
+//import { ReactComponent as ArrowUp } from "../../../assets/arrow-up.svg";
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
+//import { ReactComponent as ArrowDown } from "../../../assets/arrow-down.svg";
 import { ReactComponent as Share } from "../../../assets/share.svg";
 import { ReactComponent as Download } from "../../../assets/download.svg";
 import { countFormatter } from "../../../utils/countFormatter";
+import { dislikeVideo, likeVideo } from "../../../services/videoService";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { setUser } from "../../../store/user/user.action";
+import { fetchVideoSuccess } from "../../../store/videosServices/videosServices.action";
 
 const VideoInfos = ({ video }) => {
-  console.log(video);
+  const appUser = useSelector((state) => state.appUser);
+
+  const [loggedInUserReact, setUserReact] = useState({
+    liked: false,
+    disliked: false,
+  });
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isLikedVideosContainVideo = () => {
+      appUser?.currentUser?.likedVideos?.forEach((element) => {
+        console.log("heeere");
+        if (element === video.id) {
+          setUserReact({
+            disliked: false,
+            liked: true,
+          });
+        }
+      });
+
+      appUser?.currentUser?.dislikedVideos?.forEach((element) => {
+        console.log("heeere");
+        if (element === video.id) {
+          setUserReact({
+            liked: false,
+            disliked: true,
+          });
+        }
+      });
+    };
+
+    isLikedVideosContainVideo();
+  }, [video]);
+
+  console.log(appUser);
+
+  const handelLike = async () => {
+    //
+    if (!appUser.isLoggedIn) {
+      //
+      alert("You must be logged in to perform this action");
+    } else {
+      const { userAfterLike, videoAfterLike } = await likeVideo(
+        video,
+        appUser.currentUser
+      );
+
+      dispatch(setUser(userAfterLike));
+      dispatch(fetchVideoSuccess(videoAfterLike));
+    }
+  };
+
+  const handleDislike = async () => {
+    //
+    if (!appUser.isLoggedIn) {
+      //
+      alert("You must be logged in to perform this action");
+    } else {
+      const { userAfterDislike, videoAfterDislike } = await dislikeVideo(
+        video,
+        appUser.currentUser
+      );
+
+      dispatch(setUser(userAfterDislike));
+      dispatch(fetchVideoSuccess(videoAfterDislike));
+    }
+  };
 
   return (
     <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5">
@@ -34,19 +107,30 @@ const VideoInfos = ({ video }) => {
             Subscribe
           </button>
         </div>
-        <div className="like-dislike flex gap-2 flex-nowrap	">
+        <div className="like-dislike flex gap-2 flex-nowrap	items-center">
           <button
             title="Like"
-            className="like flex flex-nowrap items-center gap-2"
+            className="like flex flex-nowrap  gap-2 items-center"
+            onClick={handelLike}
           >
-            <ArrowUp className="w-8 h-8" />
+            <AiOutlineLike
+              size={40}
+              fill={loggedInUserReact.liked ? "blue" : "black"}
+              className="hover:scale-95"
+            />
             <span className="text-[18px]">{countFormatter(video.likes)}</span>
           </button>
+
           <button
             title="Dislike"
             className="dislike flex flex-nowrap items-center gap-2 "
+            onClick={handleDislike}
           >
-            <ArrowDown className="w-8 h-8" />{" "}
+            <AiOutlineDislike
+              size={40}
+              fill={loggedInUserReact.disliked ? "red" : "black"}
+              className="hover:scale-95"
+            />
             <span className="text-[18px]">
               {countFormatter(video.dislikes)}
             </span>

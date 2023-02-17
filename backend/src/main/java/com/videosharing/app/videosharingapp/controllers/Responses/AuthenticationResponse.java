@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,4 +21,9 @@ public class AuthenticationResponse {
     private String firstName ;
     private String profilePicture ;
     private String id ;
+    private Set<String> subscribedToUsers ;
+    private  Set<String> subscribers ;
+    private List<String> videoHistory ;
+    private Set<String> likedVideos ;
+    private Set<String> dislikedVideos;
 }

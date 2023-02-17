@@ -17,8 +17,8 @@ public class VideoEntity {
     private String description;
     private String title;
     private String userId;
-    private Integer likes ;
-    private Integer dislikes ;
+    private Integer likes= 0;
+    private Integer dislikes=0 ;
     private List<String> tags;
     private String videoUrl;
     private VideoStatus videoStatus;

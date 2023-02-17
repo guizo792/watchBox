@@ -44,18 +44,70 @@ export const createVideo = async (videoDetails) => {
 };
 
 // TODO : create video like Function
-export const likeVideo = async (idVideo, idUser, likesNumber) => {
+export const likeVideo = async (video, user) => {
+  //
   try {
-    const resUser = await axios.put(API_BASE_URL + "users/" + idUser, {
-      likedVideos: [idVideo],
+    let isDislikedVideo = false;
+
+    user?.dislikedVideos?.forEach((item) => {
+      if (item === video.id) {
+        //
+        isDislikedVideo = true;
+        return true;
+      }
     });
 
-    const resVideo = await axios.put(API_BASE_URL + "videos/" + idVideo, {
-      likes: likesNumber,
+    if (isDislikedVideo) {
+      await axios.put(API_BASE_URL + "videos/" + video.id, {
+        dislikes: video.dislikes - 1,
+      });
+    }
+    const resUser = await axios.put(API_BASE_URL + "users/" + user.id, {
+      likedVideos: [video.id],
     });
 
-    return { resUser, resVideo };
+    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
+      likes: video.likes + 1,
+    });
+
+    return { userAfterLike: resUser.data, videoAfterLike: resVideo.data };
   } catch (error) {
     throw new Error("user already liked this video");
+  }
+};
+
+//
+export const dislikeVideo = async (video, user) => {
+  //
+
+  try {
+    let isLikedViedo = false;
+
+    user?.likedVideos?.forEach((item) => {
+      if (item === video.id) {
+        //
+        isLikedViedo = true;
+        return true;
+      }
+    });
+
+    if (isLikedViedo) {
+      await axios.put(API_BASE_URL + "videos/" + video.id, {
+        likes: video.likes - 1,
+      });
+    }
+
+    const resUser = await axios.put(API_BASE_URL + "users/" + user.id, {
+      dislikedVideos: [video.id],
+    });
+
+    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
+      dislikes: video.dislikes + 1,
+    });
+
+    return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
+  } catch (error) {
+    console.log(error);
+    throw new Error("user already disliked this video");
   }
 };
