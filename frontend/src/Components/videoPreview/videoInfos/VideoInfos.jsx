@@ -101,6 +101,7 @@ const VideoInfos = ({ video }) => {
           <button
             type="button"
             className=" focus:outline-none text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:ring-pink-300 rounded-lg px-3 py-1 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-900 text-[20px]"
+            onClick={handleSubscription}
           >
             Subscribe
           </button>

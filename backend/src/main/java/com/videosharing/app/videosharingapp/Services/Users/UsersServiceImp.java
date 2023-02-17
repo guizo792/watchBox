@@ -107,6 +107,36 @@ public class UsersServiceImp implements UsersService{
                  }
              });
 
+             // update subscribedTo List when a user subscribe to other user
+             Optional.ofNullable(newUserDetails.getSubscribedToUsers()).ifPresent(e -> {
+
+                 Set<String> subscribeTo = userDb.getSubscribedToUsers()!=null ? userDb.getSubscribedToUsers(): new HashSet<String>();
+
+                 boolean subscribed =subscribeTo.add((String) (newUserDetails.getSubscribedToUsers().toArray())[0]);
+
+                 if(subscribed) {
+                     update.set("subscribedToUsers", subscribeTo);
+                 }else {
+                     subscribeTo.remove((String) (newUserDetails.getSubscribedToUsers().toArray())[0]) ;
+                     update.set("subscribedToUsers",subscribeTo);
+                 }
+             });
+
+             // update subscribers List when a subscribe request is coming from another user
+             Optional.ofNullable(newUserDetails.getSubscribedToUsers()).ifPresent(e -> {
+
+                 Set<String> subscribers = userDb.getSubscribers()!=null ? userDb.getSubscribers(): new HashSet<String>();
+
+                 boolean added =subscribers.add((String) (newUserDetails.getSubscribers().toArray())[0]);
+
+                 if(added) {
+                     update.set("subscribers", subscribers);
+                 }else {
+                     subscribers.remove((String) (newUserDetails.getSubscribers().toArray())[0]) ;
+                     update.set("subscribers",subscribers);
+                 }
+             });
+
              System.out.println(update);
             if(!update.toString().equals("{}")){
                 updatedUser =mongoTemplate.updateFirst(query, update, UserEntity.class);

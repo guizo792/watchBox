@@ -14,6 +14,7 @@ import {
 import { getVideo } from "../../services/videoService";
 import { countFormatter } from "../../utils/countFormatter";
 import LoadingSpinner from "../loadingSpinner/spinner";
+import { updateUser } from "../../services/userService";
 
 import "./videoPreview.css";
 
@@ -52,6 +53,10 @@ const VideoPreview = () => {
     getVideoData();
   }, [idParam]);
 
+  const handleSubscription = () => {
+    updateUser().then((res) => console.log(res));
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 ml-[5%] mt-10 md:grid-cols-3">
@@ -62,7 +67,10 @@ const VideoPreview = () => {
                 <VideoPlayer video={videosData.video} />
               </div>
               <div className="video-infos-container">
-                <VideoInfos video={videosData.video} />
+                <VideoInfos
+                  video={videosData.video}
+                  handleSubscription={handleSubscription}
+                />
               </div>
               <div className="comments-container col-span-2 ">
                 <Comments currentUserId={appUser?.currentUser?.id} />
