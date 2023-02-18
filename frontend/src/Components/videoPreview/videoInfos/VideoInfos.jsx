@@ -10,6 +10,7 @@ import { fetchVideoSuccess } from "../../../store/videosServices/videosServices.
 import { getUser, updateUser } from "../../../services/userService";
 import ButtonLoadingSpinner from "../../loadingSpinner/buttonSpinner/buttonSpinner";
 import Alert from "../../Alert/Alert";
+import CustomPopup from "../../popUp/popUp";
 
 const VideoInfos = ({ video }) => {
   // console.log(video);
@@ -26,6 +27,7 @@ const VideoInfos = ({ video }) => {
     show: false,
     msg: "",
   });
+  const [visibility, setVisibility] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -131,6 +133,10 @@ const VideoInfos = ({ video }) => {
       });
   };
 
+  const popupCloseHandler = (e) => {
+    setVisibility(e);
+  };
+
   return (
     <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5">
       <div className="title font-medium text-xl	">{video.title}</div>
@@ -207,7 +213,13 @@ const VideoInfos = ({ video }) => {
             </span>
           </button>
         </div>
-        <button title="Share" className="share-btn">
+        <button
+          title="Share"
+          className=""
+          onClick={() => {
+            setVisibility(!visibility);
+          }}
+        >
           <Share className="w-9 h-9" />
         </button>
 
@@ -245,6 +257,29 @@ const VideoInfos = ({ video }) => {
           <Alert msg={alert.msg} show={setALert} />
         </span>
       )}
+
+      <CustomPopup
+        onClose={popupCloseHandler}
+        show={visibility}
+        title="Share video"
+      >
+        <a
+          href={`https://twitter.com/share?url=${window.location}`}
+          target="_blank"
+          class="share-btn twitter"
+          rel="noreferrer"
+        >
+          Twitter
+        </a>
+        <a
+          href={`https://twitter.com/share?url=${window.location}`}
+          target="_blank"
+          class="share-btn facebook"
+          rel="noreferrer"
+        >
+          Facebook
+        </a>
+      </CustomPopup>
     </div>
   );
 };

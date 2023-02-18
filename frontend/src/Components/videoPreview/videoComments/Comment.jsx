@@ -38,7 +38,7 @@ const Comment = ({
     }
   }, []);
   return (
-    <div className="flex gap-[6rem]">
+    <div className="flex gap-[6rem] relative">
       <div key={comment.id} className="flex gap-5">
         <div>
           <img
@@ -135,7 +135,7 @@ const Comment = ({
       {replies.length > 0 && (
         <div className="open-close-btn">
           <button
-            className="bg-transparent text-pink-700 transition-all duration-500 text-2xl"
+            className="bg-transparent text-pink-700 transition-all duration-500 text-md border border-2 border-pink-700 rounded-full w-6 h-6 absolute top-1 left-[18rem] hover:text-white hover:bg-pink-700 flex items-center justify-center"
             onClick={(e) => {
               setShowReplies(!showReplies);
               showReplies
