@@ -1,54 +1,46 @@
-.overlay {
-  visibility: hidden;
-  opacity: 0;
-  position: fixed;
-  min-width: 70rem;
-  top: 50%;
-  left: 50%;
-  /* background: rgba(0, 0, 0, 0.7); */
-  transition: opacity 500ms;
-}
+/* Popup styling */
 .popup {
-  margin: 25rem auto;
+  margin: 70px auto;
   padding: 20px;
   background: #fff;
   border-radius: 5px;
   width: 30%;
-  position: relative;
-  transition: all 5s ease-in-out;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 1s ease-in-out;
+  min-width: 20rem;
 }
 
 .popup h2 {
+  font-weight: bold;
   margin-top: 0;
+  margin-bottom: 5px;
   color: #333;
   font-family: Tahoma, Arial, sans-serif;
 }
 .popup .close {
   position: absolute;
   top: 1px;
-  right: 10px;
+  right: 15px;
   transition: all 200ms;
   font-size: 30px;
   font-weight: bold;
   text-decoration: none;
-  color: #fa0000;
+  color: #a02222;
 }
 .popup .close:hover {
   cursor: pointer;
-  color: #000;
+  color: #ff4242;
 }
 .popup .content {
   max-height: 30%;
   overflow: auto;
 }
 
-@media screen and (max-width: 700px) {
-  .popup {
-    width: 70%;
-  }
-}
+/* Buttons styling */
 
-/* ///////////////////////////////// */
 .share-btn {
   display: inline-block;
   color: #ffffff;
@@ -58,6 +50,8 @@
   text-align: center;
   font-size: 0.9em;
   margin: 0 0.2em;
+  border-radius: 5px;
+  padding: 2px 10px;
 }
 
 .share-btn:focus,
@@ -75,4 +69,7 @@
 }
 .share-btn.facebook {
   background: #3b5998;
+}
+.share-btn.copy {
+  background: #444444;
 }

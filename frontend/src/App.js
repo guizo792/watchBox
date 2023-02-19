@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 import "./App.css";
 import UploadVideo from "./pages/video-upload/UploadVideo.jsx";
-import VideoPreview from "./Components/videoPreview/VideoPreview";
+import VideoPreview from "./pages/videoPreview/VideoPreview";
 import Home from "./pages/home/Home";
 import Navigation from "./pages/navigation/Navigation";
 import Login from "./Components/Authentication/Login";

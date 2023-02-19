@@ -10,7 +10,8 @@ import { fetchVideoSuccess } from "../../../store/videosServices/videosServices.
 import { getUser, updateUser } from "../../../services/userService";
 import ButtonLoadingSpinner from "../../loadingSpinner/buttonSpinner/buttonSpinner";
 import Alert from "../../Alert/Alert";
-import CustomPopup from "../../popUp/popUp";
+
+import "./videoInfosStyles.css";
 
 const VideoInfos = ({ video }) => {
   // console.log(video);
@@ -27,7 +28,7 @@ const VideoInfos = ({ video }) => {
     show: false,
     msg: "",
   });
-  const [visibility, setVisibility] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -133,12 +134,8 @@ const VideoInfos = ({ video }) => {
       });
   };
 
-  const popupCloseHandler = (e) => {
-    setVisibility(e);
-  };
-
   return (
-    <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5">
+    <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5 relative">
       <div className="title font-medium text-xl	">{video.title}</div>
       <div className="other-infos flex gap-5 items-center justify-around basis-1 flex-wrap">
         <div className="channel flex gap-5 flex-nowrap items-center">
@@ -155,7 +152,9 @@ const VideoInfos = ({ video }) => {
             <div className="channel-name font-medium text-[16px]">
               {videoUser?.username || "No name"}
             </div>
-            <div className="channel-subscribers text-[16px]">32.3K subs</div>
+            <div className="channel-subscribers text-[16px]">
+              {countFormatter(videoUser?.subscribers?.length || 0)} subs
+            </div>
           </div>
         </div>
         <div className="subscribe-btn">
@@ -217,7 +216,7 @@ const VideoInfos = ({ video }) => {
           title="Share"
           className=""
           onClick={() => {
-            setVisibility(!visibility);
+            setShowPopUp(true);
           }}
         >
           <Share className="w-9 h-9" />
@@ -258,28 +257,47 @@ const VideoInfos = ({ video }) => {
         </span>
       )}
 
-      <CustomPopup
-        onClose={popupCloseHandler}
-        show={visibility}
-        title="Share video"
-      >
-        <a
-          href={`https://twitter.com/share?url=${window.location}`}
-          target="_blank"
-          class="share-btn twitter"
-          rel="noreferrer"
-        >
-          Twitter
-        </a>
-        <a
-          href={`https://twitter.com/share?url=${window.location}`}
-          target="_blank"
-          class="share-btn facebook"
-          rel="noreferrer"
-        >
-          Facebook
-        </a>
-      </CustomPopup>
+      {showPopUp && (
+        <div className={"popup"}>
+          <h2>Share video</h2>
+          <span className={"close"} onClick={() => setShowPopUp(false)}>
+            &times;
+          </span>
+          <a
+            href={`https://twitter.com/share?url=${window.location}`}
+            target="_blank"
+            class="share-btn twitter"
+            rel="noreferrer"
+          >
+            Twitter
+          </a>
+          <a
+            href={`https://twitter.com/share?url=${window.location}`}
+            target="_blank"
+            class="share-btn facebook"
+            rel="noreferrer"
+          >
+            Facebook
+          </a>
+          <button
+            className="share-btn copy"
+            title="copy link"
+            onClick={() => {
+              let url = document.location.href;
+              navigator.clipboard.writeText(url).then(
+                function () {
+                  window.alert("Copied!");
+                },
+                function () {
+                  window.alert("Copy error");
+                }
+              );
+            }}
+          >
+            Copy link
+          </button>
+        </div>
+      )}
     </div>
   );
 };
