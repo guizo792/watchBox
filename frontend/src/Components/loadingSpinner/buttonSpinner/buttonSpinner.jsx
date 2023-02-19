@@ -1,6 +1,6 @@
 import { SpinnerContainer, SpinnerOverlay } from "./spinnerStyles";
 
-const LoadingSpinner = ({ styles }) => {
+const ButtonLoadingSpinner = ({ styles }) => {
   // console.log("loading ...");
   return (
     <SpinnerOverlay style={{ styles }}>
@@ -9,4 +9,4 @@ const LoadingSpinner = ({ styles }) => {
   );
 };
 
-export default LoadingSpinner;
+export default ButtonLoadingSpinner;

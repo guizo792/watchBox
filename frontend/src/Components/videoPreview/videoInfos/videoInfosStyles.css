@@ -1,0 +1,75 @@
+/* Popup styling */
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 1s ease-in-out;
+  min-width: 20rem;
+}
+
+.popup h2 {
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 5px;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 1px;
+  right: 15px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #a02222;
+}
+.popup .close:hover {
+  cursor: pointer;
+  color: #ff4242;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
+/* Buttons styling */
+
+.share-btn {
+  display: inline-block;
+  color: #ffffff;
+  border: none;
+  padding: 0.1em 0.6em;
+  outline: none;
+  text-align: center;
+  font-size: 0.9em;
+  margin: 0 0.2em;
+  border-radius: 5px;
+  padding: 2px 10px;
+}
+
+.share-btn:focus,
+.share-btn:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.share-btn:active {
+  color: #e2e2e2;
+}
+
+.share-btn.twitter {
+  background: #55acee;
+}
+.share-btn.facebook {
+  background: #3b5998;
+}
+.share-btn.copy {
+  background: #444444;
+}

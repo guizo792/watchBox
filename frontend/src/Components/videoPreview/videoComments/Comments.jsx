@@ -8,7 +8,6 @@ import {
   fetchCommentsFailure,
   fetchCommentsStart,
   fetchCommentsSuccess,
-  fetchCommentSuccess,
 } from "../../../store/comment/comment.action";
 import { useSearchParams } from "react-router-dom";
 import { createComment } from "../../../services/commentService";

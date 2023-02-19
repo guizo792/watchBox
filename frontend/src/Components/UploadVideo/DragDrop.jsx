@@ -16,12 +16,15 @@ import {
 
 const DragDrop = () => {
   const videoToUpload = useSelector((state) => state.videoToUploadDetails);
+  const appUser = useSelector((state) => state.appUser);
 
   // local state to store file and loading state
   const [loading, setLoading] = useState(false);
   const [video, setVideo] = useState(null);
 
   const dispatch = useDispatch();
+
+  //set user that will upload video
 
   const handelChange = (e) => {
     //
@@ -38,6 +41,12 @@ const DragDrop = () => {
   const handelSumbit = () => {
     //
     if (video !== null) {
+      dispatch(
+        savVideoDetails({
+          userId: appUser.currentUser.id,
+        })
+      );
+      console.log(videoToUpload.videoDetails);
       dispatch(setVideoUploading());
       const databaseRef = ref(
         database,

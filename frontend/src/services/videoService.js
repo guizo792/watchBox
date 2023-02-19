@@ -80,7 +80,7 @@ export const likeVideo = async (video, user) => {
         },
       }
     );
-    console.log(resUser);
+    //console.log(resUser);
     const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
       likes: video.likes - 1,
     });
@@ -131,12 +131,12 @@ export const dislikeVideo = async (video, user) => {
         },
       }
     );
-    console.log(resUser.data);
+    //console.log(resUser.data);
 
     const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
       dislikes: video.dislikes - 1,
     });
-    console.log(resVideo.data);
+    //console.log(resVideo.data);
 
     return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
   }

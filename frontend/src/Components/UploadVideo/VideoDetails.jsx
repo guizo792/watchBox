@@ -94,6 +94,7 @@ const VideoDetails = ({ video }) => {
               type="text"
               placeholder="Title"
               onChange={(e) => handelChange(e, false)}
+              required
             />
           </div>
           <div className="mb-4">
@@ -110,6 +111,7 @@ const VideoDetails = ({ video }) => {
               onChange={(e) => handelChange(e, false)}
               type="text"
               placeholder="video description"
+              required
             />
           </div>
           <div className="mb-4">
@@ -124,6 +126,7 @@ const VideoDetails = ({ video }) => {
               id="status"
               name="videoStatus"
               onChange={(e) => handelChange(e, true)}
+              required
             >
               <option selected disabled>
                 choose video status
@@ -147,6 +150,7 @@ const VideoDetails = ({ video }) => {
                 type="text"
                 placeholder="video tags"
                 ref={tagRef}
+                required
               />
               <button
                 type="button"
@@ -176,6 +180,7 @@ const VideoDetails = ({ video }) => {
 
           {/* btn submit  */}
           <button
+            type="button"
             className="mt-5 bg-main px-4 py-2 col-span-1 rounded shadow-md text-sm font-semibold text-white transition duration-500 ease-in-out hover:scale-110 hover:shadow-2xl"
             onClick={(e) => handleSavingVideoDetails(e)}
           >

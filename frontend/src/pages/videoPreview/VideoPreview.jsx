@@ -1,8 +1,8 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { videos } from "../../pages/home/Home";
-import Comments from "./videoComments/Comments";
-import VideoInfos from "./videoInfos/VideoInfos";
-import VideoPlayer from "./videoPlayer/VideoPlayer";
+import { videos } from "../home/Home";
+import Comments from "../../Components/videoPreview/videoComments/Comments";
+import VideoInfos from "../../Components/videoPreview/videoInfos/VideoInfos";
+import VideoPlayer from "../../Components/videoPreview/videoPlayer/VideoPlayer";
 import { ReactComponent as Verified } from "../../assets/verified.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import {
 } from "../../store/videosServices/videosServices.action";
 import { getVideo } from "../../services/videoService";
 import { countFormatter } from "../../utils/countFormatter";
-import LoadingSpinner from "../loadingSpinner/spinner";
+import LoadingSpinner from "../../Components/loadingSpinner/spinner";
 
 import "./videoPreview.css";
 
@@ -89,7 +89,7 @@ const VideoPreview = () => {
                         />
                         <div className="overlay"></div>
                       </div>
-                      <div className="video-infos">
+                      <div className="video-infos w-[18rem]">
                         <ul className="flex flex-col">
                           <li className="text-md font-medium">{video.title}</li>
                           <li className="flex gap-2 items-center text-sm text-pink-800 font-medium">
