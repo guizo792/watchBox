@@ -13,4 +13,7 @@ public interface UsersService {
     UserResponse updateUser(String id, UserEntity newUserDetails) throws UserNotFoundException, LikesException;
     List<UserEntity> getAllUsers() ;
     UserEntity deleteUser(String id) ;
+    UserResponse removeLikedVideo(String idUser,String idVideo) throws Exception;
+    UserResponse removeDislikedVideo(String idUser,String idVideo) throws Exception;
+
 }

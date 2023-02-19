@@ -36,7 +36,7 @@ public class UsersServiceImp implements UsersService{
     public UserEntity getUser(String id) throws UserNotFoundException {
         UserEntity user ;
         try {
-           user =userRepository.findById(id).get() ;
+            user =userRepository.findById(id).get() ;
 
         }catch(Exception e){
             System.out.println(e.getMessage());
@@ -50,64 +50,89 @@ public class UsersServiceImp implements UsersService{
     @Override
     public UserResponse updateUser(String id, UserEntity newUserDetails) throws UserNotFoundException, LikesException {
         UpdateResult updatedUser;
-         try{
+        try{
 
-             // get user from db
-             UserEntity userDb= userRepository.findById(id).get();
-             Query query =new Query(Criteria.where("id").is(id)) ;
-             Update update =new Update() ;
-             System.out.println("......." + update);
-             Optional.ofNullable(newUserDetails.getFirstName()).ifPresent(e -> update.set("firstName", newUserDetails.getFirstName()));
-             Optional.ofNullable(newUserDetails.getLastName()).ifPresent(e -> update.set("lastName", newUserDetails.getLastName()));
-             Optional.ofNullable(newUserDetails.getUsername()).ifPresent(e -> update.set("username", newUserDetails.getUsername()));
-             Optional.ofNullable(newUserDetails.getProfilePicture()).ifPresent(e -> update.set("profilePicture", newUserDetails.getProfilePicture()));
+            // get user from db
+            UserEntity userDb= userRepository.findById(id).get();
+            Query query =new Query(Criteria.where("id").is(id)) ;
+            Update update =new Update() ;
+            System.out.println("......." + update);
+            Optional.ofNullable(newUserDetails.getFirstName()).ifPresent(e -> update.set("firstName", newUserDetails.getFirstName()));
+            Optional.ofNullable(newUserDetails.getLastName()).ifPresent(e -> update.set("lastName", newUserDetails.getLastName()));
+            Optional.ofNullable(newUserDetails.getUsername()).ifPresent(e -> update.set("username", newUserDetails.getUsername()));
+            Optional.ofNullable(newUserDetails.getProfilePicture()).ifPresent(e -> update.set("profilePicture", newUserDetails.getProfilePicture()));
 
-             // update likedVideos List if requested
-             Optional.ofNullable(newUserDetails.getLikedVideos()).ifPresent(e -> {
-                 Set<String> likedVideos =userDb.getLikedVideos()!=null ? userDb.getLikedVideos(): new HashSet<String>();
-                 Set<String> dislikedVideos= userDb.getDislikedVideos()!=null ? userDb.getDislikedVideos(): new HashSet<String>();
+            // update likedVideos List if requested
+            Optional.ofNullable(newUserDetails.getLikedVideos()).ifPresent(e -> {
+                Set<String> likedVideos =userDb.getLikedVideos()!=null ? userDb.getLikedVideos(): new HashSet<String>();
+                Set<String> dislikedVideos= userDb.getDislikedVideos()!=null ? userDb.getDislikedVideos(): new HashSet<String>();
 
-                 boolean added =likedVideos.add((String) (newUserDetails.getLikedVideos().toArray())[0]);
-                 boolean isDisliked =dislikedVideos.contains((String) (newUserDetails.getLikedVideos().toArray())[0]) ;
+                boolean added =likedVideos.add((String) (newUserDetails.getLikedVideos().toArray())[0]);
+                boolean isDisliked =dislikedVideos.contains((String) (newUserDetails.getLikedVideos().toArray())[0]) ;
 
-                 if(added && !isDisliked) {
-                     update.set("likedVideos", likedVideos);
-                 }else if(added){
+                if(added && !isDisliked) {
+                    update.set("likedVideos", likedVideos);
+                }else if(added){
 
-                     dislikedVideos.remove((String) (newUserDetails.getLikedVideos().toArray())[0]);
-                     userDb.setDislikedVideos(dislikedVideos);
-                     update.set("dislikedVideos",dislikedVideos);
-                     update.set("likedVideos", likedVideos);
+                    dislikedVideos.remove((String) (newUserDetails.getLikedVideos().toArray())[0]);
+                    userDb.setDislikedVideos(dislikedVideos);
+                    update.set("dislikedVideos",dislikedVideos);
+                    update.set("likedVideos", likedVideos);
 
-                 } else {
-                     throw new ExpressionException("the user already liked this video") ;
-                 }
-             });
+                } else {
+                    throw new ExpressionException("the user already liked this video") ;
+                }
+            });
 
-             // update disliked List if requested
-             Optional.ofNullable(newUserDetails.getDislikedVideos()).ifPresent(e -> {
+            // update disliked List if requested
+            Optional.ofNullable(newUserDetails.getDislikedVideos()).ifPresent(e -> {
 
-                 Set<String> dislikedVideos =userDb.getDislikedVideos()!=null ? userDb.getDislikedVideos(): new HashSet<String>();
-                 Set<String> likedVideos= userDb.getLikedVideos()!=null ? userDb.getLikedVideos(): new HashSet<String>();
+                Set<String> dislikedVideos =userDb.getDislikedVideos()!=null ? userDb.getDislikedVideos(): new HashSet<String>();
+                Set<String> likedVideos= userDb.getLikedVideos()!=null ? userDb.getLikedVideos(): new HashSet<String>();
 
-                 boolean added =dislikedVideos.add((String) (newUserDetails.getDislikedVideos().toArray())[0]);
-                 boolean isLiked =likedVideos.contains((String) (newUserDetails.getDislikedVideos().toArray())[0]) ;
+                boolean added =dislikedVideos.add((String) (newUserDetails.getDislikedVideos().toArray())[0]);
+                boolean isLiked =likedVideos.contains((String) (newUserDetails.getDislikedVideos().toArray())[0]) ;
 
-                 if(added && !isLiked) {
-                     update.set("dislikedVideos", dislikedVideos);
-                 }else if (added){
-                     likedVideos.remove((String) (newUserDetails.getDislikedVideos().toArray())[0]) ;
-                     update.set("likedVideos",likedVideos);
-                     update.set("dislikedVideos", dislikedVideos);
+                if(added && !isLiked) {
+                    update.set("dislikedVideos", dislikedVideos);
+                }else if (added){
+                    likedVideos.remove((String) (newUserDetails.getDislikedVideos().toArray())[0]) ;
+                    update.set("likedVideos",likedVideos);
+                    update.set("dislikedVideos", dislikedVideos);
+                }
+                else{
+                    throw new ExpressionException("the user already disliked this video") ;
+                }
+            });
 
-                 }
+            // update subscribedTo List when a user subscribe to other user
+            Optional.ofNullable(newUserDetails.getSubscribedToUsers()).ifPresent(e -> {
 
-                 else{
-                     throw new ExpressionException("the user already disliked this video") ;
-                 }
-             });
+                Set<String> subscribeTo = userDb.getSubscribedToUsers()!=null ? userDb.getSubscribedToUsers(): new HashSet<String>();
 
-             System.out.println(update);
+                boolean subscribed =subscribeTo.add((String) (newUserDetails.getSubscribedToUsers().toArray())[0]);
+
+                if(subscribed) {
+                    update.set("subscribedToUsers", subscribeTo);
+                }else {
+                    subscribeTo.remove((String) (newUserDetails.getSubscribedToUsers().toArray())[0]) ;
+                    update.set("subscribedToUsers",subscribeTo);
+                }
+            });
+
+            // update subscribers List when a subscribe request is coming from another user
+            Optional.ofNullable(newUserDetails.getSubscribers()).ifPresent(e -> {
+                Set<String> subscribers = userDb.getSubscribers()!=null ? userDb.getSubscribers(): new HashSet<String>();
+                boolean added =subscribers.add((String) (newUserDetails.getSubscribers().toArray())[0]);
+                if(added) {
+                    update.set("subscribers", subscribers);
+                }else {
+                    subscribers.remove((String) (newUserDetails.getSubscribers().toArray())[0]) ;
+                    update.set("subscribers",subscribers);
+                }
+            });
+
+            System.out.println(update);
             if(!update.toString().equals("{}")){
                 updatedUser =mongoTemplate.updateFirst(query, update, UserEntity.class);
                 // return updated user
@@ -120,14 +145,17 @@ public class UsersServiceImp implements UsersService{
                 throw  new Exception("update body is not correct !!");
             }
 
-         }catch(ExpressionException e){
-             throw new LikesException(e.getMessage()) ;
-         }catch(Exception e) {
-             throw new UserNotFoundException(e.getMessage()) ;
+        }catch(ExpressionException e){
+            throw new LikesException(e.getMessage()) ;
+        }catch(Exception e) {
+            throw new UserNotFoundException(e.getMessage()) ;
 
-         }
+        }
 
     }
+
+
+
 
     @Override
     public List<UserEntity> getAllUsers() {
@@ -137,5 +165,49 @@ public class UsersServiceImp implements UsersService{
     @Override
     public UserEntity deleteUser(String id) {
         return null;
+    }
+
+    @Override
+    public UserResponse removeLikedVideo(String idUser,String idVideo) throws Exception {
+        try{
+            UserEntity user =userRepository.findById(idUser).get() ;
+
+            Set<String> likedVideos =user.getLikedVideos() ;
+
+            if(likedVideos.contains(idVideo)) {
+                likedVideos.remove(idVideo) ;
+                user.setLikedVideos(likedVideos);
+            }
+            userRepository.save(user) ;
+           UserResponse userResponse =new UserResponse() ;
+
+           BeanUtils.copyProperties(user,userResponse);
+
+           return userResponse ;
+        }catch (Exception e){
+            throw  new Exception("can't find user ");
+        }
+    }
+
+    @Override
+    public UserResponse removeDislikedVideo(String idUser, String idVideo) throws Exception {
+        try{
+            UserEntity user =userRepository.findById(idUser).get() ;
+
+            Set<String> disLikedVideos =user.getDislikedVideos() ;
+
+            if(disLikedVideos.contains(idVideo)) {
+                disLikedVideos.remove(idVideo) ;
+                user.setDislikedVideos(disLikedVideos);
+            }
+            userRepository.save(user) ;
+            UserResponse userResponse =new UserResponse() ;
+
+            BeanUtils.copyProperties(user,userResponse);
+
+            return userResponse ;
+        }catch (Exception e){
+            throw  new Exception("can't find user ");
+        }
     }
 }

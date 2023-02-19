@@ -20,8 +20,10 @@ const VideoInfos = ({ video }) => {
 
   useEffect(() => {
     const isLikedVideosContainVideo = () => {
+      let isLikeChnaged = false;
+      let isDislikedChnaged = false;
       appUser?.currentUser?.likedVideos?.forEach((element) => {
-        console.log("heeere");
+        isLikeChnaged = true;
         if (element === video.id) {
           setUserReact({
             disliked: false,
@@ -31,7 +33,7 @@ const VideoInfos = ({ video }) => {
       });
 
       appUser?.currentUser?.dislikedVideos?.forEach((element) => {
-        console.log("heeere");
+        isDislikedChnaged = true;
         if (element === video.id) {
           setUserReact({
             liked: false,
@@ -39,10 +41,27 @@ const VideoInfos = ({ video }) => {
           });
         }
       });
+
+      if (!isLikeChnaged) {
+        setUserReact((prevReact) => {
+          return {
+            ...prevReact,
+            liked: false,
+          };
+        });
+      }
+      if (!isDislikedChnaged) {
+        setUserReact((prevReact) => {
+          return {
+            ...prevReact,
+            disliked: false,
+          };
+        });
+      }
     };
 
     isLikedVideosContainVideo();
-  }, [video]);
+  }, [video, appUser.currentUser]);
 
   console.log(appUser);
 

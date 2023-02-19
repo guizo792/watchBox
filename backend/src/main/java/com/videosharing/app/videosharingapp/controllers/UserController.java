@@ -3,6 +3,7 @@ package com.videosharing.app.videosharingapp.controllers;
 
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
 import com.videosharing.app.videosharingapp.Services.Users.UsersService;
+import com.videosharing.app.videosharingapp.controllers.Requests.RemoveLikedVideoReq;
 import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
 
@@ -48,6 +49,29 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND) ;
         }
     }
+
+    @DeleteMapping("/likedVideos/{id}")
+    public ResponseEntity removeLikedVideo(@PathVariable String id,@RequestBody RemoveLikedVideoReq req) {
+        //System.out.println("method delete is called ");
+        //System.out.println(req);
+        try {
+            UserResponse updatedUser =usersService.removeLikedVideo(id,req.getIdVideo()) ;
+            return new ResponseEntity<UserResponse>(updatedUser,HttpStatus.OK) ;
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND) ;
+        }
+    }
+
+    @DeleteMapping("/dislikedVideos/{id}")
+    public ResponseEntity removeDislikedVideo(@PathVariable String id,@RequestBody RemoveLikedVideoReq req) {
+        try {
+            UserResponse updatedUser =usersService.removeDislikedVideo(id,req.getIdVideo()) ;
+            return new ResponseEntity<UserResponse>(updatedUser,HttpStatus.OK) ;
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND) ;
+        }
+    }
+
 }
 
 

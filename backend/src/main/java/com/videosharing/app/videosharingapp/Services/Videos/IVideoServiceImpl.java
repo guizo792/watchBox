@@ -68,8 +68,8 @@ public class IVideoServiceImpl implements IVideoService {
         VideoEntity video = videoRepository.findById(id).get();
         if (v.getDescription() != null) video.setDescription(v.getDescription());
         if (v.getTitle() != null) video.setTitle(v.getTitle());
-        if (v.getLikes() != 0) video.setLikes(v.getLikes());
-        if (v.getDislikes() != 0) video.setDislikes(v.getDislikes());
+        if ( v.getLikes()!=null && v.getLikes() >= 0) video.setLikes(v.getLikes());
+        if (v.getDislikes()!=null && v.getDislikes() >= 0 ) video.setDislikes(v.getDislikes());
         if (v.getTags() != null) video.setTags(v.getTags());
         if (v.getVideoUrl() != null) video.setVideoUrl(v.getVideoUrl());
         if (v.getUserId() != null) video.setUserId(v.getUserId());

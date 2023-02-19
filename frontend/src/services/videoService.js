@@ -72,7 +72,20 @@ export const likeVideo = async (video, user) => {
 
     return { userAfterLike: resUser.data, videoAfterLike: resVideo.data };
   } catch (error) {
-    throw new Error("user already liked this video");
+    const resUser = await axios.delete(
+      API_BASE_URL + "users/likedVideos/" + user.id,
+      {
+        data: {
+          idVideo: video.id,
+        },
+      }
+    );
+    console.log(resUser);
+    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
+      likes: video.likes - 1,
+    });
+
+    return { userAfterLike: resUser.data, videoAfterLike: resVideo.data };
   }
 };
 
@@ -91,10 +104,13 @@ export const dislikeVideo = async (video, user) => {
       }
     });
 
+    //console.log(isLikedViedo);
     if (isLikedViedo) {
-      await axios.put(API_BASE_URL + "videos/" + video.id, {
+      const res = await axios.put(API_BASE_URL + "videos/" + video.id, {
         likes: video.likes - 1,
       });
+
+      //console.log(res);
     }
 
     const resUser = await axios.put(API_BASE_URL + "users/" + user.id, {
@@ -107,7 +123,21 @@ export const dislikeVideo = async (video, user) => {
 
     return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
   } catch (error) {
-    console.log(error);
-    throw new Error("user already disliked this video");
+    const resUser = await axios.delete(
+      API_BASE_URL + "users/dislikedVideos/" + user.id,
+      {
+        data: {
+          idVideo: video.id,
+        },
+      }
+    );
+    console.log(resUser.data);
+
+    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
+      dislikes: video.dislikes - 1,
+    });
+    console.log(resVideo.data);
+
+    return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
   }
 };
