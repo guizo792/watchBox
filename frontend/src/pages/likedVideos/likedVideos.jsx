@@ -54,12 +54,6 @@ const LikedVideos = () => {
         )}
         {loading && <LoadingSpinner />}
       </div>
-      {/* <div className="videos-section pl-5 min-h-[92vh]">
-        {!loading &&
-          likedVideos.map((video) => (
-            <VideoComponent video={video} key={video.id} />
-          ))}
-      </div> */}
     </div>
   );
 };
