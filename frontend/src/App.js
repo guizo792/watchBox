@@ -10,6 +10,8 @@ import { Fragment } from "react";
 import GoTopBtn from "./Components/goTopBtn/goTopBtn";
 import UserProfile from "./Components/userProfile/UserProfile";
 import UpdateDetails from "./Components/userProfile/UpdateDetails";
+import Subscriptions from "./pages/subscriptions/subscripitons";
+import LikedVideos from "./pages/likedVideos/likedVideos";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="/videos" element={<VideoPreview />} />
           <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/user/profile/update" element={<UpdateDetails />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/liked-videos" element={<LikedVideos />} />
         </Route>
         <Route path="/auth">
           <Route path="login" element={<Login />} />

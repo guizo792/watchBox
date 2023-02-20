@@ -277,7 +277,7 @@ const VideoInfos = ({ video }) => {
       )}
 
       {showPopUp && (
-        <div className={"popup"}>
+        <div className={"popup border border-2 border-black"}>
           <h2>Share video</h2>
           <span className={"close"} onClick={() => setShowPopUp(false)}>
             &times;
