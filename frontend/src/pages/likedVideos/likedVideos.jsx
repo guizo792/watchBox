@@ -17,16 +17,18 @@ const LikedVideos = () => {
       if (appUser?.currentUser?.id) {
         try {
           const userData = await getUser(appUser?.currentUser?.id);
-
-          const likedVideos = await Promise.all(
-            userData?.likedVideos?.map((videoId) =>
-              getVideo(videoId).then((res) => res.data.data)
-            )
-          );
+          console.log(userData);
+          const likedVideos =
+            userData?.likedVideos &&
+            (await Promise.all(
+              userData?.likedVideos?.map((videoId) =>
+                getVideo(videoId).then((res) => res.data)
+              )
+            ));
 
           setLikedVideos(likedVideos);
-          setLoading(false);
           console.log(likedVideos);
+          setLoading(false);
         } catch (err) {
           console.log(err);
         }
@@ -40,13 +42,24 @@ const LikedVideos = () => {
       <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
         <SidebarNav />
       </div>
-      <div className="videos-section pl-5 min-h-[92vh]">
+      <div className="videos-section pl-5 min-h-[92vh] w-[100%]">
+        {!loading && (
+          <>
+            {likedVideos.length !== 0
+              ? likedVideos?.map((video, index) => (
+                  <VideoComponent video={video} key={index} />
+                ))
+              : "No liked videos"}
+          </>
+        )}
+        {loading && <LoadingSpinner />}
+      </div>
+      {/* <div className="videos-section pl-5 min-h-[92vh]">
         {!loading &&
           likedVideos.map((video) => (
             <VideoComponent video={video} key={video.id} />
           ))}
-      </div>
-      {loading && <LoadingSpinner />}
+      </div> */}
     </div>
   );
 };

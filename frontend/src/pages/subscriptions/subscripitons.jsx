@@ -35,7 +35,6 @@ const Subscriptions = () => {
           setSubscribedToUsers(subscribedTo);
           setSubscribers(subscribers);
           setLoading(false);
-          console.log(subscribedTo, subscribers);
         } catch (err) {
           console.log(err);
         }
@@ -49,7 +48,53 @@ const Subscriptions = () => {
       <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
         <SidebarNav />
       </div>
-      <div className="videos-section pl-5 min-h-[92vh] flex flex-col gap-8 pt-6 w-[100%]">
+      <div className="videos-section pl-5 min-h-[92vh] flex-col w-[100%] !items-start !justify-start">
+        <div className="flex flex-col gap-2">
+          {!loading && (
+            <>
+              <div className="font-medium text-pink-700">Subscribed to</div>
+              {subscribedToUsers?.map((user, index) => (
+                <div
+                  className="flex items-center gap-5 justify-start font"
+                  key={index}
+                >
+                  <img
+                    src={`${user.profilePicture}`}
+                    alt="profile pic"
+                    className="h-[3.2rem] w-[3.2rem] rounded-full shadow-lg"
+                  />
+                  <div>{user?.username}</div>
+                  <div>
+                    {countFormatter(user?.subscribers?.length)} subscribers
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          {!loading && (
+            <>
+              <div className="font-medium text-pink-700">Subscribers</div>{" "}
+              {subscribers?.map((subscriber, index) => (
+                <div
+                  className="flex items-center gap-5 justify-start"
+                  key={index}
+                >
+                  <img
+                    src={`${subscriber.profilePicture}`}
+                    alt="profile pic"
+                    className="h-[3.2rem] w-[3.2rem] rounded-full shadow-lg"
+                  />
+                  <div>{subscriber?.username}</div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
+        {loading && <LoadingSpinner />}
+      </div>
+      {/* <div className="videos-section pl-5 min-h-[92vh] flex flex-col gap-8 pt-6 w-[100%]">
         <div className="flex flex-col gap-2">
           {!loading && (
             <>
@@ -94,7 +139,7 @@ const Subscriptions = () => {
           )}
         </div>
         {loading && <LoadingSpinner />}
-      </div>
+      </div> */}
     </div>
   );
 };
