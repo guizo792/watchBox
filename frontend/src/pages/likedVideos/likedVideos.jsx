@@ -10,6 +10,7 @@ const LikedVideos = () => {
   const appUser = useSelector((state) => state.appUser);
   const [likedVideos, setLikedVideos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -17,20 +18,17 @@ const LikedVideos = () => {
       if (appUser?.currentUser?.id) {
         try {
           const userData = await getUser(appUser?.currentUser?.id);
-          console.log(userData);
-          const likedVideos =
-            userData?.likedVideos &&
-            (await Promise.all(
-              userData?.likedVideos?.map((videoId) =>
-                getVideo(videoId).then((res) => res.data)
-              )
-            ));
+          // if (!userData?.message === 'Network Error')
+          const likedVideos = await Promise.all(
+            userData?.likedVideos?.map((videoId) =>
+              getVideo(videoId).then((res) => res.data)
+            )
+          );
 
           setLikedVideos(likedVideos);
-          console.log(likedVideos);
           setLoading(false);
         } catch (err) {
-          console.log(err);
+          setLoadingError(err);
         }
       }
     };
@@ -45,14 +43,19 @@ const LikedVideos = () => {
       <div className="videos-section pl-5 min-h-[92vh] w-[100%]">
         {!loading && (
           <>
-            {likedVideos.length !== 0
+            {likedVideos?.length !== 0
               ? likedVideos?.map((video, index) => (
                   <VideoComponent video={video} key={index} />
                 ))
               : "No liked videos"}
           </>
         )}
-        {loading && <LoadingSpinner />}
+        {loading && !loadingError && <LoadingSpinner />}
+        {loadingError && (
+          <div className="text-red-900 font-medium">
+            There was an error loading liked videos details
+          </div>
+        )}
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ const Alert = ({ msg, show }) => {
         <div className="ml-3 text-sm font-medium">{msg}</div>
         <button
           type="button"
-          className="ml-auto -mx-1.5 -my-1.5  text-white rounded-lg focus:ring-2 focus:ring-main p-1.5 hover:bg-red-200 inline-flex h-8 w-8 bg-red-900"
+          className="ml-auto -mx-1.5 -my-1.5  text-white rounded-lg focus:ring-2 focus:ring-main p-1.5 hover:bg-red-200 hover:text-red-800 inline-flex h-8 w-8 bg-red-900"
           data-dismiss-target="#alert-1"
           aria-label="Close"
           onClick={() => show({ show: false, msg: "" })}
