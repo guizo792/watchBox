@@ -18,10 +18,10 @@ const VideoComponent = ({ video }) => {
   }, [video]);
 
   return (
-    <VideoContainer to={`/videos?id=${video.id}`}>
+    <VideoContainer to={`/videos?id=${video?.id}`}>
       <ThumbnailImage className="thumbnail-img">
         <img
-          src={`${video.thumbnailUrl}`}
+          src={`${video?.thumbnailUrl}`}
           alt="video thumbnail"
           className="thumbnail-img"
           loading="lazy"
@@ -40,10 +40,10 @@ const VideoComponent = ({ video }) => {
         <div className="video-infos">
           <ul>
             <li className="title max-w-[100%] max-h-[1.4rem] overflow-hidden">
-              {video.title}
+              {video?.title}
             </li>
             <li className="font-medium">{videoUser?.username || "No name"}</li>
-            <li>{countFormatter(video.viewsCount)} views</li>
+            <li>{countFormatter(video?.viewsCount)} views</li>
           </ul>
         </div>
       </div>

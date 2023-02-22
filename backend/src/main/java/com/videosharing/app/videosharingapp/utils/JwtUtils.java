@@ -15,9 +15,9 @@ public class JwtUtils {
     private String jwtSecret ;
 
     public Key getSingInKey(){
-        System.out.println(jwtSecret);
+        //System.out.println(jwtSecret);
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret) ;
-        System.out.println(keyBytes);
+       // System.out.println(keyBytes);
         return Keys.hmacShaKeyFor(keyBytes) ;
     }
 }

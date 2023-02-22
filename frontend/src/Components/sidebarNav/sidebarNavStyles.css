@@ -1,14 +1,3 @@
-.home-container {
-  display: flex;
-  gap: 20px;
-}
-
-@media only screen and (max-width: 635px) {
-  .home-container {
-    flex-wrap: wrap;
-  }
-}
-
 .sidebar-nav {
   /* height: 100vh; */
   padding: 1rem;

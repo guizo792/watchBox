@@ -3,8 +3,10 @@ package com.videosharing.app.videosharingapp.controllers;
 
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.Entities.VideoStatus;
+import com.videosharing.app.videosharingapp.Services.Notifications.WSService;
 import com.videosharing.app.videosharingapp.Services.Videos.IVideoService;
 import com.videosharing.app.videosharingapp.Services.Videos.IVideoServiceImpl;
+import com.videosharing.app.videosharingapp.controllers.Responses.ResponseMessage;
 import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.ResponseHandler;
@@ -25,6 +27,9 @@ public class VideoController {
 
     @Autowired
     IVideoService videoService;
+
+    @Autowired
+    WSService wsService ;
 
     @GetMapping("/test")
     public ResponseEntity<String> testingRoute() {
@@ -55,6 +60,9 @@ public class VideoController {
         try {
             VideoEntity v = videoService.addVideo(video);
             if (videoRepository.existsById(v.getId())) {
+                //System.out.println("inside this if ");
+                ResponseMessage msg =new ResponseMessage("a new video added") ;
+                wsService.notifyFrontend(msg);
                 return new ResponseEntity<VideoEntity>(v, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity("There was a problem adding the video, Please try again!", HttpStatus.BAD_REQUEST);
