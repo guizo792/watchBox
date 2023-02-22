@@ -53,7 +53,7 @@ const VideoDetails = ({ video }) => {
       })
     );
 
-    console.log(videoToUpload.videoDetails);
+    //console.log(videoToUpload.videoDetails);
   };
 
   const handleSavingVideoDetails = async (event) => {

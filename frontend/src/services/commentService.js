@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AuthorizationHeader } from "./request.extras";
 
 axios.defaults.withCredentials = false;
 
@@ -23,6 +24,7 @@ export const createComment = async (commentDetails) => {
       method: "POST",
       url: API_BASE_URL + "comments",
       data: commentDetails,
+      headers: AuthorizationHeader(),
     });
     return res;
   } catch (err) {
@@ -36,6 +38,7 @@ export const updateComment = async (id, commentDetails) => {
       method: "PUT",
       url: API_BASE_URL + "comments/" + id,
       data: commentDetails,
+      headers: AuthorizationHeader(),
     });
     return res;
   } catch (err) {
@@ -48,6 +51,7 @@ export const deleteComment = async (id) => {
     const res = await axios({
       method: "DELETE",
       url: API_BASE_URL + "comments/" + id,
+      headers: AuthorizationHeader(),
     });
     return res;
   } catch (err) {

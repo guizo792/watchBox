@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AuthorizationHeader } from "./request.extras";
 
 const API_BASE_URL = "http://localhost:8080/auth/";
 const API_BASE_URL_USERS = "http://localhost:8080/api/users/";
@@ -12,6 +13,7 @@ export const register = async (newUser) => {
     });
 
     const data = response.data;
+    // user informations
     localStorage.setItem(
       "user",
       JSON.stringify({
@@ -22,6 +24,9 @@ export const register = async (newUser) => {
         profilePicture: data.profilePicture,
       })
     );
+
+    // user toekn
+    localStorage.setItem("token", data.jwtToken);
 
     return response.data;
   } catch (error) {
@@ -50,6 +55,8 @@ export const login = async (user) => {
       })
     );
 
+    localStorage.setItem("token", data.jwtToken);
+
     return data;
   } catch (error) {
     //
@@ -63,7 +70,9 @@ export const login = async (user) => {
 export const updateUser = async (idUser, user) => {
   //
   try {
-    const response = await axios.put(API_BASE_URL_USERS + idUser, user);
+    const response = await axios.put(API_BASE_URL_USERS + idUser, user, {
+      headers: AuthorizationHeader(),
+    });
     return response.data;
   } catch (error) {
     throw new Error("couldn't update user: ");

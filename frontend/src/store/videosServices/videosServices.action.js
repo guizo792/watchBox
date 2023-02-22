@@ -11,7 +11,7 @@ export const fetchVideosSuccess = (videos) => {
 };
 
 export const fetchVideosFailure = () => {
-  console.log("heeeeeeeeeere");
+  //console.log("heeeeeeeeeere");
   return {
     type: "FETCH_VIDEOS_FAILURE",
     payload: "error could not fetch videos",

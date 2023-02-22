@@ -1,18 +1,23 @@
 import axios from "axios";
 
+import { AuthorizationHeader } from "./request.extras";
+
 axios.defaults.withCredentials = false;
 
 const API_BASE_URL = "http://localhost:8080/api/";
 
 export const getAllVideos = async () => {
   try {
+    console.log("..");
     const res = await axios({
       method: "GET",
       url: API_BASE_URL + "videos",
+      // headers: AuthorizationHeader(),
     });
-    // console.log(res);
+    console.log("reeeeeeeeeeees" + res);
     return res;
   } catch (err) {
+    console.log(err);
     throw new Error(err);
   }
 };
@@ -22,6 +27,7 @@ export const getVideo = async (id) => {
     const res = await axios({
       method: "GET",
       url: API_BASE_URL + "videos/" + id,
+      // headers: AuthorizationHeader(),
     });
     // console.log(res);
     return res;
@@ -36,6 +42,7 @@ export const createVideo = async (videoDetails) => {
       method: "POST",
       url: API_BASE_URL + "videos",
       data: videoDetails,
+      headers: AuthorizationHeader(),
     });
     return res;
   } catch (err) {
@@ -58,17 +65,33 @@ export const likeVideo = async (video, user) => {
     });
 
     if (isDislikedVideo) {
-      await axios.put(API_BASE_URL + "videos/" + video.id, {
-        dislikes: video.dislikes - 1,
-      });
-    }
-    const resUser = await axios.put(API_BASE_URL + "users/" + user.id, {
-      likedVideos: [video.id],
-    });
+      console.log("inside isDislikedVideo");
 
-    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
-      likes: video.likes + 1,
-    });
+      await axios.put(
+        API_BASE_URL + "videos/" + video.id,
+        {
+          dislikes: video.dislikes - 1,
+        },
+        { headers: AuthorizationHeader() }
+      );
+    }
+
+    console.log("after isDislikedVideo");
+    const resUser = await axios.put(
+      API_BASE_URL + "users/" + user.id,
+      {
+        likedVideos: [video.id],
+      },
+      { headers: AuthorizationHeader() }
+    );
+
+    const resVideo = await axios.put(
+      API_BASE_URL + "videos/" + video.id,
+      {
+        likes: video.likes + 1,
+      },
+      { headers: AuthorizationHeader() }
+    );
 
     return { userAfterLike: resUser.data, videoAfterLike: resVideo.data };
   } catch (error) {
@@ -78,12 +101,17 @@ export const likeVideo = async (video, user) => {
         data: {
           idVideo: video.id,
         },
+        headers: AuthorizationHeader(),
       }
     );
     //console.log(resUser);
-    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
-      likes: video.likes - 1,
-    });
+    const resVideo = await axios.put(
+      API_BASE_URL + "videos/" + video.id,
+      {
+        likes: video.likes - 1,
+      },
+      { headers: AuthorizationHeader() }
+    );
 
     return { userAfterLike: resUser.data, videoAfterLike: resVideo.data };
   }
@@ -106,20 +134,32 @@ export const dislikeVideo = async (video, user) => {
 
     //console.log(isLikedViedo);
     if (isLikedViedo) {
-      const res = await axios.put(API_BASE_URL + "videos/" + video.id, {
-        likes: video.likes - 1,
-      });
+      const res = await axios.put(
+        API_BASE_URL + "videos/" + video.id,
+        {
+          likes: video.likes - 1,
+        },
+        { headers: AuthorizationHeader() }
+      );
 
       //console.log(res);
     }
 
-    const resUser = await axios.put(API_BASE_URL + "users/" + user.id, {
-      dislikedVideos: [video.id],
-    });
+    const resUser = await axios.put(
+      API_BASE_URL + "users/" + user.id,
+      {
+        dislikedVideos: [video.id],
+      },
+      { headers: AuthorizationHeader() }
+    );
 
-    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
-      dislikes: video.dislikes + 1,
-    });
+    const resVideo = await axios.put(
+      API_BASE_URL + "videos/" + video.id,
+      {
+        dislikes: video.dislikes + 1,
+      },
+      { headers: AuthorizationHeader() }
+    );
 
     return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
   } catch (error) {
@@ -129,13 +169,18 @@ export const dislikeVideo = async (video, user) => {
         data: {
           idVideo: video.id,
         },
+        headers: AuthorizationHeader(),
       }
     );
     //console.log(resUser.data);
 
-    const resVideo = await axios.put(API_BASE_URL + "videos/" + video.id, {
-      dislikes: video.dislikes - 1,
-    });
+    const resVideo = await axios.put(
+      API_BASE_URL + "videos/" + video.id,
+      {
+        dislikes: video.dislikes - 1,
+      },
+      { headers: AuthorizationHeader() }
+    );
     //console.log(resVideo.data);
 
     return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
