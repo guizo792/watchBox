@@ -1,5 +1,4 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { videos } from "../home/Home";
 import Comments from "../../Components/videoPreview/videoComments/Comments";
 import VideoInfos from "../../Components/videoPreview/videoInfos/VideoInfos";
 import VideoPlayer from "../../Components/videoPreview/videoPlayer/VideoPlayer";

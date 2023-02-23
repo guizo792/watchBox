@@ -28,11 +28,12 @@
   font-size: 30px;
   font-weight: bold;
   text-decoration: none;
-  color: #a02222;
+  color: #741919;
 }
 .popup .close:hover {
   cursor: pointer;
-  color: #ff4242;
+  color: #fa0000;
+  transform: scale(1.05);
 }
 .popup .content {
   max-height: 30%;
@@ -65,11 +66,11 @@
 }
 
 .share-btn.twitter {
-  background: #55acee;
+  background: #1f7ec7;
 }
 .share-btn.facebook {
-  background: #3b5998;
+  background: #173981;
 }
 .share-btn.copy {
-  background: #444444;
+  background: #424242;
 }

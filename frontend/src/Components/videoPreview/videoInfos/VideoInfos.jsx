@@ -84,10 +84,13 @@ const VideoInfos = ({ video }) => {
     }
 
     // Check if the appuser is subscribed to video channel
-    video?.userId?.subscribers?.forEach((subscriberId) => {
-      if (subscriberId === appUser?.currentUser.id) setSubscribed(true);
-    });
-  }, [video, appUser.currentUser]);
+    if (video?.userId)
+      getUser(video?.userId).then((res) => {
+        if (res?.subscribers?.includes(appUser?.currentUser.id)) {
+          setSubscribed(true);
+        }
+      });
+  }, [video, appUser?.currentUser, subscribed]);
 
   const handelLike = async () => {
     //
@@ -271,7 +274,7 @@ const VideoInfos = ({ video }) => {
         </div>
       </div>
       {alert.show && (
-        <span className="absolute top-1/2 left-1/4 right-0 z-40">
+        <span className="absolute top-[2%] left-1/4 right-0 z-40">
           <Alert msg={alert.msg} show={setALert} />
         </span>
       )}

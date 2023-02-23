@@ -10,6 +10,7 @@ const Subscriptions = () => {
   const [subscribedToUsers, setSubscribedToUsers] = useState([]);
   const [subscribers, setSubscribers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
@@ -36,7 +37,7 @@ const Subscriptions = () => {
           setSubscribers(subscribers);
           setLoading(false);
         } catch (err) {
-          console.log(err);
+          setLoadingError(err);
         }
       }
     };
@@ -50,18 +51,18 @@ const Subscriptions = () => {
       </div>
       <div className="videos-section pl-5 min-h-[92vh] flex-col w-[100%] !items-start !justify-start">
         <div className="flex flex-col gap-2">
-          {!loading && (
+          {!loading && !loadingError && (
             <>
-              <div className="font-medium text-pink-700">Subscribed to</div>
+              <div className="font-bold text-pink-700">Subscribed to</div>
               {subscribedToUsers?.map((user, index) => (
                 <div
-                  className="flex items-center gap-5 justify-start font"
+                  className="flex items-center gap-5 justify-start font-medium"
                   key={index}
                 >
                   <img
                     src={`${user.profilePicture}`}
                     alt="profile pic"
-                    className="h-[3.2rem] w-[3.2rem] rounded-full shadow-lg"
+                    className="h-[2.4rem] w-[2.4rem] rounded-full shadow-lg"
                   />
                   <div>{user?.username}</div>
                   <div>
@@ -75,16 +76,16 @@ const Subscriptions = () => {
         <div className="flex flex-col gap-2">
           {!loading && (
             <>
-              <div className="font-medium text-pink-700">Subscribers</div>{" "}
+              <div className="font-bold text-pink-700">Subscribers</div>{" "}
               {subscribers?.map((subscriber, index) => (
                 <div
-                  className="flex items-center gap-5 justify-start"
+                  className="flex items-center gap-5 justify-start font-medium"
                   key={index}
                 >
                   <img
                     src={`${subscriber.profilePicture}`}
                     alt="profile pic"
-                    className="h-[3.2rem] w-[3.2rem] rounded-full shadow-lg"
+                    className="h-[2.4rem] w-[2.4rem] rounded-full shadow-lg"
                   />
                   <div>{subscriber?.username}</div>
                 </div>
@@ -92,7 +93,12 @@ const Subscriptions = () => {
             </>
           )}
         </div>
-        {loading && <LoadingSpinner />}
+        {loading && !loadingError && <LoadingSpinner />}
+        {loadingError && (
+          <div className="text-red-900 font-medium !self-center">
+            There was an error loading your subscriptions details
+          </div>
+        )}
       </div>
     </div>
   );
