@@ -12,10 +12,9 @@ public class WSService {
     private SimpMessagingTemplate simpMessagingTemplate ;
 
 
-    public void notifyFrontend(final ResponseMessage message){
-
-
-        simpMessagingTemplate.convertAndSend("/topic/public",message);
+    public void notifyFrontend(final ResponseMessage message,String username){
+        System.out.println("/notifications/"+username);
+        simpMessagingTemplate.convertAndSend("/notifications/"+username,message);
     }
 
 }

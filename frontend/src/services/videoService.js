@@ -8,16 +8,16 @@ const API_BASE_URL = "http://localhost:8080/api/";
 
 export const getAllVideos = async () => {
   try {
-    console.log("..");
+    //console.log("..");
     const res = await axios({
       method: "GET",
       url: API_BASE_URL + "videos",
       // headers: AuthorizationHeader(),
     });
-    console.log("reeeeeeeeeeees" + res);
+    //console.log("reeeeeeeeeeees" + res);
     return res;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     throw new Error(err);
   }
 };
@@ -65,7 +65,7 @@ export const likeVideo = async (video, user) => {
     });
 
     if (isDislikedVideo) {
-      console.log("inside isDislikedVideo");
+      //console.log("inside isDislikedVideo");
 
       await axios.put(
         API_BASE_URL + "videos/" + video.id,
@@ -76,7 +76,7 @@ export const likeVideo = async (video, user) => {
       );
     }
 
-    console.log("after isDislikedVideo");
+    //console.log("after isDislikedVideo");
     const resUser = await axios.put(
       API_BASE_URL + "users/" + user.id,
       {

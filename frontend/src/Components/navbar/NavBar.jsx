@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 import { ReactComponent as NotificationIcon } from "../../assets/notification.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowNotificationPanel } from "../../store/notifications/notification.action";
 
 const NavBar = () => {
   // menu dropdown state :
@@ -11,8 +12,12 @@ const NavBar = () => {
 
   // global states : application user state
   const appUser = useSelector((state) => state.appUser);
+  const notification = useSelector((state) => state.notifications);
 
   //console.log(appUser);
+
+  //dispatch
+  const dispatch = useDispatch();
 
   return (
     <nav className="bg-gray-800 sticky top-0 z-50">
@@ -118,12 +123,16 @@ const NavBar = () => {
                 </Link>
                 <button
                   type="button"
-                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 relative"
+                  onClick={() => dispatch(setShowNotificationPanel())}
                 >
                   <NotificationIcon
                     style={{ width: "24px", height: "24px" }}
                     title="notifications"
                   />
+                  {notification?.newNotificationReceived && (
+                    <span className="absolute h-2 w-2 rounded-full bg-main top-0 right-0"></span>
+                  )}
                 </button>
               </>
             )}

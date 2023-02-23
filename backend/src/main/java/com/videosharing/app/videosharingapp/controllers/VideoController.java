@@ -13,6 +13,7 @@ import com.videosharing.app.videosharingapp.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class VideoController {
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate ;
 
     @Autowired
     VideoRepository videoRepository;
@@ -61,8 +65,7 @@ public class VideoController {
             VideoEntity v = videoService.addVideo(video);
             if (videoRepository.existsById(v.getId())) {
                 //System.out.println("inside this if ");
-                ResponseMessage msg =new ResponseMessage("a new video added") ;
-                wsService.notifyFrontend(msg);
+               ;
                 return new ResponseEntity<VideoEntity>(v, HttpStatus.CREATED);
             } else {
                 return new ResponseEntity("There was a problem adding the video, Please try again!", HttpStatus.BAD_REQUEST);
@@ -88,6 +91,8 @@ public class VideoController {
     public ResponseEntity<VideoEntity> updateVideo(@PathVariable String id, @RequestBody VideoEntity v) {
         try {
             VideoEntity video = videoService.updateVideo(id, v);
+            ResponseMessage msg =new ResponseMessage("hello lahoucine MRBEAST HAVE JUST ADDED a new video") ;
+            wsService.notifyFrontend(msg,"lahoucine");
             return new ResponseEntity<VideoEntity>(video , HttpStatus.CREATED);
 
         } catch (Exception e) {
