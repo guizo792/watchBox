@@ -43,7 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // if there is no authorization header 
         if(authorization ==null || authorization.split(" ")[0]=="Bearer") {
-            System.out.println("........... no authorization header ");
+            //System.out.println("........... no authorization header ");
             filterChain.doFilter(request,response);
             return ;
         }

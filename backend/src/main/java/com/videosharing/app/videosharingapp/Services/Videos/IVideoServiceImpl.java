@@ -2,6 +2,8 @@ package com.videosharing.app.videosharingapp.Services.Videos;
 
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.Entities.VideoStatus;
+import com.videosharing.app.videosharingapp.Services.Notifications.WSService;
+import com.videosharing.app.videosharingapp.controllers.Responses.ResponseMessage;
 import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.VideoNotFoundException;
@@ -13,6 +15,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class IVideoServiceImpl implements IVideoService {
+
+    @Autowired
+    WSService wsService ;
 
     @Autowired
     VideoRepository videoRepository;
@@ -68,7 +73,10 @@ public class IVideoServiceImpl implements IVideoService {
         VideoEntity video = videoRepository.findById(id).get();
         if (v.getDescription() != null) video.setDescription(v.getDescription());
         if (v.getTitle() != null) video.setTitle(v.getTitle());
-        if ( v.getLikes()!=null && v.getLikes() >= 0) video.setLikes(v.getLikes());
+        if ( v.getLikes()!=null && v.getLikes() >= 0) {
+            video.setLikes(v.getLikes());
+            wsService.notifyFrontend(new ResponseMessage("you have new like "), video.getUserId());
+        };
         if (v.getDislikes()!=null && v.getDislikes() >= 0 ) video.setDislikes(v.getDislikes());
         if (v.getTags() != null) video.setTags(v.getTags());
         if (v.getVideoUrl() != null) video.setVideoUrl(v.getVideoUrl());

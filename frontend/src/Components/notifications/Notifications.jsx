@@ -31,7 +31,7 @@ const Notifications = () => {
     });
 
     stompClient.subscribe(
-      "/notifications/" + appUser?.currentUser?.username,
+      "/notifications/" + appUser?.currentUser?.id,
       function (result) {
         // console.log(".....");
         // console.log(JSON.parse(result.body));
