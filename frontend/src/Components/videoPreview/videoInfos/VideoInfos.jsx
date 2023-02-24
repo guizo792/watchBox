@@ -294,7 +294,7 @@ const VideoInfos = ({ video }) => {
             Twitter
           </a>
           <a
-            href={`https://twitter.com/share?url=${window.location}`}
+            href={`https://www.facebook.com/sharer/sharer.php?u=${window.location}`}
             target="_blank"
             class="share-btn facebook"
             rel="noreferrer"
