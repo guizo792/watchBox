@@ -1,4 +1,5 @@
 import axios from "axios";
+import { sendNotification } from "./notifications";
 
 import { AuthorizationHeader } from "./request.extras";
 
@@ -93,6 +94,11 @@ export const likeVideo = async (video, user) => {
       { headers: AuthorizationHeader() }
     );
 
+    sendNotification(
+      "just liked your video titled: " + video.title,
+      resVideo.data.userId,
+      user.id
+    );
     return { userAfterLike: resUser.data, videoAfterLike: resVideo.data };
   } catch (error) {
     const resUser = await axios.delete(

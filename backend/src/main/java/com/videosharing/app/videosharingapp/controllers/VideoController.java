@@ -23,17 +23,13 @@ import java.util.List;
 @RequestMapping("/api")
 public class VideoController {
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate ;
+
 
     @Autowired
     VideoRepository videoRepository;
 
     @Autowired
     IVideoService videoService;
-
-    @Autowired
-    WSService wsService ;
 
     @GetMapping("/test")
     public ResponseEntity<String> testingRoute() {
@@ -91,8 +87,7 @@ public class VideoController {
     public ResponseEntity<VideoEntity> updateVideo(@PathVariable String id, @RequestBody VideoEntity v) {
         try {
             VideoEntity video = videoService.updateVideo(id, v);
-            ResponseMessage msg =new ResponseMessage("hello lahoucine MRBEAST HAVE JUST ADDED a new video") ;
-            wsService.notifyFrontend(msg,"lahoucine");
+
             return new ResponseEntity<VideoEntity>(video , HttpStatus.CREATED);
 
         } catch (Exception e) {

@@ -11,5 +11,7 @@ import lombok.NoArgsConstructor;
 public class RequestMessage {
     private String message ;
 
-    private String user ;
+    private String userToNotify ;
+
+    private String userEmitter;
 }

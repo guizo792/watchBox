@@ -17,9 +17,6 @@ import java.util.List;
 public class IVideoServiceImpl implements IVideoService {
 
     @Autowired
-    WSService wsService ;
-
-    @Autowired
     VideoRepository videoRepository;
 
     // Utility function
@@ -75,7 +72,7 @@ public class IVideoServiceImpl implements IVideoService {
         if (v.getTitle() != null) video.setTitle(v.getTitle());
         if ( v.getLikes()!=null && v.getLikes() >= 0) {
             video.setLikes(v.getLikes());
-            wsService.notifyFrontend(new ResponseMessage("you have new like "), video.getUserId());
+            //wsService.notifyFrontend(new ResponseMessage("you have new like "), video.getUserId());
         };
         if (v.getDislikes()!=null && v.getDislikes() >= 0 ) video.setDislikes(v.getDislikes());
         if (v.getTags() != null) video.setTags(v.getTags());

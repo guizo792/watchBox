@@ -36,7 +36,9 @@ const NotifPanel = () => {
             ) : (
               <div className="flex flex-col gap-6 mt-8">
                 {notification.notificationsData.map((notif, index) => {
-                  return <Notification msg={notif.message} />;
+                  return (
+                    <Notification msg={notif.message} userId={notif.user} />
+                  );
                 })}
               </div>
             )}

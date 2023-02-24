@@ -2,13 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { setNotifications } from "../../store/notifications/notification.action";
-
-var sock = new SockJS("http://localhost:8080/ws");
-let stompClient = Stomp.over(sock);
-
-sock.onopen = function () {
-  console.log("open");
-};
+import { stompClient } from "../../services/notifications";
 
 // function show(message) {
 //   var response = document.getElementById("messages");

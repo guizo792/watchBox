@@ -2,6 +2,8 @@ package com.videosharing.app.videosharingapp.Services.Users;
 
 import com.mongodb.client.result.UpdateResult;
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
+import com.videosharing.app.videosharingapp.Services.Notifications.WSService;
+import com.videosharing.app.videosharingapp.controllers.Responses.ResponseMessage;
 import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.LikesException;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
@@ -28,6 +30,9 @@ public class UsersServiceImp implements UsersService {
 
     @Autowired
     MongoTemplate mongoTemplate;
+
+    @Autowired
+    WSService wsService ;
 
     @Override
     public UserEntity getUser(String id) throws UserNotFoundException {
@@ -131,6 +136,7 @@ public class UsersServiceImp implements UsersService {
                 boolean added = subscribers.add((String) (newUserDetails.getSubscribers().toArray())[0]);
                 if (added) {
                     update.set("subscribers", subscribers);
+                    wsService.notifyFrontend(new ResponseMessage("Just subscribed to you :)",(String) (newUserDetails.getSubscribers().toArray())[0]),userDb.getId());
                 } else {
                     subscribers.remove((String) (newUserDetails.getSubscribers().toArray())[0]);
                     update.set("subscribers", subscribers);
