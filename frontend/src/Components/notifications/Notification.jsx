@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { getUser } from "../../services/userService";
 
-const Notification = ({ msg, userId }) => {
+const Notification = ({ msg, userId, date }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       const data = await getUser(userId);
-      console.log(data);
+      //console.log(data);
       setUser(data);
     };
 
@@ -25,6 +25,13 @@ const Notification = ({ msg, userId }) => {
       <div className="flex flex-col">
         <p className="font-bold text-lg">{user?.username}</p>
         <p className="font-thin text-sm">{msg} </p>
+        <p className="font-semibold text-xs mt-1">
+          {date?.split("T")[0] +
+            "  at " +
+            date?.split("T")[1]?.split(":")[0] +
+            ":" +
+            date?.split("T")[1]?.split(":")[1]}
+        </p>
       </div>
     </div>
   );

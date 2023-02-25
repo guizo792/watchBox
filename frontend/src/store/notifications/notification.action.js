@@ -11,3 +11,11 @@ export const setNotifications = (data) => {
     payload: data,
   };
 };
+
+export const setNotification = (data) => {
+  //
+  return {
+    type: "ADD_NEW_NOTIFICATION",
+    payload: data,
+  };
+};

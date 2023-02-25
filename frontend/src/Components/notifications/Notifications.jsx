@@ -1,15 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
-import { setNotifications } from "../../store/notifications/notification.action";
+import { setNotification } from "../../store/notifications/notification.action";
 import { stompClient } from "../../services/notifications";
-
-// function show(message) {
-//   var response = document.getElementById("messages");
-//   var p = document.createElement("p");
-//   p.innerHTML = "message: " + message.message;
-//   response.appendChild(p);
-// }
 
 const Notifications = () => {
   //
@@ -27,22 +18,10 @@ const Notifications = () => {
     stompClient.subscribe(
       "/notifications/" + appUser?.currentUser?.id,
       function (result) {
-        // console.log(".....");
-        // console.log(JSON.parse(result.body));
-        dispatch(setNotifications([JSON.parse(result.body)]));
+        dispatch(setNotification([JSON.parse(result.body)]));
       }
     );
   });
-
-  // const sendMessage = () => {
-  //   stompClient.send(
-  //     "/app/sendMessage",
-  //     {},
-  //     JSON.stringify({
-  //       message: "hellow world",
-  //     })
-  //   );
-  // };
 
   return;
 };

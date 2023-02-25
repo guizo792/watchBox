@@ -27,32 +27,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
        registry.configureBrokerChannel() ;
        registry.setApplicationDestinationPrefixes("/app");
     }
-
-
-    /*@Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                if (StompCommand.SUBSCRIBE.equals(accessor.getCommand())) {
-                    String destination = accessor.getDestination();
-                    if (destination != null && destination.startsWith("/notifications/")) {
-                        String username = extractUsernameFromDestination(destination);
-                        accessor.setDestination("/notifications/" + username);
-                    }
-                }
-                return message;
-            }
-        });
-    }*/
-
-   /*
-   private String extractUsernameFromDestination(String destination) {
-        PathPattern pathPattern = pathPatternParser.parse("/notifications/{username}");
-        PathContainer pathContainer = PathContainer.parsePath(destination);
-        Map<String, String> pathVariables = (Map<String, String>) pathPattern.matchAndExtract(pathContainer);
-        return pathVariables.get("username");
-    }
-    */
 }

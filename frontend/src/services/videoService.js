@@ -1,5 +1,8 @@
 import axios from "axios";
-import { sendNotification } from "./notifications";
+import {
+  sendNotification,
+  sendVideoUploadedNotification,
+} from "./notifications";
 
 import { AuthorizationHeader } from "./request.extras";
 
@@ -39,12 +42,19 @@ export const getVideo = async (id) => {
 
 export const createVideo = async (videoDetails) => {
   try {
+    // add new video
     const res = await axios({
       method: "POST",
       url: API_BASE_URL + "videos",
       data: videoDetails,
       headers: AuthorizationHeader(),
     });
+
+    //notifiction to subscirebed users :
+    sendVideoUploadedNotification(
+      "just upladed new video :named " + videoDetails.title,
+      videoDetails.userId
+    );
     return res;
   } catch (err) {
     return err;
@@ -166,7 +176,6 @@ export const dislikeVideo = async (video, user) => {
       },
       { headers: AuthorizationHeader() }
     );
-
     return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
   } catch (error) {
     const resUser = await axios.delete(

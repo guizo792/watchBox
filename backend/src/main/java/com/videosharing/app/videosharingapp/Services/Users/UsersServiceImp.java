@@ -1,7 +1,9 @@
 package com.videosharing.app.videosharingapp.Services.Users;
 
 import com.mongodb.client.result.UpdateResult;
+import com.videosharing.app.videosharingapp.Entities.Notification;
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
+import com.videosharing.app.videosharingapp.Services.Notifications.NotificationsService;
 import com.videosharing.app.videosharingapp.Services.Notifications.WSService;
 import com.videosharing.app.videosharingapp.controllers.Responses.ResponseMessage;
 import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
@@ -17,10 +19,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UsersServiceImp implements UsersService {
@@ -34,6 +33,8 @@ public class UsersServiceImp implements UsersService {
     @Autowired
     WSService wsService ;
 
+    @Autowired
+    NotificationsService notificationsService ;
     @Override
     public UserEntity getUser(String id) throws UserNotFoundException {
         UserEntity user;
@@ -136,6 +137,12 @@ public class UsersServiceImp implements UsersService {
                 boolean added = subscribers.add((String) (newUserDetails.getSubscribers().toArray())[0]);
                 if (added) {
                     update.set("subscribers", subscribers);
+
+                    Set<String> usersToNotify =new HashSet<>() ;
+                    usersToNotify.add(userDb.getId()) ;
+                    Notification notification =new Notification("Subscribed to you",(String) (newUserDetails.getSubscribers().toArray())[0] ,usersToNotify,new Date() );
+                    notificationsService.addNewNotification(notification);
+
                     wsService.notifyFrontend(new ResponseMessage("Just subscribed to you :)",(String) (newUserDetails.getSubscribers().toArray())[0]),userDb.getId());
                 } else {
                     subscribers.remove((String) (newUserDetails.getSubscribers().toArray())[0]);

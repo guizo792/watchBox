@@ -13,7 +13,7 @@ public class WSService {
 
 
     public void notifyFrontend(final ResponseMessage message,String username){
-        //System.out.println("/notifications/"+username);
+        //System.out.println(username);
         simpMessagingTemplate.convertAndSend("/notifications/"+username,message);
     }
 

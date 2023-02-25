@@ -3,7 +3,7 @@ const AuthorizationHeader = () => {
   //console.log("before parse");
   const token = localStorage.getItem("token");
   if (token !== undefined) {
-    console.log({ Authorization: "Bearer " + token });
+    // console.log({ Authorization: "Bearer " + token });
     return { Authorization: "Bearer " + token };
   } else {
     return {};
