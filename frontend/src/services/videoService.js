@@ -40,6 +40,23 @@ export const getVideo = async (id) => {
   }
 };
 
+//
+
+export const ViewVideo = async (idVideo, viewsCount) => {
+  try {
+    const res = await axios.put(
+      API_BASE_URL + "videos/" + idVideo,
+      {
+        viewsCount: parseInt(viewsCount),
+      },
+      { headers: AuthorizationHeader() }
+    );
+    return res.data;
+  } catch (error) {
+    throw new Error("Couldn't update views for this video");
+  }
+};
+
 export const createVideo = async (videoDetails) => {
   try {
     // add new video

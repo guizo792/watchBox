@@ -55,7 +55,7 @@ public class NotificationsController {
 
     @MessageMapping("/newVideo")
     public void sendNewVideoNotification(@Payload RequestMessage msg){
-        System.out.println("this the request :" +msg);
+        //System.out.println("this the request :" +msg);
         try {
             UserEntity userEmittedNotification =usersService.getUser(msg.getUserEmitter());
 
@@ -70,6 +70,7 @@ public class NotificationsController {
                 wsService.notifyFrontend(new ResponseMessage(msg.getMessage(),msg.getUserEmitter()), userId);
             });
         }catch(Exception e){
+            // catch error : client error
             System.out.println(e.getMessage());
         }
 

@@ -1,9 +1,8 @@
 package com.videosharing.app.videosharingapp.Services.Comments;
 
 import com.videosharing.app.videosharingapp.Entities.CommentEntity;
-import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.repositories.CommentRepository;
-import com.videosharing.app.videosharingapp.utils.CommentNotFoundException;
+import com.videosharing.app.videosharingapp.exceptions.CommentNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
