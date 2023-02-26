@@ -132,12 +132,12 @@ const VideoInfos = ({ video }) => {
   };
 
   const handleSubscription = () => {
-    if (video?.userId === appUser?.currentUser?.id) {
+    if (appUser?.currentUser && video?.userId === appUser?.currentUser?.id) {
       setALert({
         show: true,
         msg: "You can't subscribe to yourself",
       });
-    } else if (video.userId) {
+    } else if (appUser?.currentUser && video.userId) {
       setSubscribeLoading(true);
       updateUser(appUser.currentUser.id, {
         subscribedToUsers: [video.userId],
@@ -151,7 +151,7 @@ const VideoInfos = ({ video }) => {
       });
     } else
       setALert({
-        msg: "This video has no user id to subscribe to ⚠",
+        msg: "You can't subscribe, try again (you should be logged in) ⚠",
         show: true,
       });
   };
