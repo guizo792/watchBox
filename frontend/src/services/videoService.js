@@ -218,3 +218,25 @@ export const dislikeVideo = async (video, user) => {
     return { userAfterDislike: resUser.data, videoAfterDislike: resVideo.data };
   }
 };
+
+// search video by a provided key
+
+export const searchVideos = async (key) => {
+  // http://localhost:8080/api/videos/search?key=vlog
+  try {
+    const res = await axios.get(API_BASE_URL + "videos/search?key=" + key);
+    return res.data;
+  } catch (error) {
+    throw new Error("couldn't find videos");
+  }
+};
+
+export const filteredVideos = async (key) => {
+  // http://localhost:8080/api/videos/search?key=vlog
+  try {
+    const res = await axios.get(API_BASE_URL + "videos/find?key=" + key);
+    return res.data;
+  } catch (error) {
+    throw new Error("couldn't find videos");
+  }
+};

@@ -4,6 +4,7 @@ import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IVideoService {
      List<VideoEntity> getAllVideos();
@@ -11,4 +12,6 @@ public interface IVideoService {
      VideoEntity addVideo(VideoDetails video);
      void deleteVideo(String id);
      VideoEntity updateVideo(String id, VideoEntity v);
+     Set<String> searchKeyWords(String key);
+     List<VideoEntity> searchVideo(String key);
 }

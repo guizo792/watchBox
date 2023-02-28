@@ -1,9 +1,33 @@
 import React from "react";
 
 import { VscSearch } from "react-icons/vsc";
-import SearchSuggestions from "../navbar/SearchSuggestions";
+import { useDispatch, useSelector } from "react-redux";
+import SearchSuggestions from "./SearchSuggestions";
 
+import {
+  setSearchKey,
+  setSearchKeyResults,
+  setSuggetions,
+} from "../../store/search/search.action";
+import { searchVideos } from "../../services/videoService";
 const SearchBar = () => {
+  const search = useSelector((state) => state.search);
+
+  const dispatch = useDispatch();
+
+  const handelChange = async (e) => {
+    //
+    dispatch(setSearchKey(e.target.value));
+    dispatch(setSuggetions(true));
+    //
+    try {
+      const keySearchResult = await searchVideos(e.target.value);
+      dispatch(setSearchKeyResults(keySearchResult));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="relative">
       <form action="">
@@ -20,11 +44,12 @@ const SearchBar = () => {
             id="search"
             name="search"
             placeholder="Search videos"
+            onChange={(e) => handelChange(e)}
           />
         </div>
       </form>
 
-      <SearchSuggestions />
+      {search?.showSuggetions && <SearchSuggestions />}
     </div>
   );
 };

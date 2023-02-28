@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { commentsReducer } from "./comment/comment.reducer";
 import { notificationReducer } from "./notifications/notification.reducer";
+import { searchReducer } from "./search/search.reducer";
 import { userReducer } from "./user/user.reducer";
 
 // reducers
@@ -14,5 +15,6 @@ export const store = configureStore({
     videosServices: videosServicesReducer,
     comment: commentsReducer,
     notifications: notificationReducer,
+    search: searchReducer,
   },
 });

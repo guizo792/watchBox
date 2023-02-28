@@ -14,6 +14,7 @@ import Notifications from "./Components/notifications/Notifications";
 import NotifPanel from "./Components/notifications/NotifPanel";
 import Subscriptions from "./pages/subscriptions/subscripitons";
 import LikedVideos from "./pages/likedVideos/likedVideos";
+import SearchResults from "./pages/search/SearchResults";
 
 function App() {
   return (
@@ -32,6 +33,14 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/upload-video" element={<UploadVideo />} />
           <Route path="/videos" element={<VideoPreview />} />
+          <Route
+            path="/videos/find"
+            element={
+              <>
+                <SearchResults />
+              </>
+            }
+          />
           <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/user/profile/update" element={<UpdateDetails />} />
           <Route path="/subscriptions" element={<Subscriptions />} />

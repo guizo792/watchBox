@@ -17,6 +17,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -96,4 +97,22 @@ public class VideoController {
         }
 
     }
+
+    // search videos
+    @GetMapping("/videos/search")
+    public ResponseEntity<Set<String>> searchVideoKeys(@RequestParam String key){
+        Set<String> listSugg =videoService.searchKeyWords(key) ;
+        //System.out.println(listSugg);
+        return new ResponseEntity<>(listSugg,HttpStatus.OK);
+    }
+
+    @GetMapping("/videos/find")
+    public ResponseEntity<List<VideoEntity>> filterVideosWithKey(@RequestParam String key){
+        List<VideoEntity> filteredVideos =videoService.searchVideo(key) ;
+        //System.out.println(listSugg);
+        return new ResponseEntity<>(filteredVideos,HttpStatus.OK);
+    }
+
+
+
 }

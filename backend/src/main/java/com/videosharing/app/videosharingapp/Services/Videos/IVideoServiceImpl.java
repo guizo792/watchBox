@@ -9,7 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class IVideoServiceImpl implements IVideoService {
@@ -85,5 +89,69 @@ public class IVideoServiceImpl implements IVideoService {
 
         if (v.getThumbnailUrl() != null) video.setThumbnailUrl(v.getThumbnailUrl());
         return videoRepository.save(video);
+    }
+
+
+    // search videos with words /
+
+    public Set<String> searchKeyWords(String key){
+        //
+        List<VideoEntity> videosList = videoRepository.findAll() ;
+        Set<String> listSearchSuggestions =new HashSet<>() ;
+
+        if(!key.equals("") && !key.equals(" ")){
+            videosList.forEach(video ->{
+                if(video.getTitle()!=null && video.getDescription()!=null &&video.getTags()!=null){
+                    // search if title contains key
+                    if(video.getTitle().toLowerCase().contains(key.toLowerCase())) {
+                        listSearchSuggestions.add(video.getTitle())  ;
+                    };
+                    // search in description string
+                    if(video.getDescription().toLowerCase().contains(key.toLowerCase())){
+                        listSearchSuggestions.add(video.getTitle()) ;
+                    };
+                    //search in tags array :
+                    for(String tag : video.getTags()) {
+                        if(tag.toLowerCase().contains(key.toLowerCase())){
+                            listSearchSuggestions.add(tag) ;
+                        }
+                    }
+                }
+            });
+        }
+
+        // returns search result
+        return listSearchSuggestions;
+    }
+
+    @Override
+    public List<VideoEntity> searchVideo(String key) {
+
+        List<VideoEntity> listVideos =videoRepository.findAll();
+        List<VideoEntity> filtredList= new ArrayList<>() ;
+
+        if(!key.equals("") && !key.equals(" ")){
+            for(VideoEntity video :listVideos ){
+                if(video.getTitle()!=null && video.getDescription()!=null &&video.getTags()!=null){
+
+                    if(video.getTitle().toLowerCase().contains(key.toLowerCase())) {
+                        filtredList.add(video)  ;
+                    } else if (video.getDescription().toLowerCase().contains(key.toLowerCase())) {
+                        filtredList.add(video) ;
+                    }else{
+
+                        // verify if any tag much with the key
+
+                        for(String tag : video.getTags()) {
+                            if(tag.toLowerCase().contains(key.toLowerCase())){
+                                filtredList.add(video) ;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return filtredList;
     }
 }

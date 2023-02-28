@@ -96,7 +96,9 @@ const NavBar = () => {
                 <Link
                   to="#a"
                   className="overflow-hidden text-gray-300 max-w-fit hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium "
-                  style={{ minInlineSize: " fitContent" }}
+                  style={{
+                    minInlineSize: "fit-content",
+                  }}
                 >
                   About us
                 </Link>
