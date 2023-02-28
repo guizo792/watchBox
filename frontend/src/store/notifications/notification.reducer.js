@@ -14,11 +14,16 @@ export const notificationReducer = (state = INITIAL_STATE, action) => {
         newNotificationReceived: false,
       };
     case "SET_NOTIFICATIONS":
-      //console.log(state.notificationsData);
       return {
         ...state,
         notificationsData: [...action.payload],
-        newNotificationReceived: action.payload.length === 0 ? false : true,
+        newNotificationReceived: true,
+      };
+    case "SET_NOTIFICATIONS_NO_NEW_NOTIFICATIONS":
+      return {
+        ...state,
+        notificationsData: [...action.payload],
+        newNotificationReceived: false,
       };
     case "ADD_NEW_NOTIFICATION":
       //console.log("new notification received");

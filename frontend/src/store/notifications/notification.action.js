@@ -12,6 +12,14 @@ export const setNotifications = (data) => {
   };
 };
 
+export const setNotificationsNoNew = (data) => {
+  //
+  return {
+    type: "SET_NOTIFICATIONS_NO_NEW_NOTIFICATIONS",
+    payload: data,
+  };
+};
+
 export const setNotification = (data) => {
   //
   return {

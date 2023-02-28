@@ -19,17 +19,16 @@ const VideoPlayer = ({ video }) => {
 
   // side effect for time watched tracking :
   useEffect(() => {
+    //
     const getTotalWatchTime = async () => {
       setTotalTime(
-        segments
-          .reduce((total, segment) => total + segment.duration, 0)
-          .toString()
-          .split(".")[0]
+        segments.reduce((total, segment) => total + segment.duration, 0)
       );
 
       if (duration !== null) {
-        if ((parseInt(duration) / 4).toFixed(0) >= totlaTimeWatched) {
-          //
+        console.log(duration / 4 + "--------" + totlaTimeWatched);
+        if (duration / 4 <= totlaTimeWatched) {
+          //console.log("yeees");
           //console.log("here we count view");
           const newVideData = await ViewVideo(video.id, video.viewsCount + 1);
           dispatch(fetchVideoSuccess(newVideData));
@@ -41,7 +40,8 @@ const VideoPlayer = ({ video }) => {
     if (!viewed) {
       getTotalWatchTime();
     }
-  }, [segments, totlaTimeWatched, viewed]);
+    //
+  }, [segments, totlaTimeWatched]);
 
   const handleSegmentStart = () => {
     setStartTime(Date.now());
@@ -56,18 +56,31 @@ const VideoPlayer = ({ video }) => {
     }
   };
 
+  const handleTimeUpdate = (e) => {
+    const segmentStartTimes = segments.map((segment) => segment.startTime);
+
+    if (startTime !== null || segmentStartTimes.includes(null)) {
+      const startTimeToUpdate =
+        startTime || segmentStartTimes.filter((time) => time !== null)[0];
+      const endTime = Date.now();
+      const duration = (endTime - startTimeToUpdate) / 1000;
+
+      setTotalTime((totlaTimeWatched) => totlaTimeWatched + duration);
+    }
+  };
+
   return (
     <Player
       onPlay={handleSegmentStart}
       onPause={handleSegmentEnd}
-      oEnded={handleSegmentEnd}
+      onEnded={handleSegmentEnd}
       playsInline
       poster={`${video.thumbnailUrl}`}
       src={`${video.videoUrl}`}
-      onTimeUpdate={(e) =>
-        duration === null &&
-        setDuration(e.target.duration.toString().split(".")[0])
-      }
+      onTimeUpdate={(e) => {
+        duration === null && setDuration(e.target.duration);
+        handleTimeUpdate();
+      }}
       // src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
     >
       <BigPlayButton position="center" className="rounded-2xl" />
