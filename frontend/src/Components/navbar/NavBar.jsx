@@ -5,6 +5,7 @@ import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 import { ReactComponent as NotificationIcon } from "../../assets/notification.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNotificationPanel } from "../../store/notifications/notification.action";
+import SearchBar from "../search/SearchBar";
 
 const NavBar = () => {
   // menu dropdown state :
@@ -75,8 +76,8 @@ const NavBar = () => {
                 alt="share it"
               />
             </Link>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
+            <div className="hidden w-full sm:ml-6 sm:block">
+              <div className="flex gap-4 items-center">
                 <Link
                   to="/"
                   className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
@@ -85,26 +86,30 @@ const NavBar = () => {
                   Home
                 </Link>
 
-                <Link
+                {/* <Link
                   to="#a"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   Team
-                </Link>
+                </Link> */}
 
                 <Link
                   to="#a"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className="overflow-hidden text-gray-300 max-w-fit hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium "
+                  style={{ minInlineSize: " fitContent" }}
                 >
                   About us
                 </Link>
 
-                <Link
+                {/* <Link
                   to="#a"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   More
-                </Link>
+                </Link> */}
+                <div className="w-full px-4">
+                  <SearchBar />
+                </div>
               </div>
             </div>
           </div>
