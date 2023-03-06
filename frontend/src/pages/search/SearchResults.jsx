@@ -40,7 +40,7 @@ const SearchResults = () => {
               title={video?.title}
               thumbline={video?.thumbnailUrl}
               desc={video?.description}
-              views={video?.views}
+              views={video?.viewsCount}
               userId={video?.userId}
             />
           );

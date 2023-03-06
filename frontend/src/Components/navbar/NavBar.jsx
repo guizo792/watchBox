@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
-import { ReactComponent as NotificationIcon } from "../../assets/notification.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNotificationPanel } from "../../store/notifications/notification.action";
 import SearchBar from "../search/SearchBar";
+import { CiStreamOn } from "react-icons/ci";
+import { BiVideoPlus } from "react-icons/bi";
+import { MdOutlineNotificationsNone } from "react-icons/md";
 
 const NavBar = () => {
   // menu dropdown state :
   const [isOpen, setIsOpen] = useState(false);
+  const [isUploadMenuOpen, setIsUploadMenuOpen] = useState(false);
 
   // global states : application user state
   const appUser = useSelector((state) => state.appUser);
@@ -118,7 +121,62 @@ const NavBar = () => {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 gap-3">
             {appUser?.isLoggedIn && (
               <>
-                <Link
+                <button
+                  type="button"
+                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  onClick={() => setIsUploadMenuOpen((prevState) => !prevState)}
+                >
+                  <BiVideoPlus size={30} />
+                </button>
+                {isUploadMenuOpen && (
+                  <div
+                    className=" absolute divide-y right-6 top-12 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    role="menu"
+                    onMouseLeave={() =>
+                      setIsUploadMenuOpen((prevState) => !prevState)
+                    }
+                  >
+                    {appUser.isLoggedIn ? (
+                      <>
+                        <Link
+                          to="/upload-video"
+                          className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md flex items-center gap-4"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="user-menu-item-0"
+                        >
+                          <UploadIcon
+                            style={{ width: "24px", height: "24px" }}
+                          />
+                          <span>Upload video</span>
+                        </Link>
+                        <a
+                          href="/live-stream"
+                          className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md flex items-center gap-4"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="user-menu-item-2"
+                        >
+                          <CiStreamOn size={24} /> Go live
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/auth/login"
+                          className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="user-menu-item-2"
+                        >
+                          You should login
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* <Link
                   to={"/upload-video"}
                   type="button"
                   className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -127,16 +185,13 @@ const NavBar = () => {
                     style={{ width: "24px", height: "24px" }}
                     title="upload video"
                   />
-                </Link>
+                </Link> */}
                 <button
                   type="button"
                   className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 relative"
                   onClick={() => dispatch(setShowNotificationPanel())}
                 >
-                  <NotificationIcon
-                    style={{ width: "24px", height: "24px" }}
-                    title="notifications"
-                  />
+                  <MdOutlineNotificationsNone size={28} title="notifications" />
                   {notification?.newNotificationReceived && (
                     <span className="absolute h-2 w-2 rounded-full bg-main top-0 right-0"></span>
                   )}

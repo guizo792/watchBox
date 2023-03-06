@@ -15,6 +15,8 @@ import NotifPanel from "./Components/notifications/NotifPanel";
 import Subscriptions from "./pages/subscriptions/subscripitons";
 import LikedVideos from "./pages/likedVideos/likedVideos";
 import SearchResults from "./pages/search/SearchResults";
+import LiveStream from "./pages/liveStream/liveStream";
+import LiveStreaming from "./pages/liveStream/liveStreaming";
 
 function App() {
   return (
@@ -45,6 +47,7 @@ function App() {
           <Route path="/user/profile/update" element={<UpdateDetails />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/liked-videos" element={<LikedVideos />} />
+          <Route path="/live-stream" element={<LiveStreaming />} />
         </Route>
         <Route path="/auth">
           <Route path="login" element={<Login />} />
