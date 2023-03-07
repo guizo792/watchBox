@@ -34,7 +34,7 @@ const SearchResultsItem = ({ thumbline, title, views, userId, desc }) => {
         <p className="text-sm font-semibold text-gray-700"> {views} views</p>
         <div className="flex pt-3 items-center gap-4">
           <img
-            src={userInfo?.profilePicture}
+            src={userInfo?.profilePicture || "/images/defaultProfile.jpg"}
             alt="profile"
             className="rounded-full w-10 h-10 "
           />

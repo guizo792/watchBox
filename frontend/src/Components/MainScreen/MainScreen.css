@@ -1,0 +1,17 @@
+.main-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 85vh;
+  background: #3c4043;
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.footer {
+  height: 10vh;
+  background: #3c4043;
+}

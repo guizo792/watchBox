@@ -26,7 +26,7 @@ const VideoPlayer = ({ video }) => {
       );
 
       if (duration !== null) {
-        console.log(duration / 4 + "--------" + totlaTimeWatched);
+        // console.log(duration / 4 + "--------" + totlaTimeWatched);
         if (duration / 4 <= totlaTimeWatched) {
           //console.log("yeees");
           //console.log("here we count view");
