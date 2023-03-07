@@ -16,13 +16,14 @@ const SearchResults = () => {
       //
       try {
         const listVideos = await filteredVideos(search.searchKey);
+        //
         if (isMounted) setVideosFiltered(listVideos);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchData();
 
+    fetchData();
     return () => {
       isMounted = false;
     };

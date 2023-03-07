@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { VscSearch } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,17 +15,31 @@ const SearchBar = () => {
 
   const dispatch = useDispatch();
 
-  const handelChange = async (e) => {
+  useEffect(() => {
+    async function fetchSearch() {
+      try {
+        const keySearchResult = await searchVideos(search.searchKey);
+        dispatch(setSearchKeyResults(keySearchResult));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    let timer = setTimeout(() => {
+      if (search.searchKey.length > 0) fetchSearch();
+      console.log("....hello");
+    }, 400);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [search.searchKey, dispatch]);
+
+  const handelChange = (e) => {
     //
     dispatch(setSearchKey(e.target.value));
     dispatch(setSuggetions(true));
     //
-    try {
-      const keySearchResult = await searchVideos(e.target.value);
-      dispatch(setSearchKeyResults(keySearchResult));
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
