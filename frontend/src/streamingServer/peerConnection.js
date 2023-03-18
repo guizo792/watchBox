@@ -38,6 +38,7 @@ export const initializeListensers = async (userId) => {
 
   currentUserRef.child("offers").on("child_added", async (snapshot) => {
     const data = snapshot.val();
+
     if (data?.offer) {
       const pc =
         store.getState().participants[data.offer.userId]?.peerConnection;

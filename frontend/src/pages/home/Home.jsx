@@ -12,6 +12,7 @@ import LoadingSpinner from "../../Components/loadingSpinner/spinner";
 
 const Home = () => {
   const videosData = useSelector((state) => state.videosServices);
+  const appUser = useSelector((state) => state.appUser);
   const dispatch = useDispatch();
 
   //console.log(videosData);
@@ -20,7 +21,7 @@ const Home = () => {
     const getVideosData = async () => {
       try {
         dispatch(fetchVideoStart());
-        const videos = await getAllVideos();
+        const videos = await getAllVideos(appUser?.currentUser?.id);
         // console.log(videos.data.data);
         if (videos?.data?.data) {
           dispatch(fetchVideosSuccess(videos.data.data));
@@ -42,16 +43,19 @@ const Home = () => {
       <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
         <SidebarNav />
       </div>
-      <div className="videos-section pl-5">
-        {!videosData.isFetching && videosData.videos.length === 0 ? (
-          <>
-            <img src="/images/img404.png" alt="" className="h-full w-full" />
-          </>
-        ) : (
-          videosData.videos.map((video) => (
-            <VideoComponent video={video} key={video.id} />
-          ))
-        )}
+
+      <div className="flex justify-center">
+        <div className="videos-section pl-5 mx-auto">
+          {!videosData.isFetching && videosData.videos.length === 0 ? (
+            <>
+              <img src="/images/img404.png" alt="" className="h-full w-full" />
+            </>
+          ) : (
+            videosData.videos.map((video) => (
+              <VideoComponent video={video} key={video.id} />
+            ))
+          )}
+        </div>
       </div>
       {videosData.isFetching && <LoadingSpinner />}
     </div>

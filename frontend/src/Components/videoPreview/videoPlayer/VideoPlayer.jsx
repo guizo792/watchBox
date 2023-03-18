@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BigPlayButton, Player } from "video-react";
 import { ViewVideo } from "../../../services/videoService";
 import { fetchVideoSuccess } from "../../../store/videosServices/videosServices.action";
@@ -7,7 +7,7 @@ import { fetchVideoSuccess } from "../../../store/videosServices/videosServices.
 import "./VideoPlayer.css";
 
 const VideoPlayer = ({ video }) => {
-  //console.log(video);
+  const appUser = useSelector((state) => state.appUser);
 
   const [startTime, setStartTime] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -30,9 +30,13 @@ const VideoPlayer = ({ video }) => {
         if (duration / 4 <= totlaTimeWatched) {
           //console.log("yeees");
           //console.log("here we count view");
-          const newVideData = await ViewVideo(video.id, video.viewsCount + 1);
-          dispatch(fetchVideoSuccess(newVideData));
           setViewd(true);
+          const newVideData = await ViewVideo(
+            video.id,
+            appUser?.currentUser?.id,
+            video.viewsCount + 1
+          );
+          dispatch(fetchVideoSuccess(newVideData));
         }
       }
     };

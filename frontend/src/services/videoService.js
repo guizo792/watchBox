@@ -10,12 +10,12 @@ axios.defaults.withCredentials = false;
 
 const API_BASE_URL = "http://localhost:8080/api/";
 
-export const getAllVideos = async () => {
+export const getAllVideos = async (idUser) => {
   try {
     //console.log("..");
     const res = await axios({
       method: "GET",
-      url: API_BASE_URL + "videos",
+      url: API_BASE_URL + "videosRecommend?idUser=" + idUser,
       // headers: AuthorizationHeader(),
     });
     //console.log("reeeeeeeeeeees" + res);
@@ -42,8 +42,12 @@ export const getVideo = async (id) => {
 
 //
 
-export const ViewVideo = async (idVideo, viewsCount) => {
+export const ViewVideo = async (idVideo, idUser, viewsCount) => {
   try {
+    // set views counter : video entity
+
+    console.log("updatiiing view counter");
+
     const res = await axios.put(
       API_BASE_URL + "videos/" + idVideo,
       {
@@ -51,6 +55,19 @@ export const ViewVideo = async (idVideo, viewsCount) => {
       },
       { headers: AuthorizationHeader() }
     );
+
+    // set videos history for user :
+
+    await axios.put(
+      API_BASE_URL + "users/" + idUser,
+      {
+        videoHistory: [idVideo],
+      },
+      { headers: AuthorizationHeader() }
+    );
+
+    //
+
     return res.data;
   } catch (error) {
     throw new Error("Couldn't update views for this video");
