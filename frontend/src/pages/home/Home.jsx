@@ -44,18 +44,16 @@ const Home = () => {
         <SidebarNav />
       </div>
 
-      <div className="flex justify-center">
-        <div className="videos-section pl-5 mx-auto">
-          {!videosData.isFetching && videosData.videos.length === 0 ? (
-            <>
-              <img src="/images/img404.png" alt="" className="h-full w-full" />
-            </>
-          ) : (
-            videosData.videos.map((video) => (
-              <VideoComponent video={video} key={video.id} />
-            ))
-          )}
-        </div>
+      <div className="videos-section justify-center mt-8">
+        {!videosData.isFetching && videosData.videos.length === 0 ? (
+          <>
+            <img src="/images/img404.png" alt="" className="h-full w-full" />
+          </>
+        ) : (
+          videosData.videos.map((video) => (
+            <VideoComponent video={video} key={video.id} />
+          ))
+        )}
       </div>
       {videosData.isFetching && <LoadingSpinner />}
     </div>

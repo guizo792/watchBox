@@ -13,13 +13,24 @@ const API_BASE_URL = "http://localhost:8080/api/";
 export const getAllVideos = async (idUser) => {
   try {
     //console.log("..");
-    const res = await axios({
-      method: "GET",
-      url: API_BASE_URL + "videosRecommend?idUser=" + idUser,
-      // headers: AuthorizationHeader(),
-    });
-    //console.log("reeeeeeeeeeees" + res);
-    return res;
+
+    if (idUser !== undefined) {
+      const res = await axios({
+        method: "GET",
+        url: API_BASE_URL + "videosRecommend?idUser=" + idUser,
+        // headers: AuthorizationHeader(),
+      });
+      //console.log("reeeeeeeeeeees" + res);
+      return res;
+    } else {
+      const res = await axios({
+        method: "GET",
+        url: API_BASE_URL + "videos",
+        // headers: AuthorizationHeader(),
+      });
+      //console.log("reeeeeeeeeeees" + res);
+      return res;
+    }
   } catch (err) {
     //console.log(err);
     throw new Error(err);

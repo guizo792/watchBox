@@ -10,8 +10,8 @@ const VideoComponent = ({ video }) => {
 
   useEffect(() => {
     // Get and set the video user state
-    if (video.userId) {
-      getUser(video.userId).then((res) => {
+    if (video?.userId) {
+      getUser(video?.userId).then((res) => {
         setVideoUser(res);
       });
     }

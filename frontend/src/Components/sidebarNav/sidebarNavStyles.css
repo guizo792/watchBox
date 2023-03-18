@@ -53,9 +53,9 @@
 .videos-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
-  padding-top: 2rem;
+
   border-left: solid #44444477 1px;
 }
 

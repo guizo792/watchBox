@@ -4,11 +4,11 @@ import styled from "styled-components";
 export const VideoContainer = styled(Link)`
   display: flex;
   flex-direction: column;
-  padding: 0 0 20px;
+  //padding: 0 0 20px;
   // background-color: #333;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
   transition: 0.3s;
-  border-radius: 4px;
+  border-radius: 9px;
   max-width: 22rem;
   overflow: hidden;
   transition: all 0.3s;
