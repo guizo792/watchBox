@@ -156,6 +156,7 @@ const NavBar = () => {
                           role="menuitem"
                           tabIndex="-1"
                           id="user-menu-item-2"
+                          target="_blank"
                         >
                           <CiStreamOn size={24} /> Go live
                         </a>

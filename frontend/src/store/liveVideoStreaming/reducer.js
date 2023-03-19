@@ -7,6 +7,7 @@ import {
   UPDATE_PARTICIPANT,
   SET_IS_STREAMER,
   SET_STREAMER,
+  SET_STREAM_ID,
 } from "./types";
 
 import {
@@ -22,6 +23,7 @@ let defaultUserState = {
   isStreamer: false,
   streamer: null,
   HTMLParticipants: {},
+  streamId: null,
 };
 
 const servers = {
@@ -111,6 +113,11 @@ export const liveVideoStreamingReducer = (state = defaultUserState, action) => {
   } else if (action.type === SET_STREAMER) {
     let payload = action.payload;
     state = { ...state, streamer: payload };
+    return state;
+  } else if (action.type === SET_STREAM_ID) {
+    let payload = action.payload;
+    state = { ...state, streamId: payload };
+    return state;
   }
   return state;
 };

@@ -47,8 +47,8 @@ function App() {
           <Route path="/user/profile/update" element={<UpdateDetails />} />
           <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/liked-videos" element={<LikedVideos />} />
-          <Route path="/live-stream" element={<LiveStreaming />} />
         </Route>
+        <Route path="/live-stream" element={<LiveStreaming />} />
         <Route path="/auth">
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />

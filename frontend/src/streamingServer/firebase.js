@@ -25,6 +25,9 @@ if (window.location.href.includes("live-stream"))
     window.onbeforeunload = (e) => {
       e.preventDefault();
       e.returnValue = "";
+      // const streamId = store;
+      // console.log(streamId);
+      // deleteVideo(streamId).then((res) => console.log(res));
       firepadRef.remove().then(() => {
         console.log("All data removed successfully.");
       });
