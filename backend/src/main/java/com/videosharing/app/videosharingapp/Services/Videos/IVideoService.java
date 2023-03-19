@@ -16,4 +16,5 @@ public interface IVideoService {
      VideoEntity updateVideo(String id, VideoEntity v);
      Set<String> searchKeyWords(String key);
      List<VideoEntity> searchVideo(String key);
+     List<VideoEntity> getVideosToRecommend(String idUser) ;
 }

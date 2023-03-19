@@ -1,8 +1,10 @@
 package com.videosharing.app.videosharingapp.Services.Videos;
 
+import com.videosharing.app.videosharingapp.Entities.UserEntity;
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.Entities.VideoStatus;
 import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
+import com.videosharing.app.videosharingapp.repositories.UserRepository;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.exceptions.VideoNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,9 @@ public class IVideoServiceImpl implements IVideoService {
 
     @Autowired
     VideoRepository videoRepository;
+
+    @Autowired
+    UserRepository userRepository ;
 
     // Utility function
     void throwExceptionIfNotExist(String id) {
@@ -153,5 +159,109 @@ public class IVideoServiceImpl implements IVideoService {
             }
         }
         return filtredList;
+    }
+
+    @Override
+    public List<VideoEntity> getVideosToRecommend(String idUser) {
+
+        boolean userPresent = !userRepository.findById(idUser).isEmpty();
+
+        if(userPresent){
+
+            UserEntity user = userRepository.findById(idUser).get();
+            Set<VideoEntity> recommendedVideos =new HashSet<>() ;
+
+
+            Set<String> likedTags =new HashSet<>() ;
+            Set<String> disLikedTags =new HashSet<>() ;
+            Set<String> watchedVideosTags =new HashSet<>() ;
+            //
+            Set<String> likedVideos =user.getLikedVideos() ;
+            Set<String> dislikedVideo =user.getDislikedVideos() ;
+            List<String> videoHistory =user.getVideoHistory() ;
+
+
+            // get video tags that the user liked
+            if(likedVideos!=null){
+                likedVideos.forEach((idVideo) -> {
+
+                    if(videoRepository.findById(idVideo).isPresent()){
+                        VideoEntity likedVideo =  videoRepository.findById(idVideo).get() ;
+
+                        if(likedVideo.getTags() !=null){
+                            likedTags.addAll(likedVideo.getTags().stream().map((tag)->{
+                                return tag.toUpperCase() ;
+                            }).collect(Collectors.toList())) ;
+                        }
+                    }
+
+
+                });
+            }
+
+            // get video tags that the user watched
+           if(videoHistory!=null){
+               videoHistory.forEach((idVideo)->{
+                   if(videoRepository.findById(idVideo).isPresent()) {
+                       VideoEntity watchedVideo =videoRepository.findById(idVideo).get() ;
+                       if(watchedVideo.getTags()!=null){
+                           watchedVideosTags.addAll(watchedVideo.getTags().stream().map((tag)->{
+                               return tag.toUpperCase() ;
+                           }).collect(Collectors.toList())) ;
+                       }
+
+                   }
+               });
+           }
+
+            // get video tags that the user disliked
+
+            if (dislikedVideo !=null){
+                dislikedVideo.forEach((idVideo) -> {
+
+                    if (videoRepository.findById(idVideo).isPresent()){
+                        VideoEntity disLikedVideo =videoRepository.findById(idVideo).get() ;
+
+                        if(disLikedVideo.getTags()!=null){
+                            disLikedTags.addAll(disLikedVideo.getTags().stream().map((tag)->{
+                                return tag.toUpperCase() ;
+                            }).collect(Collectors.toList())) ;
+                        }
+                    }
+
+                });
+
+            }
+
+            List<VideoEntity> allVideos =videoRepository.findAll();
+            System.out.println("this is liked tags :" + likedTags );
+            allVideos.forEach((video)->{
+
+
+                List<String> tags= video.getTags();
+
+                if(tags!=null){
+                    tags.forEach(tag->{
+                        //System.out.println("this is a tag named :" +tag);
+                        if(likedTags.contains(tag.toUpperCase())  || watchedVideosTags.contains(tag.toUpperCase())){
+                            recommendedVideos.add(video);
+                            return;
+                        };
+                    });
+                }
+            });
+
+
+            List<VideoEntity> recommendedVideosList =new ArrayList<>(recommendedVideos);
+
+            for (VideoEntity video : allVideos) {
+                if( ! recommendedVideos.contains(video)) recommendedVideosList.add(video) ;
+            }
+
+            return recommendedVideosList;
+        }
+
+
+       return null ;
     }
 }

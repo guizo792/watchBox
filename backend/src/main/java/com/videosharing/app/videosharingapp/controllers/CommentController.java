@@ -72,7 +72,7 @@ public class CommentController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity("There was a problem editing the comment informations", HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity("There was a problem editing the comment information", HttpStatus.BAD_GATEWAY);
         }
     }
 }

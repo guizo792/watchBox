@@ -17,11 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 
 @Controller
@@ -30,10 +30,8 @@ public class NotificationsController {
 
     @Autowired
     NotificationsService notificationsService ;
-
     @Autowired
     WSService wsService ;
-
     @Autowired
     UsersService usersService ;
 
@@ -73,9 +71,7 @@ public class NotificationsController {
             // catch error : client error
             System.out.println(e.getMessage());
         }
-
     }
-
 
     @GetMapping("/api/notifications/{idUser}")
     public ResponseEntity<List<Notification>> getAllNotifications(@PathVariable String idUser){
@@ -83,3 +79,4 @@ public class NotificationsController {
         return new ResponseEntity<>(notificationsService.getAllUserNotifications(idUser), HttpStatus.OK);
     }
 }
+

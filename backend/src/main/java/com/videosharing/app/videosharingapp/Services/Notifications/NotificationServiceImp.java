@@ -21,10 +21,12 @@ public class NotificationServiceImp implements NotificationsService{
     // get notifications that belongs to a user with id : idUser :
     @Override
     public List<Notification> getAllUserNotifications(String idUser) {
+
         List<Notification> list = new ArrayList<Notification>();
+
        notificationRepository.findAll().forEach(notification ->{
-           //System.out.println(notification);
            boolean notifIsForUser =notification.getUsersToNotify().contains(idUser) ;
+           
            if(notifIsForUser){
                list.add(notification) ;
            }

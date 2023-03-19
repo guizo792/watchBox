@@ -84,6 +84,14 @@
 			<artifactId>json</artifactId>
 			<version>20220320</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency> -->
+
+
+
 	</dependencies>
 
 	<build>

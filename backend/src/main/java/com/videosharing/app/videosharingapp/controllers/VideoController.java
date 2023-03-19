@@ -113,6 +113,12 @@ public class VideoController {
         return new ResponseEntity<>(filteredVideos,HttpStatus.OK);
     }
 
+    @GetMapping("/videosRecommend")
+    public ResponseEntity<Object> getVideosToRecommendToUser(@RequestParam String idUser){
+        List<VideoEntity> videos =videoService.getVideosToRecommend(idUser);
+        //System.out.println(listSugg);
+        return ResponseHandler.responseBuilder(HttpStatus.OK, videos, videos.size());
 
+    }
 
 }

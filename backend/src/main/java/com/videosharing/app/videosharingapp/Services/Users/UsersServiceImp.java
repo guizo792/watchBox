@@ -10,6 +10,7 @@ import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.LikesException;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
 import com.videosharing.app.videosharingapp.repositories.UserRepository;
+import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -35,6 +36,9 @@ public class UsersServiceImp implements UsersService {
 
     @Autowired
     NotificationsService notificationsService ;
+    @Autowired
+    private VideoRepository videoRepository;
+
     @Override
     public UserEntity getUser(String id) throws UserNotFoundException {
         UserEntity user;
@@ -67,6 +71,23 @@ public class UsersServiceImp implements UsersService {
                     .ifPresent(e -> update.set("username", newUserDetails.getUsername()));
             Optional.ofNullable(newUserDetails.getProfilePicture())
                     .ifPresent(e -> update.set("profilePicture", newUserDetails.getProfilePicture()));
+
+
+            // update video history if requested
+
+            Optional.ofNullable(newUserDetails.getVideoHistory())
+                    .ifPresent(e -> {
+                        System.out.println("1" + newUserDetails.getVideoHistory());
+
+                        List<String> videosHistory =userDb.getVideoHistory() ==null ? new ArrayList<String>() : userDb.getVideoHistory() ;
+                       String idVideo = newUserDetails.getVideoHistory().get(0);
+                        videosHistory.add(idVideo) ;
+                        System.out.println(idVideo
+                          );
+                        update.set("videoHistory", videosHistory) ;
+
+                    });
+
 
             // update likedVideos List if requested
             Optional.ofNullable(newUserDetails.getLikedVideos()).ifPresent(e -> {
