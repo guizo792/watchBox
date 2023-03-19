@@ -8,12 +8,16 @@ import {
   removeParticipant,
   updateParticipant,
   setStreamer,
+  setStreamId,
 } from "../../store/liveVideoStreaming/action";
 import { connect, useSelector } from "react-redux";
+import { createVideo, getAllVideos } from "../../services/videoService";
 
 function LiveStream(props) {
-  const userName =
-    JSON.parse(localStorage.getItem("user"))?.username || "Guest";
+  const isStreamer = useSelector((state) => state.isStreamer);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = user?.username || "Guest";
   const getUserStream = async () => {
     const localStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -24,6 +28,7 @@ function LiveStream(props) {
   };
   useEffect(() => {
     const asyncFunc = async () => {
+      // Handling stream and session
       const stream = await getUserStream();
       stream.getVideoTracks()[0].enabled = false;
       props.setMainStream(stream);
@@ -46,9 +51,73 @@ function LiveStream(props) {
           userStatusRef.onDisconnect().remove();
         }
       });
+
+      //   // Get all videos and check if the live doesn't exist
+      //   let liveExist = false;
+      //   const videos = await getAllVideos();
+      //   console.log(videos?.data?.data);
+      //   videos?.data?.data?.forEach((video) => {
+      //     if (video.title === `Live streaming from ${userName}`) liveExist = true;
+      //   });
+
+      //   // Creating the liveStream as a video in DB to show it to users
+      //   console.log(isStreamer);
+      //   if (isStreamer && !liveExist) {
+      //     const res = await createVideo({
+      //       description: `live streaming from ${userName}, enjoy the stream without cut offs, join us to start streaming yourself too and gather your own community. VIDEOBOX help you break the limits`,
+      //       title: `Live streaming from ${userName}`,
+      //       userId: `${user.id}`,
+      //       likes: 0,
+      //       dislikes: 0,
+      //       tags: ["live stream"],
+      //       videoURL: window.location.href,
+      //       videoStatus: "public",
+      //       viewsCount: 0,
+      //       thumbnailUrl:
+      //         "https://media.gettyimages.com/id/1306922705/vector/live-stream-banner.jpg?s=612x612&w=gi&k=20&c=5lgXBYQJSgo4QSRGeODWkpFUp915Nz7p9pKuKjrZ9Yw=",
+      //     });
+      //     if (res.status === 201) {
+      //       console.log("LIVE STREAM CREATED SUCCESSFULLY 🟩");
+      //     }
+      //   }
     };
     asyncFunc();
   }, []);
+
+  useEffect(() => {
+    const asyncFunc = async () => {
+      // Get all videos and check if the live doesn't exist
+      let liveExist = false;
+      const videos = await getAllVideos();
+      console.log(videos?.data?.data);
+      videos?.data?.data?.forEach((video) => {
+        if (video.title === `Live streaming from ${userName}`) liveExist = true;
+      });
+
+      // Creating the liveStream as a video in DB to show it to users
+      console.log(isStreamer);
+      if (isStreamer && !liveExist) {
+        const res = await createVideo({
+          description: `live streaming from ${userName}, enjoy the stream without cut offs, join us to start streaming yourself too and gather your own community. VIDEOBOX help you break the limits`,
+          title: `Live streaming from ${userName}`,
+          userId: `${user.id}`,
+          likes: 0,
+          dislikes: 0,
+          tags: ["live stream"],
+          videoURL: window.location.href,
+          videoStatus: "public",
+          viewsCount: 0,
+          thumbnailUrl:
+            "https://media.gettyimages.com/id/1306922705/vector/live-stream-banner.jpg?s=612x612&w=gi&k=20&c=5lgXBYQJSgo4QSRGeODWkpFUp915Nz7p9pKuKjrZ9Yw=",
+        });
+        if (res.status === 201) {
+          console.log("LIVE STREAM CREATED SUCCESSFULLY 🟩");
+          props.setStreamId(res?.data?.id);
+        }
+      }
+    };
+    asyncFunc();
+  }, [isStreamer]);
 
   const connectedRef = db.database().ref(".info/connected");
   const participantRef = firepadRef.child("participants");
@@ -116,6 +185,7 @@ const mapDispatchToProps = (dispatch) => {
     removeParticipant: (userId) => dispatch(removeParticipant(userId)),
     updateParticipant: (user) => dispatch(updateParticipant(user)),
     setStreamer: (streamer) => dispatch(setStreamer(streamer)),
+    setStreamId: (id) => dispatch(setStreamId(id)),
   };
 };
 

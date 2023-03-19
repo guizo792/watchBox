@@ -7,6 +7,7 @@ import {
   UPDATE_PARTICIPANT,
   SET_IS_STREAMER,
   SET_STREAMER,
+  SET_STREAM_ID,
 } from "./types";
 
 export const setMainStream = (stream) => {
@@ -74,5 +75,12 @@ export const setStreamer = (streamer) => {
   return {
     type: SET_STREAMER,
     payload: streamer,
+  };
+};
+
+export const setStreamId = (id) => {
+  return {
+    type: SET_STREAM_ID,
+    payload: id,
   };
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./Participants.css";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Participant from "./Participant/Participant.component";
 import firepadRef from "../../streamingServer/firebase";
 import { setIsStreamer } from "../../store/liveVideoStreaming/action";

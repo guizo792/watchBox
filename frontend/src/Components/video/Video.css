@@ -1,3 +1,22 @@
+.videoContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+  border-radius: 4px;
+  max-width: 22rem;
+  overflow: hidden;
+  transition: all 0.3s;
+
+  /* On mouse-over, add a deeper shadow */
+}
+
+.videoContainer:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
 .thumbnail-img {
   object-fit: cover;
   border-radius: 4px;

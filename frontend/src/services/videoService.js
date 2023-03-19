@@ -106,6 +106,21 @@ export const createVideo = async (videoDetails) => {
   }
 };
 
+// Delete video
+export const deleteVideo = async (id) => {
+  try {
+    const res = await axios({
+      method: "DELETE",
+      url: API_BASE_URL + "videos/" + id,
+      headers: AuthorizationHeader(),
+    });
+    // console.log(res);
+    return res;
+  } catch (err) {
+    return err;
+  }
+};
+
 // TODO : create video like Function
 export const likeVideo = async (video, user) => {
   //

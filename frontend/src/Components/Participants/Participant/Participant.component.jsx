@@ -9,9 +9,11 @@ import {
 } from "react-icons/fa";
 import firepadRef from "../../../streamingServer/firebase";
 import { useSelector } from "react-redux";
+import { deleteVideo } from "../../../services/videoService";
 
 const Participant = (props) => {
   const isStreamer = useSelector((state) => state.isStreamer);
+  const streamId = useSelector((state) => state.streamId);
 
   const {
     curentIndex,
@@ -28,7 +30,7 @@ const Participant = (props) => {
   // No participant, nothing to show
   if (!currentParticipant) return <></>;
 
-  if (isStreamer)
+  if (isStreamer) {
     window.onunload = (e) => {
       e.preventDefault();
       e.returnValue = "";
@@ -36,6 +38,13 @@ const Participant = (props) => {
         console.log("All data removed successfully.");
       });
     };
+    window.onbeforeunload = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+      console.log(streamId);
+      deleteVideo(streamId).then((res) => console.log(res));
+    };
+  }
 
   return (
     <div className={`participant ${hideVideo ? "hide" : ""} flex flex-wrap`}>
@@ -57,9 +66,10 @@ const Participant = (props) => {
         )}
         <div className="name">
           {currentParticipant?.name}
-          {currentUser
+          {currentUser ? `(You)` : ``}
+          {/* {currentUser
             ? `(You), ${streamInfos.viewersCount} viewer(s)`
-            : `, ${streamInfos.viewersCount} viewer(s)`}
+            : `, ${streamInfos.viewersCount} viewer(s)`} */}
         </div>
       </Card>
       <div className="fixed left-[-120px] flex justify-center items-center gap-2 transition-all duration-300">
@@ -99,8 +109,9 @@ const Participant = (props) => {
                 const confirmEnding = window.confirm(
                   "Are you sure you want to end the live 🟥"
                 );
-                if (confirmEnding) {
+                if (confirmEnding && streamId) {
                   clearStreamData();
+                  deleteVideo(streamId).then((res) => console.log(res));
                   window.location.replace("/");
                 }
               }}
