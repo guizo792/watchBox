@@ -9,10 +9,15 @@ import { CiStreamOn } from "react-icons/ci";
 import { BiVideoPlus } from "react-icons/bi";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 
+import Fade from "react-reveal/Fade";
+
 const NavBar = () => {
   // menu dropdown state :
   const [isOpen, setIsOpen] = useState(false);
   const [isUploadMenuOpen, setIsUploadMenuOpen] = useState(false);
+
+  // navbar mobile
+  const [navShow, setNavShow] = useState(false);
 
   // global states : application user state
   const appUser = useSelector((state) => state.appUser);
@@ -24,7 +29,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
 
   return (
-    <nav className="bg-gray-800 sticky top-0 z-50">
+    <nav className="bg-gray-800 sticky top-0 z-50 transition duration-500 ease-in-out">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -33,6 +38,9 @@ const NavBar = () => {
               className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
               aria-controls="mobile-menu"
               aria-expanded="false"
+              onClick={() => {
+                setNavShow((prevState) => !prevState);
+              }}
             >
               <svg
                 className="block h-6 w-6"
@@ -273,36 +281,40 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-
-      <div className="sm:hidden" id="mobile-menu">
-        <div className="space-y-1 px-2 pt-2 pb-3">
-          <a
-            href="#aa"
-            className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-            aria-current="page"
-          >
-            Dashboard
-          </a>
-          <a
-            href="#aa"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Team
-          </a>
-          <a
-            href="#a"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Projects
-          </a>
-          <a
-            href="#aa"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Calendar
-          </a>
+      <Fade top>
+        <div
+          className={"sm:hidden bg-gray-800" + (navShow ? " block" : " hidden")}
+          id="mobile-menu"
+        >
+          <div className="space-y-1 px-2 pt-2 pb-3">
+            <a
+              href="#aa"
+              className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+              aria-current="page"
+            >
+              Dashboard
+            </a>
+            <a
+              href="#aa"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Team
+            </a>
+            <a
+              href="#a"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Projects
+            </a>
+            <a
+              href="#aa"
+              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            >
+              Calendar
+            </a>
+          </div>
         </div>
-      </div>
+      </Fade>
     </nav>
   );
 };

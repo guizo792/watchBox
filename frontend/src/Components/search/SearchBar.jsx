@@ -44,7 +44,7 @@ const SearchBar = () => {
 
   return (
     <div className="relative">
-      <form action="">
+      <form onSubmit={(e) => e.preventDefault()}>
         <label htmlFor="search" className="sr-only">
           search
         </label>

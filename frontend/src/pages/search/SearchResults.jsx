@@ -43,6 +43,7 @@ const SearchResults = () => {
               desc={video?.description}
               views={video?.viewsCount}
               userId={video?.userId}
+              videoId={video?.id}
             />
           );
         })}

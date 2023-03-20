@@ -70,7 +70,7 @@ const PasswordUpdate = () => {
   };
 
   return (
-    <div className="grid grid-cols-4 mb-4">
+    <div className="sm:grid sm:grid-cols-4 mb-8">
       {/*  */}
       <div className="col-span-1"></div>
       {/*  */}
@@ -83,7 +83,7 @@ const PasswordUpdate = () => {
           {alert.show && <Alert msg={alert.msg} show={setAlert} />}
 
           <form>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="sm:grid sm:grid-cols-2 sm:gap-4">
               <div>
                 <div className="flex flex-col mb-4">
                   <label className="font-semibold tracking-tight">

@@ -33,12 +33,12 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <section className="max-w-6xl mx-auto mt-10 overflow-hidden">
-      <div className="grid grid-cols-4 gap-6">
+    <section className="max-w-6xl mx-auto mt-4 sm:mt-10 overflow-hidden">
+      <div className="sm:grid sm:grid-cols-4 sm:gap-6">
         <div className="col-span-1">
           <ImageProfile />
         </div>
-        <div className="col-span-3 bg-gray-800 rounded-md">
+        <div className="col-span-3 bg-gray-800 rounded-b-md sm:rounded-md">
           <GeneralDetails />
         </div>
       </div>

@@ -90,22 +90,23 @@ const UpdateDetails = () => {
   };
 
   return (
-    <section className="mt-10 mx-auto text-white max-w-6xl">
-      <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-1 bg-gray-800 flex flex-col items-center justify-center rounded-md ">
-          <Profile className="w-full" />
-
-          <h1 className="font-bold text-white">Edit profile informations</h1>
+    <section className="mt-1 sm:mt-10 mx-auto text-white max-w-6xl">
+      <div className="sm:grid sm:grid-cols-4 sm:gap-4">
+        <div className="sm:col-span-1  bg-gray-800 flex flex-col items-center justify-center rounded-t-md sm:rounded-md ">
+          <Profile className="h-72 sm:h-full sm:w-full" />
+          <h1 className="hidden sm:block pb-2 font-bold text-white">
+            Edit profile informations
+          </h1>
         </div>
 
-        <div className="col-span-3 bg-gray-800 rounded-md py-4 px-6">
+        <div className="col-span-3 bg-gray-800 rounded-b-md sm:rounded-md py-4 px-6">
           <h1 className="text-xl font-bold tracking-wider mb-4">
             General Inforamtion
           </h1>
           {alert.show && <Alert msg={alert.msg} show={setAlert} />}
           {!isLoading ? (
             <form action="">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="sm:grid sm:grid-cols-2 sm:gap-4">
                 <div>
                   <div className="flex flex-col mb-4">
                     <label className="font-semibold tracking-tight">
