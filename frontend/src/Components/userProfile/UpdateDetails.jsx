@@ -23,7 +23,12 @@ const INITIAL_STATE = {
 const UpdateDetails = () => {
   // states
   const appUser = useSelector((state) => state.appUser);
-  const [newUserDetails, setNewUserDetails] = useState(INITIAL_STATE);
+  const [newUserDetails, setNewUserDetails] = useState({
+    ...INITIAL_STATE,
+    firstName: appUser?.currentUser?.firstName,
+    lastName: appUser?.currentUser?.lastName,
+    username: appUser?.currentUser?.username,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({
     msg: "",
@@ -112,7 +117,7 @@ const UpdateDetails = () => {
                       className="bg-gray-600 outline-none border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4"
                       placeholder="First name"
                       onChange={(e) => handelChange(e)}
-                      value={appUser?.currentUser?.firstName}
+                      value={newUserDetails.firstName}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
@@ -125,7 +130,7 @@ const UpdateDetails = () => {
                       className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
                       placeholder="last name"
                       onChange={(e) => handelChange(e)}
-                      value={appUser?.currentUser?.lastName}
+                      value={newUserDetails?.lastName}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
@@ -138,7 +143,7 @@ const UpdateDetails = () => {
                       className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
                       placeholder="Username"
                       onChange={(e) => handelChange(e)}
-                      value={appUser?.currentUser?.username}
+                      value={newUserDetails?.username}
                     />
                   </div>
                 </div>

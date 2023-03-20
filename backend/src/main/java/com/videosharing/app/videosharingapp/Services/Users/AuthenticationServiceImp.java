@@ -93,7 +93,11 @@ public class AuthenticationServiceImp implements AuthenticationService{
         BeanUtils.copyProperties(user,userEntity);
         UserEntity userSaved =userRepository.save(userEntity) ;
         //generate jwt token
-        String token =jwtService.generateToken(user) ;
+
+        UserDetailsImp userRegistered=new UserDetailsImp() ;
+        BeanUtils.copyProperties(userSaved,userRegistered);
+
+        String token =jwtService.generateToken(userRegistered) ;
 
         return AuthenticationResponse.builder()
                 .jwtToken(token)

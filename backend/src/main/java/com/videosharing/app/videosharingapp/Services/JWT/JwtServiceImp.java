@@ -1,5 +1,6 @@
 package com.videosharing.app.videosharingapp.Services.JWT;
 
+import com.videosharing.app.videosharingapp.model.Users.UserDetailsImp;
 import com.videosharing.app.videosharingapp.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,7 +20,7 @@ public class JwtServiceImp implements JwtService{
 
 
     @Override
-    public String extractUsername(String jwtToken) {
+    public String extractId(String jwtToken) {
 
         return extractClaim(jwtToken ,Claims::getSubject);
     }
@@ -46,10 +47,13 @@ public class JwtServiceImp implements JwtService{
     }
 
     @Override
-    public String generateToken(Map<String, Object> extrasClaims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> extrasClaims, UserDetailsImp userDetails) {
+
+        System.out.println(userDetails.getId());
+
         return Jwts.builder()
                 .addClaims(extrasClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+(24*60*60*1000)))
                 .signWith(jwtUtils.getSingInKey())
@@ -58,14 +62,14 @@ public class JwtServiceImp implements JwtService{
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetailsImp userDetails) {
         return generateToken(new HashMap<String,Object>() ,userDetails);
     }
 
     @Override
-    public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
-        String username =extractUsername(jwtToken) ;
-        return (username.equals(userDetails.getUsername()) && !istTokenExpired(jwtToken)) ;
+    public boolean isTokenValid(String jwtToken, UserDetailsImp userDetails) {
+        String id =extractId(jwtToken) ;
+        return (id.equals(userDetails.getId()) && !istTokenExpired(jwtToken)) ;
     }
 
     @Override

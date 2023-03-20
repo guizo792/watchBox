@@ -24,7 +24,7 @@ public class UserEntity {
 
     @Indexed(unique = true)
     private String username ;
-    
+
     private Role role ;
 
     private String password ;
@@ -34,4 +34,6 @@ public class UserEntity {
     private List<String> videoHistory ;
     private Set<String> likedVideos ;
     private Set<String> dislikedVideos;
+
+
 }
