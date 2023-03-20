@@ -106,6 +106,7 @@ const UpdateDetails = () => {
                       className="bg-gray-600 outline-none border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4"
                       placeholder="First name"
                       onChange={(e) => handelChange(e)}
+                      value={appUser?.currentUser?.firstName}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
@@ -118,6 +119,7 @@ const UpdateDetails = () => {
                       className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
                       placeholder="last name"
                       onChange={(e) => handelChange(e)}
+                      value={appUser?.currentUser?.lastName}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
@@ -130,6 +132,7 @@ const UpdateDetails = () => {
                       className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
                       placeholder="Username"
                       onChange={(e) => handelChange(e)}
+                      value={appUser?.currentUser?.username}
                     />
                   </div>
                 </div>

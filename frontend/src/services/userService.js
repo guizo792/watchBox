@@ -88,3 +88,14 @@ export const getUser = async (idUser) => {
     return error;
   }
 };
+
+export const getUserVideos = async (idUser) => {
+  //get user's videos
+
+  try {
+    const response = await axios.get(API_BASE_URL_USERS + idUser + "/videos");
+    return response.data;
+  } catch (error) {
+    throw new Error("Error while getting user's videos");
+  }
+};

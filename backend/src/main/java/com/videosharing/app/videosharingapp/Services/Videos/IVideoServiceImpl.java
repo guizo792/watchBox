@@ -235,15 +235,17 @@ public class IVideoServiceImpl implements IVideoService {
 
             List<VideoEntity> allVideos =videoRepository.findAll();
             System.out.println("this is liked tags :" + likedTags );
-            allVideos.forEach((video)->{
 
+
+            allVideos.forEach((video)->{
 
                 List<String> tags= video.getTags();
 
                 if(tags!=null){
                     tags.forEach(tag->{
                         //System.out.println("this is a tag named :" +tag);
-                        if(likedTags.contains(tag.toUpperCase())  || watchedVideosTags.contains(tag.toUpperCase())){
+                        if((video.getUserId()!=null && !video.getUserId().equals(idUser) &&(likedTags.contains(tag.toUpperCase())  || watchedVideosTags.contains(tag.toUpperCase()))) ||
+                                ( video.getUserId()==null &&(likedTags.contains(tag.toUpperCase())  || watchedVideosTags.contains(tag.toUpperCase())))){
                             recommendedVideos.add(video);
                             return;
                         };
@@ -255,7 +257,7 @@ public class IVideoServiceImpl implements IVideoService {
             List<VideoEntity> recommendedVideosList =new ArrayList<>(recommendedVideos);
 
             for (VideoEntity video : allVideos) {
-                if( ! recommendedVideos.contains(video)) recommendedVideosList.add(video) ;
+                if( (! recommendedVideos.contains(video) && video.getUserId()!=null  && !video.getUserId().equals(idUser)) || (! recommendedVideos.contains(video) && video.getUserId()==null)) recommendedVideosList.add(video) ;
             }
 
             return recommendedVideosList;

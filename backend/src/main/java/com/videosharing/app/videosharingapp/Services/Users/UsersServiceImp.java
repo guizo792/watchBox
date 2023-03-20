@@ -3,11 +3,13 @@ package com.videosharing.app.videosharingapp.Services.Users;
 import com.mongodb.client.result.UpdateResult;
 import com.videosharing.app.videosharingapp.Entities.Notification;
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
+import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.Services.Notifications.NotificationsService;
 import com.videosharing.app.videosharingapp.Services.Notifications.WSService;
 import com.videosharing.app.videosharingapp.controllers.Responses.ResponseMessage;
 import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.LikesException;
+import com.videosharing.app.videosharingapp.exceptions.NoVideosException;
 import com.videosharing.app.videosharingapp.exceptions.UserNotFoundException;
 import com.videosharing.app.videosharingapp.repositories.UserRepository;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
@@ -36,6 +38,7 @@ public class UsersServiceImp implements UsersService {
 
     @Autowired
     NotificationsService notificationsService ;
+
     @Autowired
     private VideoRepository videoRepository;
 
@@ -244,6 +247,18 @@ public class UsersServiceImp implements UsersService {
             return userResponse;
         } catch (Exception e) {
             throw new Exception("can't find user ");
+        }
+    }
+
+    @Override
+    public List<VideoEntity> getUserVideos(String idUser) throws NoVideosException {
+
+        try{
+           List<VideoEntity> userVideos =videoRepository.findAllByUserId(idUser) ;
+           return userVideos ;
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            throw new NoVideosException("no videos for this user") ;
         }
     }
 }
