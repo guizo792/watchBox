@@ -166,7 +166,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
-      <div className="absolute bottom-0 right-0 left-0 w-full -z-10 ">
+      <div className="absolute  bottom-0 right-0 left-0 w-full -z-10 overflow-x-hidden ">
         <Waves style={{ width: "100%", height: "100%" }} />
       </div>
 

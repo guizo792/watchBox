@@ -12,20 +12,26 @@ const ProfileStat = () => {
   //
   const appUser = useSelector((state) => state.appUser);
 
-  const [userVideos, setUserVideos] = useState([]);
+  // const [userVideos, setUserVideos] = useState([]);
   const [likes, setlikes] = useState(0);
+  const [views, setviews] = useState(0);
 
   useEffect(() => {
     const ftechLikes = async () => {
       //
       try {
-        const userVideos = await getUserVideos(appUser?.currentUser?.id);
-        console.log(userVideos);
-        let counter = 0;
-        userVideos.forEach((video) => {
-          counter += video?.likes;
+        const data = await getUserVideos(appUser?.currentUser?.id);
+
+        let counterLikes = 0;
+        let counterViews = 0;
+        data.forEach((video) => {
+          counterLikes += video?.likes;
+          if (video?.viewsCount !== null && video?.viewsCount !== undefined)
+            counterViews += video?.viewsCount;
         });
-        setlikes(counter);
+        setlikes(counterLikes);
+
+        setviews(counterViews);
       } catch (error) {
         //
         console.log("error: " + error);
@@ -72,11 +78,11 @@ const ProfileStat = () => {
         <div>
           <AiOutlineFieldTime size={50} color={"white"} />
           <div className="mt-2">
-            <p className="">Time viewd</p>
+            <p className="">Total views</p>
           </div>
         </div>
         <div>
-          <p className="font-bold text-xl ">12 hr</p>
+          <p className="font-bold text-xl ">{views}</p>
         </div>
       </div>
     </div>

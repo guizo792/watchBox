@@ -75,7 +75,7 @@ const NavBar = () => {
               />
               <img
                 className="hidden h-9 w-auto lg:block"
-                src="./images/logo.png"
+                src="/images/logo.png"
                 alt="share it"
               />
             </Link>

@@ -2,18 +2,13 @@ package com.videosharing.app.videosharingapp.controllers;
 
 
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
-import com.videosharing.app.videosharingapp.Entities.VideoStatus;
-import com.videosharing.app.videosharingapp.Services.Notifications.WSService;
 import com.videosharing.app.videosharingapp.Services.Videos.IVideoService;
-import com.videosharing.app.videosharingapp.Services.Videos.IVideoServiceImpl;
-import com.videosharing.app.videosharingapp.controllers.Responses.ResponseMessage;
 import com.videosharing.app.videosharingapp.model.Videos.VideoDetails;
 import com.videosharing.app.videosharingapp.repositories.VideoRepository;
 import com.videosharing.app.videosharingapp.utils.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

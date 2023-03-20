@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import ButtonMain from "../Constants/ButtonMain";
+import Alert from "../Alert/Alert";
 
 const PasswordUpdate = () => {
+  const [alert, setAlert] = useState({
+    show: true,
+    msg: "msg",
+  });
   return (
     <div className="grid grid-cols-4 mb-4">
       <div className="col-span-1"></div>
       <div className="col-span-3">
         <div className="mt-4 bg-gray-800 py-4 px-6 rounded">
-          <h1 className="font-bold text-xl tracking wider mb-2">
+          <h1 className="font-bold text-xl tracking wider mb-4">
             Change Password
           </h1>
 
-          {/* {} */}
+          {alert.show && <Alert msg={alert.msg} show={setAlert} />}
 
           <form action="">
             <div className="grid grid-cols-2 gap-4">

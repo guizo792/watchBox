@@ -26,7 +26,7 @@ const SearchBar = () => {
     }
 
     let timer = setTimeout(() => {
-      if (search.searchKey.length > 0) fetchSearch();
+      if (search?.searchKey?.length > 0) fetchSearch();
       console.log("....hello");
     }, 400);
 

@@ -8,6 +8,8 @@ import { updateUser } from "../../services/userService";
 import { setUser } from "../../store/user/user.action";
 import { useNavigate } from "react-router";
 
+import { ReactComponent as Profile } from "../../assets/profile.svg";
+
 //
 const INITIAL_STATE = {
   firstName: "",
@@ -85,7 +87,11 @@ const UpdateDetails = () => {
   return (
     <section className="mt-10 mx-auto text-white max-w-6xl">
       <div className="grid grid-cols-4 gap-4">
-        <div className="col-span-1 bg-gray-800">left</div>
+        <div className="col-span-1 bg-gray-800 flex flex-col items-center justify-center rounded-md ">
+          <Profile className="w-full" />
+
+          <h1 className="font-bold text-white">Edit profile informations</h1>
+        </div>
 
         <div className="col-span-3 bg-gray-800 rounded-md py-4 px-6">
           <h1 className="text-xl font-bold tracking-wider mb-4">
