@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.expression.ExpressionException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -41,6 +42,9 @@ public class UsersServiceImp implements UsersService {
 
     @Autowired
     private VideoRepository videoRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder ;
 
     @Override
     public UserEntity getUser(String id) throws UserNotFoundException {
@@ -261,4 +265,28 @@ public class UsersServiceImp implements UsersService {
             throw new NoVideosException("no videos for this user") ;
         }
     }
+
+    @Override
+    public boolean changeUserPassword(String idUser, String currentPassword, String newPassword) {
+
+        try{
+            UserEntity user =userRepository.findById(idUser).isPresent() ? userRepository.findById(idUser).get() :null ;
+
+            if(user==null) throw new UserNotFoundException("no such user") ;
+
+            if(passwordEncoder.matches(currentPassword,user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user) ;
+                return true ;
+            }else{
+                System.out.println("current password is incorrect");
+                return false ;
+            }
+
+        }catch(UserNotFoundException e){
+            throw new RuntimeException();
+        }
+    }
+
+
 }

@@ -99,3 +99,26 @@ export const getUserVideos = async (idUser) => {
     throw new Error("Error while getting user's videos");
   }
 };
+
+//
+// change password for
+
+export const changeUserPassword = async (
+  idUser,
+  currentPassword,
+  newPassword
+) => {
+  try {
+    const response = await axios.put(
+      API_BASE_URL_USERS + idUser + "/password",
+      {
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      },
+      { headers: AuthorizationHeader() }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Error while changing password");
+  }
+};

@@ -4,6 +4,7 @@ package com.videosharing.app.videosharingapp.controllers;
 import com.videosharing.app.videosharingapp.Entities.UserEntity;
 import com.videosharing.app.videosharingapp.Entities.VideoEntity;
 import com.videosharing.app.videosharingapp.Services.Users.UsersService;
+import com.videosharing.app.videosharingapp.controllers.Requests.PasswordChangeReq;
 import com.videosharing.app.videosharingapp.controllers.Requests.RemoveLikedVideoReq;
 import com.videosharing.app.videosharingapp.controllers.Responses.UserResponse;
 import com.videosharing.app.videosharingapp.exceptions.NoVideosException;
@@ -55,6 +56,20 @@ public class UserController {
     }
 
 
+    @PutMapping("/{idUser}/password")
+    public ResponseEntity changeUserPassword(@PathVariable String idUser,@RequestBody PasswordChangeReq req) {
+        try {
+
+            System.out.println("heeeeeeeeeeere");
+
+            boolean updated =usersService.changeUserPassword(idUser,req.getCurrentPassword() ,req.getNewPassword()) ;
+            return new ResponseEntity<Boolean>(updated,HttpStatus.OK) ;
+        }catch (ExpressionException e ){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST) ;
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND) ;
+        }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity updateUserDetails(@PathVariable String id,@RequestBody UserEntity userNewDetails) {
@@ -67,6 +82,8 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND) ;
         }
     }
+
+
 
     @DeleteMapping("/likedVideos/{id}")
     public ResponseEntity removeLikedVideo(@PathVariable String id,@RequestBody RemoveLikedVideoReq req) {

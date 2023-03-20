@@ -18,5 +18,7 @@ public interface UsersService {
     UserResponse removeLikedVideo(String idUser,String idVideo) throws Exception;
     UserResponse removeDislikedVideo(String idUser,String idVideo) throws Exception;
     List<VideoEntity> getUserVideos(String idUser) throws NoVideosException;
+    boolean changeUserPassword(String idUser, String currentPassword ,String newPassword) ;
+
 
 }
