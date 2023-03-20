@@ -33,14 +33,23 @@ public class AuthenticationServiceImp implements AuthenticationService{
     @Override
     public AuthenticationResponse login(LoginRequest req) {
 
-        // verify if the credentials are valid or not
-        authenticationManger.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        req.getUsername() ,
-                        req.getPassword()
-                )
-        );
+        System.out.println("heeeeeeeeeeeeere login");
 
+        var user =userRepository.findByUsername(req.getUsername()).
+                orElseThrow() ;
+
+        // verify if the credentials are valid or not
+        try{
+            authenticationManger.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            req.getUsername() ,
+                            req.getPassword()
+                    )
+            );
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         // console output
         System.out.println("login method: " +authenticationManger.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -50,8 +59,7 @@ public class AuthenticationServiceImp implements AuthenticationService{
         ).isAuthenticated());
 
         // get user by username
-        var user =userRepository.findByUsername(req.getUsername()).
-                orElseThrow() ;
+
 
         //generate token
         // user details object

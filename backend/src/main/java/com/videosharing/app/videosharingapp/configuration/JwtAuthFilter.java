@@ -45,7 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String jwt ;
         String id ;
 
-        System.out.println("i'm heeere");
+        //System.out.println("i'm heeere");
         // if there is no authorization header 
         if(authorization ==null || authorization.split(" ")[0]=="Bearer") {
             System.out.println("........... no authorization header ");
@@ -56,10 +56,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwt =authorization.split(" ")[1] ;
 
 
-        System.out.println("token"+jwt);
+        //System.out.println("token"+jwt);
         id =jwtService.extractId(jwt);
 
-        System.out.println("all claims" +jwtService.extractAllClaims(jwt));
+        //System.out.println("all claims" +jwtService.extractAllClaims(jwt));
         System.out.println(id);
         if(id !=null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails =userDetailsImpService.loadUserById(id) ;

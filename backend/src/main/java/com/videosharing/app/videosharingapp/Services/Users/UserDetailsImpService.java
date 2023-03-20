@@ -29,6 +29,12 @@ public class UserDetailsImpService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+
+        UserEntity userEntity =userRepository.findByUsername(username)
+                .orElseThrow(()-> new UsernameNotFoundException("No username found")) ;
+        UserDetailsImp userDetailsImp =new UserDetailsImp() ;
+        BeanUtils.copyProperties(userEntity,userDetailsImp);
+        return userDetailsImp;
+
     }
 }
