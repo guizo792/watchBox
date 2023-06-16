@@ -28,7 +28,7 @@ Install the required dependencies:
     mvn clean install
 Start the application:
 #### Frontend :
-    ng serve
+    npm start
 #### Backend (spring boot)
     mvn spring-boot:run
 
