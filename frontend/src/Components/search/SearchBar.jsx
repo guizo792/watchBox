@@ -27,7 +27,6 @@ const SearchBar = () => {
 
     let timer = setTimeout(() => {
       if (search?.searchKey?.length > 0) fetchSearch();
-      console.log("....hello");
     }, 400);
 
     return () => {
@@ -49,12 +48,12 @@ const SearchBar = () => {
           search
         </label>
         <div className="relative">
-          <span className="absolute left-1 top-3">
-            <VscSearch size={20} color={"white"} />
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted">
+            <VscSearch size={18} />
           </span>
           <input
             type="text"
-            className="h-9 w-full text-white  pr-4 font-thin pl-8 rounded-md outline-none bg-gray-600  focus:border-2 focus:bg-gray-700 focus:border-main"
+            className="h-10 w-full rounded-full border border-line bg-surface-sunken pl-10 pr-4 text-sm text-ink outline-none transition placeholder:text-muted focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20"
             id="search"
             name="search"
             placeholder="Search videos"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
@@ -7,9 +7,18 @@ import { setShowNotificationPanel } from "../../store/notifications/notification
 import SearchBar from "../search/SearchBar";
 import { CiStreamOn } from "react-icons/ci";
 import { BiVideoPlus } from "react-icons/bi";
-import { MdOutlineNotificationsNone } from "react-icons/md";
+import {
+  MdOutlineNotificationsNone,
+  MdSearch,
+  MdClose,
+} from "react-icons/md";
 
-import Fade from "react-reveal/Fade";
+const iconButton =
+  "relative rounded-full p-2 text-muted transition-colors hover:bg-surface-sunken hover:text-ink";
+const menuPanel =
+  "absolute right-0 top-full z-50 mt-2 w-52 origin-top-right overflow-hidden rounded-xl border border-line bg-white p-1 shadow-card-hover";
+const menuItem =
+  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-ink transition-colors hover:bg-surface-sunken";
 
 const NavBar = () => {
   // menu dropdown state :
@@ -23,299 +32,163 @@ const NavBar = () => {
   const appUser = useSelector((state) => state.appUser);
   const notification = useSelector((state) => state.notifications);
 
-  //console.log(appUser);
-
   //dispatch
   const dispatch = useDispatch();
 
+  // Close the dropdowns on outside click or Escape
+  const uploadRef = useRef(null);
+  const profileRef = useRef(null);
+  useEffect(() => {
+    const onPointerDown = (e) => {
+      if (!uploadRef.current?.contains(e.target)) setIsUploadMenuOpen(false);
+      if (!profileRef.current?.contains(e.target)) setIsOpen(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsUploadMenuOpen(false);
+        setIsOpen(false);
+        setNavShow(false);
+      }
+    };
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
   return (
-    <nav className="bg-gray-800 sticky top-0 z-50 transition duration-500 ease-in-out">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
-              onClick={() => {
-                setNavShow((prevState) => !prevState);
-              }}
-            >
-              <svg
-                className="block h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-              <svg
-                className="hidden h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <Link to={"/"} className="flex flex-shrink-0 items-center">
-              <img
-                className="block h-9 w-auto lg:hidden"
-                src="/images/logo.png"
-                alt="share it"
-              />
-              <img
-                className="hidden h-9 w-auto lg:block"
-                src="/images/logo.png"
-                alt="share it"
-              />
-            </Link>
-            <div className="hidden w-full sm:ml-6 sm:block">
-              <div className="flex gap-4 items-center">
-                <Link
-                  to="/"
-                  className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                  aria-current="page"
-                >
-                  Home
-                </Link>
+    <header className="sticky top-0 z-50 border-b border-line bg-white/85 backdrop-blur">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-3 sm:px-6 lg:px-8">
+        <button
+          type="button"
+          className={iconButton + " sm:hidden"}
+          aria-label={navShow ? "Close search" : "Search"}
+          aria-controls="mobile-search"
+          aria-expanded={navShow}
+          onClick={() => setNavShow((prevState) => !prevState)}
+        >
+          {navShow ? <MdClose size={24} /> : <MdSearch size={24} />}
+        </button>
 
-                {/* <Link
-                  to="#a"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Team
-                </Link> */}
+        <Link to="/" className="flex shrink-0 items-center gap-2">
+          <img className="h-9 w-auto rounded-lg" src="/images/logo.png" alt="" />
+          <span className="hidden text-lg font-bold tracking-tight text-ink sm:inline">
+            Watch<span className="text-brand">Box</span>
+          </span>
+        </Link>
 
-                <Link
-                  to="#a"
-                  className="overflow-hidden text-gray-300 max-w-fit hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium "
-                  style={{
-                    minInlineSize: "fit-content",
-                  }}
-                >
-                  About us
-                </Link>
+        {/* One SearchBar for every breakpoint: inline on desktop, a dropdown row on phones */}
+        <div
+          id="mobile-search"
+          className={
+            (navShow
+              ? "absolute inset-x-0 top-full border-b border-line bg-white px-3 py-3 "
+              : "hidden ") +
+            "sm:static sm:mx-auto sm:block sm:w-full sm:max-w-xl sm:flex-1 sm:border-0 sm:bg-transparent sm:p-0"
+          }
+        >
+          <SearchBar />
+        </div>
 
-                {/* <Link
-                  to="#a"
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  More
-                </Link> */}
-                <div className="w-full px-4">
-                  <SearchBar />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 gap-3">
-            {appUser?.isLoggedIn && (
-              <>
+        <div className="ml-auto flex items-center gap-1 sm:ml-0">
+          {appUser?.isLoggedIn && (
+            <>
+              <div className="relative" ref={uploadRef}>
                 <button
                   type="button"
-                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  className={iconButton}
+                  aria-label="Create"
+                  aria-haspopup="menu"
+                  aria-expanded={isUploadMenuOpen}
                   onClick={() => setIsUploadMenuOpen((prevState) => !prevState)}
                 >
-                  <BiVideoPlus size={30} />
+                  <BiVideoPlus size={26} />
                 </button>
                 {isUploadMenuOpen && (
-                  <div
-                    className=" absolute divide-y right-6 top-12 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    role="menu"
-                    onMouseLeave={() =>
-                      setIsUploadMenuOpen((prevState) => !prevState)
-                    }
-                  >
-                    {appUser.isLoggedIn ? (
-                      <>
-                        <Link
-                          to="/upload-video"
-                          className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md flex items-center gap-4"
-                          role="menuitem"
-                          tabIndex="-1"
-                          id="user-menu-item-0"
-                        >
-                          <UploadIcon
-                            style={{ width: "24px", height: "24px" }}
-                          />
-                          <span>Upload video</span>
-                        </Link>
-                        <a
-                          href="/live-stream"
-                          className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md flex items-center gap-4"
-                          role="menuitem"
-                          tabIndex="-1"
-                          id="user-menu-item-2"
-                          target="_blank"
-                        >
-                          <CiStreamOn size={24} /> Go live
-                        </a>
-                      </>
-                    ) : (
-                      <>
-                        <Link
-                          to="/auth/login"
-                          className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
-                          role="menuitem"
-                          tabIndex="-1"
-                          id="user-menu-item-2"
-                        >
-                          You should login
-                        </Link>
-                      </>
-                    )}
+                  <div className={menuPanel} role="menu">
+                    <Link to="/upload-video" className={menuItem} role="menuitem">
+                      <UploadIcon style={{ width: "22px", height: "22px" }} />
+                      <span>Upload video</span>
+                    </Link>
+                    <a
+                      href="/live-stream"
+                      className={menuItem}
+                      role="menuitem"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <CiStreamOn size={22} /> Go live
+                    </a>
                   </div>
                 )}
+              </div>
 
-                {/* <Link
-                  to={"/upload-video"}
-                  type="button"
-                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <UploadIcon
-                    style={{ width: "24px", height: "24px" }}
-                    title="upload video"
-                  />
-                </Link> */}
-                <button
-                  type="button"
-                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 relative"
-                  onClick={() => dispatch(setShowNotificationPanel())}
-                >
-                  <MdOutlineNotificationsNone size={28} title="notifications" />
-                  {notification?.newNotificationReceived && (
-                    <span className="absolute h-2 w-2 rounded-full bg-main top-0 right-0"></span>
-                  )}
-                </button>
-              </>
-            )}
-
-            <div className="relative ml-3">
               <button
-                className=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                data-dropdown-toggle="dropdown"
-                onClick={() => setIsOpen((prevState) => !prevState)}
+                type="button"
+                className={iconButton}
+                aria-label="Notifications"
+                onClick={() => dispatch(setShowNotificationPanel())}
               >
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src={
-                    !appUser.isLoggedIn
-                      ? "/images/user.png"
-                      : appUser?.currentUser?.profilePicture
-                  }
-                  alt="profile "
-                />
+                <MdOutlineNotificationsNone size={26} />
+                {notification?.newNotificationReceived && (
+                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-brand ring-2 ring-white" />
+                )}
               </button>
+            </>
+          )}
 
-              {isOpen && (
-                <div
-                  className=" absolute divide-y right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                  role="menu"
-                  onMouseLeave={() => setIsOpen((prevState) => !prevState)}
-                >
-                  {appUser.isLoggedIn ? (
-                    <>
-                      <Link
-                        to="/user/profile"
-                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
-                        role="menuitem"
-                        tabIndex="-1"
-                        id="user-menu-item-0"
-                      >
-                        Your Profile
-                      </Link>
-                      <a
-                        href="#aa"
-                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
-                        role="menuitem"
-                        tabIndex="-1"
-                        id="user-menu-item-1"
-                      >
-                        Settings
-                      </a>
-                      <Link
-                        to="/auth/login"
-                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
-                        role="menuitem"
-                        tabIndex="-1"
-                        id="user-menu-item-2"
-                        onClick={() => localStorage.clear()}
-                      >
-                        Sign out
-                      </Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link
-                        to="/auth/login"
-                        className="block px-4 py-2 text-sm text-gray-800 transition duration-300 hover:bg-gray-600 hover:text-white rounded-md"
-                        role="menuitem"
-                        tabIndex="-1"
-                        id="user-menu-item-2"
-                      >
-                        Login
-                      </Link>
-                    </>
-                  )}
-                </div>
-              )}
-            </div>
+          <div className="relative ml-1" ref={profileRef}>
+            <button
+              type="button"
+              className="flex rounded-full ring-2 ring-transparent transition hover:ring-line"
+              aria-label="Account menu"
+              aria-haspopup="menu"
+              aria-expanded={isOpen}
+              onClick={() => setIsOpen((prevState) => !prevState)}
+            >
+              <img
+                className="h-9 w-9 rounded-full bg-surface-sunken object-cover"
+                src={
+                  (appUser.isLoggedIn && appUser?.currentUser?.profilePicture) ||
+                  "/images/user.png"
+                }
+                alt=""
+              />
+            </button>
+
+            {isOpen && (
+              <div className={menuPanel} role="menu">
+                {appUser.isLoggedIn ? (
+                  <>
+                    <Link to="/user/profile" className={menuItem} role="menuitem">
+                      Your Profile
+                    </Link>
+                    <a href="#aa" className={menuItem} role="menuitem">
+                      Settings
+                    </a>
+                    <Link
+                      to="/auth/login"
+                      className={menuItem + " text-brand"}
+                      role="menuitem"
+                      onClick={() => localStorage.clear()}
+                    >
+                      Sign out
+                    </Link>
+                  </>
+                ) : (
+                  <Link to="/auth/login" className={menuItem} role="menuitem">
+                    Login
+                  </Link>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
-      <Fade top>
-        <div
-          className={"sm:hidden bg-gray-800" + (navShow ? " block" : " hidden")}
-          id="mobile-menu"
-        >
-          <div className="space-y-1 px-2 pt-2 pb-3">
-            <a
-              href="#aa"
-              className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-              aria-current="page"
-            >
-              Dashboard
-            </a>
-            <a
-              href="#aa"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Team
-            </a>
-            <a
-              href="#a"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Projects
-            </a>
-            <a
-              href="#aa"
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Calendar
-            </a>
-          </div>
-        </div>
-      </Fade>
-    </nav>
+
+    </header>
   );
 };
 

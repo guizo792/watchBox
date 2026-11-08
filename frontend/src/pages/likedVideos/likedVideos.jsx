@@ -37,26 +37,27 @@ const LikedVideos = () => {
 
   return (
     <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
-      <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
+      <div className="sticky top-16 z-30 w-full bg-white/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
-      <div className="videos-section pl-5 min-h-[92vh] w-[100%]">
-        {!loading && (
-          <>
-            {likedVideos?.length !== 0
-              ? likedVideos?.map((video, index) => (
-                  <VideoComponent video={video} key={index} />
-                ))
-              : "No liked videos"}
-          </>
-        )}
+      <main className="mt-8 min-h-[80vh] flex-1 px-4 pb-12 sm:pr-6">
+        {!loading &&
+          (likedVideos?.length !== 0 ? (
+            <div className="video-grid">
+              {likedVideos?.map((video, index) => (
+                <VideoComponent video={video} key={index} />
+              ))}
+            </div>
+          ) : (
+            <p className="pt-10 text-center text-muted">No liked videos yet</p>
+          ))}
         {loading && !loadingError && <LoadingSpinner />}
         {loadingError && (
           <div className="text-red-900 font-medium">
             There was an error loading liked videos details
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

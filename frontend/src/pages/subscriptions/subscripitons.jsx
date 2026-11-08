@@ -46,7 +46,7 @@ const Subscriptions = () => {
 
   return (
     <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
-      <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
+      <div className="sticky top-16 z-30 w-full bg-white/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
       <div className="videos-section pl-5 min-h-[92vh] flex-col w-[100%] !items-start !justify-start">

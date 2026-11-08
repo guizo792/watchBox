@@ -8,29 +8,29 @@ import { Link } from "react-router-dom";
 function SearchSuggestions() {
   const search = useSelector((state) => state.search);
 
-  //console.log(search?.searchKeyResult);
   const dispatch = useDispatch();
 
   return (
     <Fade top>
-      <div className="absolute bg-gray-800 rounded-md max-w-3xl left-0 right-0 top-14">
-        <div className="px-4 py-4">
-          <div className="flex justify-between items-center">
+      <div className="absolute left-0 right-0 top-12 z-50 rounded-xl border border-line bg-white shadow-card-hover">
+        <div className="px-3 py-3">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-white text-lg font-bold tracking-wider ">
+              <h1 className="text-sm font-semibold text-ink">
                 Search suggestions
               </h1>
-              <span className="block border-b-4 border-main w-16"></span>
+              <span className="mt-1 block h-0.5 w-10 rounded bg-brand"></span>
             </div>
             <button
-              className="cursor-pointer"
+              className="cursor-pointer rounded-full text-muted hover:text-ink"
+              aria-label="Close suggestions"
               onClick={() => dispatch(setSuggetions(false))}
             >
-              <CiSquareRemove size={30} color={"white"} />
+              <CiSquareRemove size={26} />
             </button>
           </div>
 
-          <div className="h-80 mt-4 px-4 text-white overflow-scroll scrollbar-hide">
+          <div className="scrollbar-hide mt-3 max-h-80 overflow-y-auto text-ink">
             {search?.searchKeyResult.map((key, index) => {
               return <KeySearchResult keySearchResult={key} key={index} />;
             })}
@@ -52,9 +52,11 @@ const KeySearchResult = ({ keySearchResult }) => {
         dispatch(setSuggetions(false));
       }}
     >
-      <p className="mb-2 h-11 text-lg rounded py-2 px-3 transition duration-300 ease-in-out shadow-sm bg-gray-600 hover:bg-main cursor-pointer overflow-hidden">
+      <p className="flex items-center justify-between truncate rounded-lg px-3 py-2 text-sm transition-colors hover:bg-brand-soft hover:text-brand">
         {keySearchResult}
-        <span className="font-bold text-2lg float-right">{">"}</span>
+        <span aria-hidden="true" className="text-muted">
+          {">"}
+        </span>
       </p>
     </Link>
   );

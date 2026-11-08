@@ -50,7 +50,7 @@ const UserProfile = () => {
         <h1 className="pt-2 text-xl font-bold">My videos</h1>
         <span className="block w-8 border-2 border-main"></span>
 
-        <div className="flex gap-2 flex-wrap mt-4 mb-2 justify-center">
+        <div className="video-grid mt-4 mb-2 px-4">
           {userVideos.map((video) => (
             <VideoComponent video={video} key={video.id} />
           ))}

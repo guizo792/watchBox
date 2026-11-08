@@ -8,7 +8,7 @@ import {
   fetchVideoStart,
 } from "../../store/videosServices/videosServices.action";
 import SidebarNav from "../../Components/sidebarNav/sidebarNav";
-import LoadingSpinner from "../../Components/loadingSpinner/spinner";
+import VideoSkeleton from "../../Components/video/VideoSkeleton";
 
 const Home = () => {
   const videosData = useSelector((state) => state.videosServices);
@@ -40,22 +40,34 @@ const Home = () => {
 
   return (
     <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
-      <div className="sticky top-16 left-0 z-50 sm:h-[80vh]">
+      <div className="sticky top-16 z-30 w-full bg-white/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
 
-      <div className="videos-section justify-center mt-8">
-        {!videosData.isFetching && videosData.videos.length === 0 ? (
-          <>
-            <img src="/images/img404.png" alt="" className="h-full w-full" />
-          </>
+      <main className="mt-8 min-h-[80vh] flex-1 px-4 pb-12 sm:pr-6">
+        {videosData.isFetching ? (
+          <div className="video-grid">
+            {Array.from({ length: 8 }, (_, i) => (
+              <VideoSkeleton key={i} />
+            ))}
+          </div>
+        ) : videosData.videos.length === 0 ? (
+          <div className="mx-auto flex max-w-sm flex-col items-center gap-3 pt-10 text-center">
+            <img src="/images/img404.png" alt="" className="w-full" />
+            <h2 className="text-lg font-semibold">No videos yet</h2>
+            <p className="text-sm text-muted">
+              Nothing to watch right now. Check back soon or upload the first
+              one.
+            </p>
+          </div>
         ) : (
-          videosData.videos.map((video) => (
-            <VideoComponent video={video} key={video.id} />
-          ))
+          <div className="video-grid">
+            {videosData.videos.map((video) => (
+              <VideoComponent video={video} key={video.id} />
+            ))}
+          </div>
         )}
-      </div>
-      {videosData.isFetching && <LoadingSpinner />}
+      </main>
     </div>
   );
 };
