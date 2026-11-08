@@ -23,7 +23,7 @@ const linkClasses = ({ isActive }) =>
 // Vertical list on desktop, horizontally scrollable pill row on phones.
 const SidebarNav = () => (
   <nav aria-label="Primary" className="border-b border-line sm:border-0">
-    <ul className="scrollbar-hide flex gap-2 overflow-x-auto px-4 py-2 sm:flex-col sm:gap-1 sm:overflow-visible sm:px-3 sm:py-4">
+    <ul className="scrollbar-hide flex gap-2 overflow-x-auto px-3 py-2 sm:flex-col sm:gap-1 sm:overflow-visible sm:px-0 sm:py-4">
       {LINKS.map(({ to, label, icon, end }) => (
         <li key={to}>
           <NavLink to={to} end={end} className={linkClasses}>

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import { countFormatter } from "../../utils/countFormatter";
 import { getUser } from "../../services/userService.js";
-
-const DEFAULT_AVATAR = "/images/defaultProfile.jpg";
+import Avatar from "../Avatar/Avatar";
+import Thumbnail from "./Thumbnail";
 
 const VideoComponent = ({ video }) => {
   const [videoUser, setVideoUser] = useState(null);
@@ -35,11 +35,10 @@ const VideoComponent = ({ video }) => {
       className="group flex flex-col gap-3 rounded-xl focus-visible:outline-offset-4"
     >
       <div className="relative aspect-video overflow-hidden rounded-xl bg-surface-sunken shadow-card transition-shadow duration-300 group-hover:shadow-card-hover">
-        <img
+        <Thumbnail
           src={video?.thumbnailUrl}
           alt={`Thumbnail for ${video?.title ?? "video"}`}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          className="duration-500 ease-out group-hover:scale-105"
         />
         {isLive && (
           <span className="absolute left-2 top-2 inline-flex items-center gap-1.5 rounded-md bg-brand px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
@@ -50,10 +49,10 @@ const VideoComponent = ({ video }) => {
       </div>
 
       <div className="flex gap-3">
-        <img
-          src={videoUser?.profilePicture || DEFAULT_AVATAR}
-          alt={videoUser?.username ? `${videoUser.username}'s avatar` : ""}
-          className="mt-0.5 h-9 w-9 shrink-0 rounded-full bg-surface-sunken object-cover"
+        <Avatar
+          src={videoUser?.profilePicture}
+          name={videoUser?.username}
+          className="mt-0.5 h-9 w-9 text-sm"
         />
         <div className="min-w-0">
           <h3

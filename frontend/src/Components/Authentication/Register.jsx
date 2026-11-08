@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 
 import { Link, useNavigate } from "react-router-dom";
-import Alert from "../Alert/Alert";
+import Toast from "../Alert/Toast";
 
 // firebase imports
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -11,7 +11,7 @@ import { database } from "../../Config/firebaseConfig";
 import { register } from "../../services/userService";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/user/user.action";
-import { AuthShell, AuthToast, PasswordField, TextField } from "./AuthShell";
+import { AuthShell, PasswordField, TextField } from "./AuthShell";
 
 // initail states
 const initialState = {
@@ -263,11 +263,7 @@ const Register = () => {
         )}
       </form>
 
-      {alert.show && (
-        <AuthToast>
-          <Alert msg={alert.msg} show={setALert} />
-        </AuthToast>
-      )}
+      {alert.show && <Toast msg={alert.msg} show={setALert} />}
     </AuthShell>
   );
 };

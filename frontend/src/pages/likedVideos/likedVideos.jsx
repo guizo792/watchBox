@@ -36,11 +36,11 @@ const LikedVideos = () => {
   }, [appUser.currentUser]);
 
   return (
-    <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
+    <div className="mx-auto flex max-w-[1500px] flex-wrap gap-5 sm:flex-nowrap sm:px-6 lg:px-8">
       <div className="sticky top-16 z-30 w-full bg-surface/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
-      <main className="mt-8 min-h-[80vh] flex-1 px-4 pb-12 sm:pr-6">
+      <main className="mt-8 min-h-[80vh] min-w-0 flex-1 px-3 pb-12 sm:px-0">
         {!loading &&
           (likedVideos?.length !== 0 ? (
             <div className="video-grid">

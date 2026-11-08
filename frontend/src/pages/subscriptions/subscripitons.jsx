@@ -45,11 +45,11 @@ const Subscriptions = () => {
   }, [appUser.currentUser]);
 
   return (
-    <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
+    <div className="mx-auto flex max-w-[1500px] flex-wrap gap-5 sm:flex-nowrap sm:px-6 lg:px-8">
       <div className="sticky top-16 z-30 w-full bg-surface/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
-      <div className="videos-section min-h-[80vh] w-full flex-col !items-start !justify-start gap-8 px-4 pb-12 pt-8">
+      <div className="videos-section min-h-[80vh] min-w-0 flex-1 flex-col !items-start !justify-start gap-8 px-3 pb-12 pt-8 sm:px-0">
         <div className="flex flex-col gap-2">
           {!loading && !loadingError && (
             <>

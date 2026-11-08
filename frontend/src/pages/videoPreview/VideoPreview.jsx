@@ -11,10 +11,11 @@ import {
 } from "../../store/videosServices/videosServices.action";
 import { getAllVideos, getVideo } from "../../services/videoService";
 import { countFormatter } from "../../utils/countFormatter";
+import Thumbnail from "../../Components/video/Thumbnail";
 
 const WatchSkeleton = () => (
   <div
-    className="mx-auto grid max-w-[1400px] gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-6"
+    className="mx-auto grid max-w-[1500px] gap-6 px-3 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-8"
     aria-hidden="true"
   >
     <div className="space-y-4">
@@ -110,7 +111,7 @@ const VideoPreview = () => {
   );
 
   return (
-    <div className="mx-auto grid max-w-[1400px] gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-6">
+    <div className="animate-enter mx-auto grid max-w-[1500px] gap-6 px-3 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-8">
       <div className="min-w-0">
         <div className="overflow-hidden rounded-xl bg-black shadow-card">
           <VideoPlayer video={videosData.video} />
@@ -128,12 +129,9 @@ const VideoPreview = () => {
               key={video.id}
               className="group flex gap-3"
             >
-              <img
-                src={video.thumbnailUrl}
-                alt=""
-                loading="lazy"
-                className="aspect-video w-40 shrink-0 rounded-lg bg-surface-sunken object-cover shadow-card transition-shadow group-hover:shadow-card-hover"
-              />
+              <div className="aspect-video w-40 shrink-0 overflow-hidden rounded-lg bg-surface-sunken shadow-card transition-shadow group-hover:shadow-card-hover">
+                <Thumbnail src={video.thumbnailUrl} />
+              </div>
               <div className="min-w-0">
                 <h3 className="line-clamp-2-fallback text-sm font-semibold leading-snug group-hover:text-brand">
                   {video.title}

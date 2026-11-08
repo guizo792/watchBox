@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getUser } from "../../services/userService";
 import { Link } from "react-router-dom";
+import Avatar from "../Avatar/Avatar";
+import Thumbnail from "../video/Thumbnail";
 
 const resizeDesc = () => {};
 
@@ -35,21 +37,19 @@ const SearchResultsItem = ({
   return (
     <Link to={"/videos?id=" + videoId} className="group block">
       <div className="flex max-w-5xl flex-col gap-4 sm:flex-row">
-        <img
-          src={thumbline}
-          alt=""
-          className="aspect-video w-full shrink-0 rounded-xl bg-surface-sunken object-cover shadow-card transition-shadow group-hover:shadow-card-hover sm:w-72"
-        />
+        <div className="aspect-video w-full shrink-0 overflow-hidden rounded-xl bg-surface-sunken shadow-card transition-shadow group-hover:shadow-card-hover sm:w-72">
+          <Thumbnail src={thumbline} />
+        </div>
         <div className="min-w-0">
           <h2 className="text-lg font-semibold leading-snug group-hover:text-brand">
             {title}
           </h2>
           <p className="text-sm text-muted"> {views} views</p>
           <div className="flex items-center gap-3 pt-3">
-            <img
-              src={userInfo?.profilePicture || "/images/defaultProfile.jpg"}
-              alt=""
-              className="h-8 w-8 rounded-full bg-surface-sunken object-cover"
+            <Avatar
+              src={userInfo?.profilePicture}
+              name={userInfo?.username}
+              className="h-8 w-8 text-xs"
             />
             <p className="text-sm font-semibold text-muted">
               {userInfo?.username}

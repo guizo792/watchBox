@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import Alert from "../Alert/Alert";
+import Toast from "../Alert/Toast";
 import { login } from "../../services/userService";
 import { setUser } from "../../store/user/user.action";
 import { useDispatch } from "react-redux";
-import { AuthShell, AuthToast, PasswordField, TextField } from "./AuthShell";
+import { AuthShell, PasswordField, TextField } from "./AuthShell";
 
 //initial state
 
@@ -118,11 +118,7 @@ const Login = () => {
         </button>
       </form>
 
-      {alert.show && (
-        <AuthToast>
-          <Alert msg={alert.msg} show={setALert} />
-        </AuthToast>
-      )}
+      {alert.show && <Toast msg={alert.msg} show={setALert} />}
     </AuthShell>
   );
 };

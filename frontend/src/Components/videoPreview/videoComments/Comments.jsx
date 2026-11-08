@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
+import Toast from "../../Alert/Toast";
+import ConfirmDialog from "../../Modal/ConfirmDialog";
 import { getAllComments } from "../../../services/commentService";
 import {
   fetchCommentsFailure,
@@ -25,6 +27,8 @@ const Comments = ({ commentsUrl, currentUserId }) => {
 
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(null);
+  const [notice, setNotice] = useState({ show: false, msg: "" });
   let currentRootComments = useRef([]);
   // let updatedBackendComments = useRef([]);
 
@@ -87,7 +91,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
         }
       });
     } else {
-      alert("Please login to post comments ⚠");
+      setNotice({ show: true, msg: "Please log in to post comments" });
     }
   };
 
@@ -108,15 +112,16 @@ const Comments = ({ commentsUrl, currentUserId }) => {
         console.log(err);
       });
   };
-  const deleteComment = (commentId) => {
-    if (window.confirm("Are you sure you want to remove comment?")) {
-      deleteCommentApi(commentId).then(() => {
-        const updatedBackendComments = backendComments?.filter(
-          (backendComment) => backendComment?.id !== commentId
-        );
-        setBackendComments(updatedBackendComments);
-      });
-    }
+  const deleteComment = (commentId) => setPendingDelete(commentId);
+  const confirmDelete = () => {
+    const commentId = pendingDelete;
+    setPendingDelete(null);
+    deleteCommentApi(commentId).then(() => {
+      const updatedBackendComments = backendComments?.filter(
+        (backendComment) => backendComment?.id !== commentId
+      );
+      setBackendComments(updatedBackendComments);
+    });
   };
 
   return (
@@ -155,6 +160,17 @@ const Comments = ({ commentsUrl, currentUserId }) => {
           </>
         )}
       </div>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        title="Delete comment?"
+        message="This can't be undone."
+        confirmLabel="Delete"
+        danger
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={confirmDelete}
+      />
+      {notice.show && <Toast msg={notice.msg} show={setNotice} />}
     </section>
   );
 };

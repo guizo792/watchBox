@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getUser } from "../../services/userService";
+import Avatar from "../Avatar/Avatar";
 
 const Notification = ({ msg, userId, date }) => {
   const [user, setUser] = useState(null);
@@ -20,10 +21,10 @@ const Notification = ({ msg, userId, date }) => {
 
   return (
     <div className="flex items-start gap-3">
-      <img
-        src={user?.profilePicture || "/images/defaultProfile.jpg"}
-        alt=""
-        className="h-10 w-10 shrink-0 rounded-full bg-surface-sunken object-cover"
+      <Avatar
+        src={user?.profilePicture}
+        name={user?.username}
+        className="h-10 w-10 text-sm"
       />
       <div className="min-w-0">
         <p className="text-sm font-semibold">{user?.username}</p>

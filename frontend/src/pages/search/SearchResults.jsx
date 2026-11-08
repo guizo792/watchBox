@@ -30,11 +30,11 @@ const SearchResults = () => {
   }, [search]);
 
   return (
-    <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
+    <div className="mx-auto flex max-w-[1500px] flex-wrap gap-5 sm:flex-nowrap sm:px-6 lg:px-8">
       <div className="sticky top-16 z-30 w-full bg-surface/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
-      <main className="min-w-0 flex-1 space-y-5 px-4 pb-12 pt-4 sm:pr-6">
+      <main className="min-w-0 flex-1 space-y-5 px-3 pb-12 pt-4 sm:px-0">
         {videosFiltered?.map((video, index) => {
           return (
             <SearchResultsItem

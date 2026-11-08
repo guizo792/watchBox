@@ -67,9 +67,3 @@ export const PasswordField = ({ id, label, invalid, ...props }) => {
   );
 };
 
-// Fixed toast so validation messages are always visible, wherever the form is.
-export const AuthToast = ({ children }) => (
-  <span className="fixed bottom-6 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2">
-    {children}
-  </span>
-);

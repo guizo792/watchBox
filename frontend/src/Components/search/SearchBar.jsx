@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { VscSearch } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,24 @@ const SearchBar = () => {
   const search = useSelector((state) => state.search);
 
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+
+  // Press "/" anywhere (outside a text field) to jump to search
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
+      const t = e.target;
+      if (
+        t instanceof HTMLElement &&
+        (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))
+      )
+        return;
+      e.preventDefault();
+      inputRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => {
     async function fetchSearch() {
@@ -53,12 +71,16 @@ const SearchBar = () => {
           </span>
           <input
             type="text"
-            className="h-10 w-full rounded-full border border-line bg-surface-sunken pl-10 pr-4 text-sm text-ink outline-none transition placeholder:text-muted focus:border-brand focus:bg-surface focus:ring-2 focus:ring-brand/20"
+            ref={inputRef}
+            className="peer h-10 w-full rounded-full border border-line bg-surface-sunken pl-10 pr-4 text-sm text-ink outline-none transition placeholder:text-muted focus:border-brand focus:bg-surface focus:ring-2 focus:ring-brand/20"
             id="search"
             name="search"
             placeholder="Search videos"
             onChange={(e) => handelChange(e)}
           />
+          <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-line bg-surface px-1.5 text-[11px] text-muted sm:block peer-focus:hidden">
+            /
+          </kbd>
         </div>
       </form>
 

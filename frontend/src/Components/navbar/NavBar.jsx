@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNotificationPanel } from "../../store/notifications/notification.action";
 import SearchBar from "../search/SearchBar";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
+import Avatar from "../Avatar/Avatar";
 import { CiStreamOn } from "react-icons/ci";
 import { BiVideoPlus } from "react-icons/bi";
 import {
@@ -61,7 +62,7 @@ const NavBar = () => {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-surface/85 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-3 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-[1500px] items-center gap-3 px-3 sm:px-6 lg:px-8">
         <button
           type="button"
           className={iconButton + " sm:hidden"}
@@ -150,13 +151,13 @@ const NavBar = () => {
               aria-expanded={isOpen}
               onClick={() => setIsOpen((prevState) => !prevState)}
             >
-              <img
-                className="h-9 w-9 rounded-full bg-surface-sunken object-cover"
+              <Avatar
                 src={
                   (appUser.isLoggedIn && appUser?.currentUser?.profilePicture) ||
-                  "/images/user.png"
+                  (!appUser.isLoggedIn ? "/images/user.png" : undefined)
                 }
-                alt=""
+                name={appUser?.currentUser?.username}
+                className="h-9 w-9 text-sm"
               />
             </button>
 

@@ -4,7 +4,7 @@ import {
   AiOutlineDislike,
   AiFillDislike,
 } from "react-icons/ai";
-import { MdShare, MdFileDownload, MdClose } from "react-icons/md";
+import { MdShare, MdFileDownload } from "react-icons/md";
 import { countFormatter } from "../../../utils/countFormatter";
 import { dislikeVideo, likeVideo } from "../../../services/videoService";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,10 @@ import { setUser } from "../../../store/user/user.action";
 import { fetchVideoSuccess } from "../../../store/videosServices/videosServices.action";
 import { getUser, updateUser } from "../../../services/userService";
 import ButtonLoadingSpinner from "../../loadingSpinner/buttonSpinner/buttonSpinner";
-import Alert from "../../Alert/Alert";
+import Toast from "../../Alert/Toast";
+import Avatar from "../../Avatar/Avatar";
+import Modal from "../../Modal/Modal";
+import ConfirmDialog from "../../Modal/ConfirmDialog";
 
 
 const VideoInfos = ({ video }) => {
@@ -33,6 +36,7 @@ const VideoInfos = ({ video }) => {
   });
   const [showPopUp, setShowPopUp] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showUnsub, setShowUnsub] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -181,10 +185,10 @@ const VideoInfos = ({ video }) => {
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <img
-            src={videoUser?.profilePicture || "/images/defaultProfile.jpg"}
-            alt=""
-            className="h-11 w-11 rounded-full bg-surface-sunken object-cover"
+          <Avatar
+            src={videoUser?.profilePicture}
+            name={videoUser?.username}
+            className="h-11 w-11 text-base"
           />
           <div className="min-w-0 leading-tight">
             <div className="truncate font-semibold">
@@ -198,10 +202,7 @@ const VideoInfos = ({ video }) => {
             <button
               type="button"
               className="ml-2 rounded-full border border-line bg-surface-sunken px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-line"
-              onClick={() => {
-                if (window.confirm("Are you sure you want to unsubsribe 🛑"))
-                  handleSubscription();
-              }}
+              onClick={() => setShowUnsub(true)}
             >
               {subscribeLoading ? <ButtonLoadingSpinner /> : "Subscribed"}
             </button>
@@ -232,7 +233,7 @@ const VideoInfos = ({ video }) => {
               onClick={handelLike}
             >
               {loggedInUserReact.liked ? (
-                <AiFillLike size={20} />
+                <AiFillLike size={20} className="animate-pop" />
               ) : (
                 <AiOutlineLike size={20} />
               )}
@@ -249,7 +250,7 @@ const VideoInfos = ({ video }) => {
               onClick={handleDislike}
             >
               {loggedInUserReact.disliked ? (
-                <AiFillDislike size={20} />
+                <AiFillDislike size={20} className="animate-pop" />
               ) : (
                 <AiOutlineDislike size={20} />
               )}
@@ -305,64 +306,50 @@ const VideoInfos = ({ video }) => {
         )}
       </div>
 
-      {alert.show && (
-        <span className="fixed bottom-6 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2">
-          <Alert msg={alert.msg} show={setALert} />
-        </span>
-      )}
+      {alert.show && <Toast msg={alert.msg} show={setALert} />}
 
-      {showPopUp && (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4"
-          onClick={() => setShowPopUp(false)}
-          role="presentation"
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="Share video"
-            className="panel w-full max-w-sm p-5"
-            onClick={(e) => e.stopPropagation()}
+      <ConfirmDialog
+        open={showUnsub}
+        title="Unsubscribe?"
+        message={`You will stop following ${
+          videoUser?.username || "this channel"
+        }.`}
+        confirmLabel="Unsubscribe"
+        danger
+        onCancel={() => setShowUnsub(false)}
+        onConfirm={() => {
+          setShowUnsub(false);
+          handleSubscription();
+        }}
+      />
+
+      <Modal
+        open={showPopUp}
+        title="Share video"
+        onClose={() => setShowPopUp(false)}
+      >
+        <div className="flex flex-wrap gap-2">
+          <a
+            href={`https://twitter.com/share?url=${window.location}`}
+            target="_blank"
+            className="btn bg-[#1f7ec7] text-white hover:opacity-90"
+            rel="noreferrer"
           >
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Share video</h2>
-              <button
-                type="button"
-                className="rounded-full p-1 text-muted hover:bg-surface-sunken hover:text-ink"
-                aria-label="Close"
-                onClick={() => setShowPopUp(false)}
-              >
-                <MdClose size={22} />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <a
-                href={`https://twitter.com/share?url=${window.location}`}
-                target="_blank"
-                className="btn bg-[#1f7ec7] text-white hover:opacity-90"
-                rel="noreferrer"
-              >
-                Twitter
-              </a>
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${window.location}`}
-                target="_blank"
-                className="btn bg-[#173981] text-white hover:opacity-90"
-                rel="noreferrer"
-              >
-                Facebook
-              </a>
-              <button
-                className="btn-secondary"
-                title="copy link"
-                onClick={copyLink}
-              >
-                {copied ? "Copied!" : "Copy link"}
-              </button>
-            </div>
-          </div>
+            Twitter
+          </a>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${window.location}`}
+            target="_blank"
+            className="btn bg-[#173981] text-white hover:opacity-90"
+            rel="noreferrer"
+          >
+            Facebook
+          </a>
+          <button className="btn-secondary" title="copy link" onClick={copyLink}>
+            {copied ? "Copied!" : "Copy link"}
+          </button>
         </div>
-      )}
+      </Modal>
     </div>
   );
 };

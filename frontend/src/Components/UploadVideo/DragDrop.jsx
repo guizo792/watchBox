@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import { database } from "../../Config/firebaseConfig";
+import useFileDrop from "./useFileDrop";
 import {
   savVideoDetails,
   setUploaded,
@@ -26,10 +27,9 @@ const DragDrop = () => {
 
   //set user that will upload video
 
-  const handelChange = (e) => {
-    //
-    const fileToUpload = e.target.files[0];
-    setLoading((prevLoading) => !prevLoading);
+  const selectFile = (fileToUpload) => {
+    if (!fileToUpload) return;
+    setLoading(true);
     setVideo(fileToUpload);
     dispatch(
       savVideoDetails({
@@ -37,6 +37,9 @@ const DragDrop = () => {
       })
     );
   };
+
+  const handelChange = (e) => selectFile(e.target.files[0]);
+  const { dragging, dropProps } = useFileDrop(selectFile, "video/");
 
   const handelSumbit = () => {
     //
@@ -86,9 +89,12 @@ const DragDrop = () => {
       </p>
 
       <label
+        {...dropProps}
         className={
-          "relative mt-6 flex h-44 w-full cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-2 border-dashed px-4 text-center transition-colors " +
-          (video
+          "relative mt-6 flex h-44 w-full cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-2 border-dashed px-4 text-center transition " +
+          (dragging
+            ? "scale-[1.02] border-brand bg-brand-soft"
+            : video
             ? "border-brand bg-brand-soft"
             : "border-line bg-surface-sunken hover:border-brand")
         }
@@ -97,7 +103,9 @@ const DragDrop = () => {
           <>
             <UploadIcon style={{ width: "36px", height: "36px" }} />
             <span className="text-sm text-muted">
-              <span className="font-semibold text-ink">Drop a video here</span>{" "}
+              <span className="font-semibold text-ink">
+                {dragging ? "Release to upload" : "Drop a video here"}
+              </span>{" "}
               or <span className="font-semibold text-brand">browse</span>
             </span>
             <input

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUser } from "../../../services/userService";
 import CommentForm from "./CommentForm";
+import Avatar from "../../Avatar/Avatar";
 
 const actionBtn =
   "text-xs font-semibold text-muted transition-colors hover:text-ink";
@@ -43,10 +44,10 @@ const Comment = ({
 
   return (
     <div className="flex gap-3">
-      <img
-        src={commentAuthor?.profilePicture || "/images/defaultProfile.jpg"}
-        alt=""
-        className="h-9 w-9 shrink-0 rounded-full bg-surface-sunken object-cover"
+      <Avatar
+        src={commentAuthor?.profilePicture}
+        name={commentAuthor?.username}
+        className="h-9 w-9 text-sm"
       />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-x-2">
