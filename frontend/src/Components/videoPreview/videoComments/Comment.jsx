@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { getUser } from "../../../services/userService";
 import CommentForm from "./CommentForm";
 
+const actionBtn =
+  "text-xs font-semibold text-muted transition-colors hover:text-ink";
+
 const Comment = ({
   comment,
   replies,
@@ -37,71 +40,77 @@ const Comment = ({
       });
     }
   }, []);
+
   return (
-    <div className="flex gap-[6rem] relative">
-      <div key={comment.id} className="flex gap-5">
-        <div>
-          <img
-            src={`${
-              commentAuthor?.profilePicture || "/images/defaultProfile.jpg"
-            } `}
-            alt="user profile"
-            className="min-w-[2rem] min-h-[2rem] max-w-[2rem] max-h-[2rem] rounded-full border-[2px] border-pink-700 border-solid"
-          />
+    <div className="flex gap-3">
+      <img
+        src={commentAuthor?.profilePicture || "/images/defaultProfile.jpg"}
+        alt=""
+        className="h-9 w-9 shrink-0 rounded-full bg-surface-sunken object-cover"
+      />
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline gap-x-2">
+          <span className="text-sm font-semibold">
+            {commentAuthor?.username || "User"}
+          </span>
+          <span className="text-xs text-muted">
+            {new Date(comment?.createdAt).toLocaleDateString()}
+          </span>
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center text-[19px] gap-5">
-            <div className="font-bold text-pink-800 tracking-wider	">
-              {commentAuthor?.username}
-            </div>
-            <div>{new Date(comment?.createdAt).toLocaleDateString()}</div>
-          </div>
-          {!isEditing && <div className="comment-text">{comment.text}</div>}
-          {isEditing && (
-            <CommentForm
-              submitLabel="Update"
-              hasCancelButton
-              initialText={comment.text}
-              handleSubmit={(text) => updateComment(text, comment.id)}
-              handleCancel={() => {
-                setActiveComment(null);
-              }}
-            />
+
+        {!isEditing && (
+          <p className="mt-0.5 whitespace-pre-line break-words text-sm">
+            {comment.text}
+          </p>
+        )}
+        {isEditing && (
+          <CommentForm
+            submitLabel="Update"
+            hasCancelButton
+            initialText={comment.text}
+            handleSubmit={(text) => updateComment(text, comment.id)}
+            handleCancel={() => {
+              setActiveComment(null);
+            }}
+          />
+        )}
+
+        <div className="mt-1 flex items-center gap-4">
+          {canReply && (
+            <button
+              type="button"
+              className={actionBtn}
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "replying" })
+              }
+            >
+              Reply
+            </button>
           )}
-          <div className="flex gap-5 items-center">
-            {canReply && (
-              <div
-                className="text-sm text-gray-900 hover:text-gray-500 tracking-wider	 font-bold cursor-pointer
-"
-                onClick={() =>
-                  setActiveComment({ id: comment.id, type: "replying" })
-                }
-              >
-                Reply
-              </div>
-            )}
-            {canEdit && (
-              <div
-                className="text-sm text-gray-900 hover:text-gray-500 tracking-wider font-bold cursor-pointer
-"
-                onClick={() =>
-                  setActiveComment({ id: comment.id, type: "editing" })
-                }
-              >
-                Edit
-              </div>
-            )}
-            {canDelete && (
-              <div
-                className="text-sm text-red-600 hover:text-red-900 tracking-wider	 font-bold cursor-pointer
-"
-                onClick={() => deleteComment(comment.id)}
-              >
-                Delete
-              </div>
-            )}
-          </div>
-          {isReplying && (
+          {canEdit && (
+            <button
+              type="button"
+              className={actionBtn}
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "editing" })
+              }
+            >
+              Edit
+            </button>
+          )}
+          {canDelete && (
+            <button
+              type="button"
+              className="text-xs font-semibold text-red-500 transition-colors hover:text-red-600"
+              onClick={() => deleteComment(comment.id)}
+            >
+              Delete
+            </button>
+          )}
+        </div>
+
+        {isReplying && (
+          <div className="mt-2">
             <CommentForm
               submitLabel="Reply"
               hasCancelButton
@@ -110,43 +119,49 @@ const Comment = ({
                 setActiveComment(null);
               }}
             />
-          )}
-          {showReplies && replies?.length > 0 && (
-            <div className="replies">
-              {replies.map((reply) => (
-                <Comment
-                  comment={reply}
-                  key={reply.id}
-                  setActiveComment={setActiveComment}
-                  activeComment={activeComment}
-                  updateComment={updateComment}
-                  deleteComment={deleteComment}
-                  addComment={addComment}
-                  parentId={comment.id}
-                  replies={[]}
-                  currentUserId={currentUserId}
-                  authorId={reply?.userId}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-      {replies.length > 0 && (
-        <div className="open-close-btn">
+          </div>
+        )}
+
+        {replies.length > 0 && (
           <button
-            className="bg-transparent text-pink-700 transition-all duration-500 text-md border border-2 border-pink-700 rounded-full w-6 h-6 absolute top-1 left-[18rem] hover:text-white hover:bg-pink-700 flex items-center justify-center"
-            onClick={(e) => {
-              setShowReplies(!showReplies);
-              showReplies
-                ? (e.target.style.transform = "rotate(0)")
-                : (e.target.style.transform = "rotate(180deg)");
-            }}
+            type="button"
+            className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline"
+            aria-expanded={showReplies}
+            onClick={() => setShowReplies(!showReplies)}
           >
-            ▼
+            <span
+              aria-hidden="true"
+              className={
+                "inline-block text-xs transition-transform " +
+                (showReplies ? "rotate-180" : "")
+              }
+            >
+              ▼
+            </span>
+            {replies.length} {replies.length === 1 ? "reply" : "replies"}
           </button>
-        </div>
-      )}
+        )}
+
+        {showReplies && replies?.length > 0 && (
+          <div className="mt-3 flex flex-col gap-4 border-l border-line pl-4">
+            {replies.map((reply) => (
+              <Comment
+                comment={reply}
+                key={reply.id}
+                setActiveComment={setActiveComment}
+                activeComment={activeComment}
+                updateComment={updateComment}
+                deleteComment={deleteComment}
+                addComment={addComment}
+                parentId={comment.id}
+                replies={[]}
+                currentUserId={currentUserId}
+                authorId={reply?.userId}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

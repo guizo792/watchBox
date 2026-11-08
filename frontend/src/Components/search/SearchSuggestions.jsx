@@ -12,7 +12,7 @@ function SearchSuggestions() {
 
   return (
     <Fade top>
-      <div className="absolute left-0 right-0 top-12 z-50 rounded-xl border border-line bg-white shadow-card-hover">
+      <div className="absolute left-0 right-0 top-12 z-50 rounded-xl border border-line bg-surface shadow-card-hover">
         <div className="px-3 py-3">
           <div className="flex items-center justify-between">
             <div>

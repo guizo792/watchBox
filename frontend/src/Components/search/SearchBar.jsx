@@ -53,7 +53,7 @@ const SearchBar = () => {
           </span>
           <input
             type="text"
-            className="h-10 w-full rounded-full border border-line bg-surface-sunken pl-10 pr-4 text-sm text-ink outline-none transition placeholder:text-muted focus:border-brand focus:bg-white focus:ring-2 focus:ring-brand/20"
+            className="h-10 w-full rounded-full border border-line bg-surface-sunken pl-10 pr-4 text-sm text-ink outline-none transition placeholder:text-muted focus:border-brand focus:bg-surface focus:ring-2 focus:ring-brand/20"
             id="search"
             name="search"
             placeholder="Search videos"

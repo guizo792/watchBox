@@ -1,23 +1,30 @@
 /** @type {import('tailwindcss').Config} */
+
+// Colors read CSS variables (see src/index.css) so every utility such as
+// `bg-surface` or `text-ink` flips automatically between light and dark.
+const token = (name) => `rgb(var(--color-${name}) / <alpha-value>)`;
+
 module.exports = {
+  darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Brand
+        // Brand (same in both themes)
         main: "rgb(236 53 84)",
         brand: {
-          DEFAULT: "#ec3554",
-          dark: "#c8213d",
-          soft: "#fdecef",
+          DEFAULT: token("brand"),
+          dark: token("brand-dark"),
+          soft: token("brand-soft"),
         },
-        // Neutrals used by the design system (see index.css for CSS variables)
-        ink: "#111827",
-        muted: "#6b7280",
-        line: "#e5e7eb",
+        // Theme-aware neutrals
+        ink: token("ink"),
+        muted: token("muted"),
+        line: token("line"),
         surface: {
-          DEFAULT: "#ffffff",
-          sunken: "#f6f7f9",
+          DEFAULT: token("surface"),
+          sunken: token("sunken"),
+          raised: token("raised"),
         },
       },
       fontFamily: {
@@ -32,9 +39,8 @@ module.exports = {
         ],
       },
       boxShadow: {
-        card: "0 1px 2px rgba(17,24,39,.06), 0 1px 3px rgba(17,24,39,.08)",
-        "card-hover":
-          "0 10px 24px -6px rgba(17,24,39,.18), 0 4px 8px -4px rgba(17,24,39,.1)",
+        card: "var(--shadow-card)",
+        "card-hover": "var(--shadow-card-hover)",
       },
     },
   },

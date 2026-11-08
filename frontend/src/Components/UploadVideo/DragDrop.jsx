@@ -46,7 +46,6 @@ const DragDrop = () => {
           userId: appUser.currentUser.id,
         })
       );
-      console.log(videoToUpload.videoDetails);
       dispatch(setVideoUploading());
       const databaseRef = ref(
         database,
@@ -80,73 +79,90 @@ const DragDrop = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-12">
-      <label className="relative flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-800 focus:outline-none overflow-hidden">
+    <div className="mx-auto max-w-xl px-4 py-10">
+      <h1 className="text-2xl font-bold tracking-tight">Upload a video</h1>
+      <p className="mt-1 text-sm text-muted">
+        Pick a file, upload it, then add the title, tags and thumbnail.
+      </p>
+
+      <label
+        className={
+          "relative mt-6 flex h-44 w-full cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border-2 border-dashed px-4 text-center transition-colors " +
+          (video
+            ? "border-brand bg-brand-soft"
+            : "border-line bg-surface-sunken hover:border-brand")
+        }
+      >
         {!loading && (
           <>
-            <span className="flex items-center space-x-2">
-              <UploadIcon />
-              <span className="font-medium text-gray-600">
-                Drop files to Attach, or
-                <span className="text-blue-600 underline">browse</span>
-              </span>
+            <UploadIcon style={{ width: "36px", height: "36px" }} />
+            <span className="text-sm text-muted">
+              <span className="font-semibold text-ink">Drop a video here</span>{" "}
+              or <span className="font-semibold text-brand">browse</span>
             </span>
             <input
               type="file"
               name="file_upload"
-              className="hidden"
+              className="sr-only"
               accept="video/*"
               onChange={(e) => handelChange(e)}
               required
             />
           </>
         )}
-        <span className=" absolute w-40 top-5">
-          <ThreeDots
-            height="90"
-            width="80"
-            radius="9"
-            color="rgb(236 53 84)"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{ margin: "auto 0" }}
-            visible={loading}
-          />
-          {video?.name && (
-            <span className="absolute top-0">
-              <p
-                className="text-lg font-medium text-gray-800
-             tracking-wider"
-              >
-                {video?.name}
+        {loading && (
+          <>
+            <ThreeDots
+              height="40"
+              width="60"
+              radius="9"
+              color="rgb(236 53 84)"
+              ariaLabel="three-dots-loading"
+              visible={loading}
+            />
+            {video?.name && (
+              <p className="max-w-full truncate text-sm font-semibold">
+                {video.name}
               </p>
-            </span>
-          )}
-        </span>
+            )}
+          </>
+        )}
       </label>
-      <div className="mt-4 ">
+
+      <div className="mt-4">
         {!videoToUpload.isUploading ? (
           <button
-            className="block bg-green-600 w-20 col-span-1 rounded shadow-2xl text-sm font-semibold text-white transition duration-500 ease-in-out py-2 hover:shadow-2xl"
+            className="btn-primary w-full sm:w-auto"
             onClick={handelSumbit}
+            disabled={video === null}
           >
             Upload file
           </button>
         ) : (
-          <div className="w-full bg-gray-200 rounded-full dark:bg-gray-800 mt-2">
-            <div
-              className="bg-main text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition ease-in-out duration-500 "
-              style={{ width: videoToUpload.progressUploading + "%" }}
-            >
-              {Math.floor(videoToUpload.progressUploading) + "%"}
+          <div>
+            <div className="mb-1 flex justify-between text-xs text-muted">
+              <span>Uploading...</span>
+              <span>{Math.floor(videoToUpload.progressUploading) + "%"}</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-line">
+              <div
+                className="h-full rounded-full bg-brand transition-all duration-500"
+                style={{ width: videoToUpload.progressUploading + "%" }}
+                role="progressbar"
+                aria-valuenow={Math.floor(videoToUpload.progressUploading)}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              />
             </div>
           </div>
         )}
       </div>
-      <div className="mt-8">
+
+      <div className="mt-10">
         <img
-          src="./images/uploadAn.gif"
-          alt="video-illustration"
-          className="max-h-80 mx-auto"
+          src="/images/uploadAn.gif"
+          alt=""
+          className="mx-auto max-h-72 rounded-2xl"
         />
       </div>
     </div>

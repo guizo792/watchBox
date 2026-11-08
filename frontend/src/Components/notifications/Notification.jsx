@@ -15,23 +15,20 @@ const Notification = ({ msg, userId, date }) => {
     fetchUser();
   }, []);
 
+  const [day, time] = (date || "").split("T");
+  const when = day ? `${day} at ${(time || "").slice(0, 5)}` : "";
+
   return (
-    <div className="flex gap-4 items-center cursor-pointer">
+    <div className="flex items-start gap-3">
       <img
-        src={user?.profilePicture}
-        alt="profile"
-        className="rounded-full h-12 w-12"
+        src={user?.profilePicture || "/images/defaultProfile.jpg"}
+        alt=""
+        className="h-10 w-10 shrink-0 rounded-full bg-surface-sunken object-cover"
       />
-      <div className="flex flex-col">
-        <p className="font-bold text-lg">{user?.username}</p>
-        <p className="font-thin text-sm">{msg} </p>
-        <p className="font-semibold text-xs mt-1">
-          {date?.split("T")[0] +
-            "  at " +
-            date?.split("T")[1]?.split(":")[0] +
-            ":" +
-            date?.split("T")[1]?.split(":")[1]}
-        </p>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold">{user?.username}</p>
+        <p className="text-sm text-muted">{msg}</p>
+        <p className="mt-1 text-xs text-muted">{when}</p>
       </div>
     </div>
   );

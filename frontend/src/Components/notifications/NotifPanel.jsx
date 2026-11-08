@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Fade from "react-reveal/Fade";
-import { CiSquareRemove } from "react-icons/ci";
+import { MdClose } from "react-icons/md";
 import Notification from "./Notification";
 import { ReactComponent as NoNotifSvg } from "../../assets/notNotifs.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,23 +47,28 @@ const NotifPanel = () => {
   return (
     notification.showNotificationPanel && (
       <Fade right>
-        <div className="fixed bg-gray-600 w-80 bottom-0 top-16 right-0 px-3 py-4 z-50 text-white">
-          <div className="flex justify-between items-center pb-4">
-            <h1 className="text-xl font-bold">Notifactions</h1>
+        <aside
+          aria-label="Notifications"
+          className="fixed bottom-0 right-0 top-16 z-50 w-full max-w-sm border-l border-line bg-surface-raised px-4 py-4 shadow-card-hover"
+        >
+          <div className="flex items-center justify-between pb-4">
+            <h1 className="text-lg font-bold">Notifications</h1>
             <button
-              className="cursor-pointer relative"
+              className="rounded-full p-1 text-muted hover:bg-surface-sunken hover:text-ink"
+              aria-label="Close notifications"
               onClick={() => dispatch(setShowNotificationPanel())}
             >
-              <CiSquareRemove size={30} color={"white"} />
+              <MdClose size={22} />
             </button>
           </div>
-          <div className="h-full overflow-scroll scrollbar-hide">
+          <div className="scrollbar-hide h-full overflow-y-auto pb-20">
             {notification?.notificationsData?.length === 0 ? (
-              <div className="flex flex-col justify-center">
-                <NoNotifSvg />
+              <div className="flex flex-col items-center gap-2 pt-6 text-center">
+                <NoNotifSvg className="max-w-[12rem]" />
+                <p className="text-sm text-muted">You're all caught up.</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-6 mt-4 mb-8 ">
+              <div className="flex flex-col gap-5">
                 {notification.notificationsData.map((notif, index) => {
                   return (
                     <Notification
@@ -77,7 +82,7 @@ const NotifPanel = () => {
               </div>
             )}
           </div>
-        </div>
+        </aside>
       </Fade>
     )
   );

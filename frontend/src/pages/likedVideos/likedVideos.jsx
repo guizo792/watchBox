@@ -37,7 +37,7 @@ const LikedVideos = () => {
 
   return (
     <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
-      <div className="sticky top-16 z-30 w-full bg-white/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
+      <div className="sticky top-16 z-30 w-full bg-surface/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
       <main className="mt-8 min-h-[80vh] flex-1 px-4 pb-12 sm:pr-6">

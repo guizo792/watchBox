@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
-import { ReactComponent as Shape } from "../../assets/shape1.svg";
 import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
-import { GrFormClose } from "react-icons/gr";
+import { MdClose } from "react-icons/md";
 import Fade from "react-reveal/Fade";
 
 //firebase imports
@@ -52,8 +51,6 @@ const VideoDetails = ({ video }) => {
         [e.target.name]: e.target.value,
       })
     );
-
-    //console.log(videoToUpload.videoDetails);
   };
 
   const handleSavingVideoDetails = async (event) => {
@@ -73,22 +70,20 @@ const VideoDetails = ({ video }) => {
   };
 
   return (
-    <div className=" mt-8 grid grid-cols-2 max-w-6xl mx-auto gap-8 items-start mb-8">
-      <div className="col-span-1">
+    <div className="mx-auto grid max-w-6xl items-start gap-8 px-4 py-10 lg:grid-cols-2">
+      <div>
         {/* details */}
-        <h2 className=" mt-2 font-bold text-lg tracking-wide mb-4">
-          Add video details
-        </h2>
-        <form>
-          <div className="mb-4">
-            <label
-              className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="title"
-            >
+        <h1 className="text-2xl font-bold tracking-tight">Video details</h1>
+        <p className="mt-1 text-sm text-muted">
+          Tell viewers what your video is about.
+        </p>
+        <form className="mt-6 space-y-5">
+          <div>
+            <label className="field-label" htmlFor="title">
               Title
             </label>
             <input
-              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full"
+              className="field"
               id="title"
               name="title"
               type="text"
@@ -97,54 +92,45 @@ const VideoDetails = ({ video }) => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="description"
-            >
+          <div>
+            <label className="field-label" htmlFor="description">
               Description
             </label>
             <textarea
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="field min-h-[7rem] resize-y"
               id="description"
               name="description"
               onChange={(e) => handelChange(e, false)}
-              type="text"
               placeholder="video description"
               required
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="videoStatus"
-            >
+          <div>
+            <label className="field-label" htmlFor="status">
               Video status
             </label>
             <select
-              className="shadow  border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="field"
               id="status"
               name="videoStatus"
+              defaultValue=""
               onChange={(e) => handelChange(e, true)}
               required
             >
-              <option selected disabled>
+              <option value="" disabled>
                 choose video status
               </option>
               <option value="public">public</option>
               <option value="private">private</option>
             </select>
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-800 text-sm font-semibold mb-2"
-              htmlFor="tags"
-            >
+          <div>
+            <label className="field-label" htmlFor="tags">
               Video tags
             </label>
-            <div className="grid grid-cols-4 gap-8">
+            <div className="flex gap-2">
               <input
-                className="col-span-3 shadow appearance-none border w-full rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="field"
                 id="tags"
                 name="tags"
                 type="text"
@@ -154,13 +140,13 @@ const VideoDetails = ({ video }) => {
               />
               <button
                 type="button"
-                className="mx-auto bg-green-400 w-20 col-span-1 rounded shadow-2xl text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-600"
+                className="btn-secondary shrink-0"
                 onClick={addTag}
               >
-                add tag
+                Add tag
               </button>
             </div>
-            <div className=" flex mt-4 gap-4 flex-wrap px-8 justify-center">
+            <div className="mt-3 flex flex-wrap gap-2">
               {tags?.map((tag, index) => {
                 return (
                   <Fade top key={index}>
@@ -181,25 +167,22 @@ const VideoDetails = ({ video }) => {
           {/* btn submit  */}
           <button
             type="button"
-            className="mt-5 bg-main px-4 py-2 col-span-1 rounded shadow-md text-sm font-semibold text-white transition duration-500 ease-in-out hover:scale-110 hover:shadow-2xl"
+            className="btn-primary"
             onClick={(e) => handleSavingVideoDetails(e)}
           >
-            Save Details
+            Save details
           </button>
         </form>
       </div>
-      <div className="col-span-1 pl-20 mt-8 relative max-h-fit">
-        {/*  */}
-        <video className="max-h-56 rounded-lg" controls>
-          <source src={videoToUpload.videoDetails?.videoURL} />
-        </video>
-
-        <div
-          className="absolute -z-10 left-0 right-0 max-h-48 object-contain opacity-60"
-          style={{ top: "-7rem" }}
-        >
-          <Shape />
+      <div className="lg:sticky lg:top-24">
+        <div className="overflow-hidden rounded-2xl bg-black shadow-card">
+          <video className="aspect-video w-full" controls>
+            <source src={videoToUpload.videoDetails?.videoURL} />
+          </video>
         </div>
+        <p className="mt-2 truncate text-sm text-muted">
+          {videoToUpload.videoDetails?.videoName}
+        </p>
       </div>
     </div>
   );
@@ -221,15 +204,17 @@ const Tag = ({ title, index, setTags, tags }) => {
     );
   };
   return (
-    <div className="px-1 rounded-lg text-xs font-semibold shadow-md text-white bg-gray-800 flex gap-2 items-center py-1">
-      <p className="uppercase">{title}</p>
-      <span
-        className="inline-block rounded-full bg-main cursor-pointer"
+    <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft py-1 pl-3 pr-1 text-xs font-semibold text-brand">
+      {title}
+      <button
+        type="button"
+        className="rounded-full p-0.5 hover:bg-brand hover:text-white"
+        aria-label={`Remove tag ${title}`}
         onClick={deleteTag}
       >
-        <GrFormClose size={22} />
-      </span>
-    </div>
+        <MdClose size={14} />
+      </button>
+    </span>
   );
 };
 
@@ -283,66 +268,55 @@ const InputImage = () => {
   };
 
   return (
-    <>
-      <div className="mb-4">
-        <label
-          className="block text-gray-800 text-sm font-semibold mb-2"
-          htmlFor="thumbnail"
-        >
-          Video thumhnail image
-        </label>
-        <div className="grid grid-cols-4 gap-8 items-center">
-          {uploaded ? (
-            <div className="mt-4 col-span-4">
-              <img
-                src={videoToUpload.videoDetails?.thumbnailUrl}
-                alt=""
-                className="rounded-lg h-72"
-              />
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-center col-span-3">
-                <label
-                  htmlFor="thmblineImage"
-                  className="flex flex-col items-center justify-center w-full  border-2 border-gray-300 border-dashed rounded-lg cursor-pointer  dark:border-gray-600 shadow appearance-none py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline "
-                >
-                  <div className="flex flex-col items-center justify-center ">
-                    {!loading ? (
-                      <>
-                        <UploadIcon style={{ width: "35px", height: "35px" }} />
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Click to upload</span>{" "}
-                          or drag and drop
-                        </p>
-                      </>
-                    ) : (
-                      <ThreeDots />
-                    )}
-                  </div>
-                  <input
-                    id="thmblineImage"
-                    name="thumbnailUrl"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handelChange(e)}
-                    ref={imageRef}
-                  />
-                </label>
-              </div>
-              <button
-                type="button"
-                className="bg-green-400 w-30 h-10 col-span-1 rounded shadow-2xl text-sm font-semibold text-white transition duration-500 ease-in-out hover:bg-green-600"
-                onClick={handelUpload}
-              >
-                upload photo
-              </button>
-            </>
-          )}
+    <div>
+      <label className="field-label" htmlFor="thmblineImage">
+        Video thumbnail image
+      </label>
+      {uploaded ? (
+        <img
+          src={videoToUpload.videoDetails?.thumbnailUrl}
+          alt="Chosen thumbnail"
+          className="aspect-video w-full max-w-sm rounded-xl object-cover shadow-card"
+        />
+      ) : (
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <label
+            htmlFor="thmblineImage"
+            className="flex flex-1 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-line bg-surface-sunken px-3 py-5 text-center transition-colors hover:border-brand"
+          >
+            {!loading ? (
+              <>
+                <UploadIcon style={{ width: "32px", height: "32px" }} />
+                <p className="text-sm text-muted">
+                  <span className="font-semibold text-ink">
+                    Click to upload
+                  </span>{" "}
+                  or drag and drop
+                </p>
+              </>
+            ) : (
+              <ThreeDots color="rgb(236 53 84)" height="40" width="50" />
+            )}
+            <input
+              id="thmblineImage"
+              name="thumbnailUrl"
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              onChange={(e) => handelChange(e)}
+              ref={imageRef}
+            />
+          </label>
+          <button
+            type="button"
+            className="btn-secondary sm:self-stretch"
+            onClick={handelUpload}
+          >
+            Upload photo
+          </button>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

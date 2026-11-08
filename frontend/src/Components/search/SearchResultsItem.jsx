@@ -33,28 +33,30 @@ const SearchResultsItem = ({
   }, []);
 
   return (
-    <Link to={"/videos?id=" + videoId}>
-      <div className="flex gap-4 mb-2 max-w-5xl">
+    <Link to={"/videos?id=" + videoId} className="group block">
+      <div className="flex max-w-5xl flex-col gap-4 sm:flex-row">
         <img
           src={thumbline}
-          alt="video-thubmbline"
-          className="rounded-xl h-52 w-80"
+          alt=""
+          className="aspect-video w-full shrink-0 rounded-xl bg-surface-sunken object-cover shadow-card transition-shadow group-hover:shadow-card-hover sm:w-72"
         />
-        <div className="">
-          <h1 className="text-lg font-medium ">{title}</h1>
-          <p className="text-sm font-semibold text-gray-700"> {views} views</p>
-          <div className="flex pt-3 items-center gap-4">
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold leading-snug group-hover:text-brand">
+            {title}
+          </h2>
+          <p className="text-sm text-muted"> {views} views</p>
+          <div className="flex items-center gap-3 pt-3">
             <img
               src={userInfo?.profilePicture || "/images/defaultProfile.jpg"}
-              alt="profile"
-              className="rounded-full w-10 h-10 "
+              alt=""
+              className="h-8 w-8 rounded-full bg-surface-sunken object-cover"
             />
-            <p className="font-semibold text-lg text-gray-600">
+            <p className="text-sm font-semibold text-muted">
               {userInfo?.username}
             </p>
           </div>
 
-          <p className="text-md pt-3 h-16 overflow-hidden ">{desc}</p>
+          <p className="line-clamp-2-fallback pt-3 text-sm text-muted">{desc}</p>
         </div>
       </div>
     </Link>

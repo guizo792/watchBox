@@ -15,36 +15,29 @@ const CommentForm = ({
     setText("");
   };
   return (
-    <form onSubmit={onSubmit}>
-      <label
-        htmlFor="message"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
+    <form onSubmit={onSubmit} className="w-full">
+      <label htmlFor="message" className="sr-only">
         Write comment
       </label>
       <textarea
+        id="message"
         rows="2"
-        className="block p-2.5 w-full text-md text-black-800 rounded-lg border border-gray-500"
-        placeholder="Write comment here..."
+        className="field resize-y"
+        placeholder="Add a comment..."
         value={text}
         onChange={(e) => setText(e.target.value)}
       ></textarea>
 
-      <button
-        className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 rounded-lg text-lg px-3 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 mt-3"
-        disabled={isTextareaDisabled}
-      >
-        {submitLabel}
-      </button>
-      {hasCancelButton && (
-        <button
-          type="button"
-          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-300 focus:ring-4 focus:ring-gray-200 rounded-lg text-lg px-3 mr-2 mb-2 mt-3"
-          onClick={handleCancel}
-        >
-          Cancel
+      <div className="mt-2 flex justify-end gap-2">
+        {hasCancelButton && (
+          <button type="button" className="btn-ghost" onClick={handleCancel}>
+            Cancel
+          </button>
+        )}
+        <button className="btn-primary" disabled={isTextareaDisabled}>
+          {submitLabel}
         </button>
-      )}
+      </div>
     </form>
   );
 };

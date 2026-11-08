@@ -10,3 +10,21 @@
   left: 50% !important;
   transform: translate(-50%, -30%) !important;
 }
+
+/* Brand the player chrome */
+.video-react .video-react-big-play-button {
+  background-color: rgb(var(--color-brand)) !important;
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.video-react:hover .video-react-big-play-button {
+  background-color: rgb(var(--color-brand-dark)) !important;
+  transform: scale(1.06);
+}
+
+.video-react .video-react-play-progress,
+.video-react .video-react-volume-level {
+  background-color: rgb(var(--color-brand));
+}

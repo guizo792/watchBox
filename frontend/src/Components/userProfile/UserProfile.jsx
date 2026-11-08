@@ -2,8 +2,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import GeneralDetails from "./GeneralDetails";
 import ImageProfile from "./ImageProfile";
 import ProfileStat from "./ProfileStat";
-import { ReactComponent as Svg } from "../../assets/blob.svg";
-import { ReactComponent as Wave } from "../../assets/wave.svg";
 import { getUserVideos } from "../../services/userService";
 import { useSelector } from "react-redux";
 import VideoComponent from "../video/Video";
@@ -33,37 +31,34 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <section className="max-w-6xl mx-auto mt-4 sm:mt-10 overflow-hidden">
-      <div className="sm:grid sm:grid-cols-4 sm:gap-6">
-        <div className="col-span-1">
+    <section className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
+      <div className="grid gap-6 sm:grid-cols-4">
+        <div className="sm:col-span-1">
           <ImageProfile />
         </div>
-        <div className="col-span-3 bg-gray-800 rounded-b-md sm:rounded-md">
+        <div className="sm:col-span-3">
           <GeneralDetails />
         </div>
       </div>
-      <div className="mt-10">
+      <div className="mt-6">
         <ProfileStat />
       </div>
 
-      <div className="mt-8 mb-5">
-        <h1 className="pt-2 text-xl font-bold">My videos</h1>
-        <span className="block w-8 border-2 border-main"></span>
+      <div className="mt-10">
+        <h2 className="text-xl font-bold tracking-tight">My videos</h2>
+        <span className="mt-1 block h-0.5 w-10 rounded bg-brand"></span>
 
-        <div className="video-grid mt-4 mb-2 px-4">
-          {userVideos.map((video) => (
-            <VideoComponent video={video} key={video.id} />
-          ))}
-        </div>
-      </div>
-      <div className="absolute top-0 -z-30" style={{ left: "-9rem" }}>
-        <Svg className="w-80 h-60" />
-      </div>
-      <div
-        className="absolute top-2 -z-30 overflow-hidden"
-        style={{ right: "-5rem" }}
-      >
-        <Svg className="w-80 h-60" />
+        {userVideos.length === 0 ? (
+          <p className="mt-6 text-sm text-muted">
+            You haven't uploaded any videos yet.
+          </p>
+        ) : (
+          <div className="video-grid mt-6">
+            {userVideos.map((video) => (
+              <VideoComponent video={video} key={video.id} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

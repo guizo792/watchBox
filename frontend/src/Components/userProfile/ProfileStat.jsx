@@ -45,46 +45,29 @@ const ProfileStat = () => {
     // }
   }, []);
 
+  const stats = [
+    { label: "Likes", value: likes, Icon: AiTwotoneLike },
+    {
+      label: "Subscribers",
+      value: appUser?.currentUser?.subscribers?.length ?? 0,
+      Icon: FaUserFriends,
+    },
+    { label: "Total views", value: views, Icon: AiOutlineFieldTime },
+  ];
+
   return (
-    <div className="flex gap-4 flex-wrap text-white justify-center">
-      {/* card 1 */}
-      <div className="rounded bg-gray-900 px-4 py-2 w-52 flex gap-10 items-center">
-        <div>
-          <AiTwotoneLike size={50} color={"white"} />
-          <div className="mt-2">
-            <p className="">LIKES</p>
+    <div className="grid gap-4 sm:grid-cols-3">
+      {stats.map(({ label, value, Icon }) => (
+        <div key={label} className="panel flex items-center gap-4 p-5">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+            <Icon size={26} />
+          </span>
+          <div>
+            <p className="text-2xl font-bold leading-none">{value}</p>
+            <p className="mt-1 text-sm text-muted">{label}</p>
           </div>
         </div>
-        <div>
-          <p className="font-bold text-xl ">{likes}</p>
-        </div>
-      </div>
-      {/* card 2 */}
-      <div className="rounded bg-gray-900 px-4 py-2 w-52 flex gap-10 items-center">
-        <div>
-          <FaUserFriends size={50} color={"white"} />
-          <div className="mt-2">
-            <p className="">SUBS</p>
-          </div>
-        </div>
-        <div>
-          <p className="font-bold text-xl ">
-            {appUser?.currentUser?.subscribers?.length}
-          </p>
-        </div>
-      </div>
-      {/* card 3 */}
-      <div className="rounded bg-gray-900 px-4 py-2 w-52 flex gap-10 items-center">
-        <div>
-          <AiOutlineFieldTime size={50} color={"white"} />
-          <div className="mt-2">
-            <p className="">Total views</p>
-          </div>
-        </div>
-        <div>
-          <p className="font-bold text-xl ">{views}</p>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

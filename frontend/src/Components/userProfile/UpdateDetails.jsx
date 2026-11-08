@@ -90,17 +90,17 @@ const UpdateDetails = () => {
   };
 
   return (
-    <section className="mt-1 sm:mt-10 mx-auto text-white max-w-6xl">
-      <div className="sm:grid sm:grid-cols-4 sm:gap-4">
-        <div className="sm:col-span-1  bg-gray-800 flex flex-col items-center justify-center rounded-t-md sm:rounded-md ">
+    <section className="mx-auto max-w-6xl px-4 py-6 sm:py-10">
+      <div className="grid gap-4 sm:grid-cols-4">
+        <div className="sm:col-span-1 panel flex flex-col items-center justify-center p-4">
           <Profile className="h-72 sm:h-full sm:w-full" />
-          <h1 className="hidden sm:block pb-2 font-bold text-white">
+          <h1 className="hidden pb-2 text-sm font-semibold text-muted sm:block">
             Edit profile informations
           </h1>
         </div>
 
-        <div className="col-span-3 bg-gray-800 rounded-b-md sm:rounded-md py-4 px-6">
-          <h1 className="text-xl font-bold tracking-wider mb-4">
+        <div className="sm:col-span-3 panel px-6 py-5">
+          <h1 className="text-lg font-bold tracking-tight mb-4">
             General Inforamtion
           </h1>
           {alert.show && <Alert msg={alert.msg} show={setAlert} />}
@@ -109,39 +109,39 @@ const UpdateDetails = () => {
               <div className="sm:grid sm:grid-cols-2 sm:gap-4">
                 <div>
                   <div className="flex flex-col mb-4">
-                    <label className="font-semibold tracking-tight">
+                    <label className="field-label">
                       First name
                     </label>
                     <input
                       type="text"
                       name="firstName"
-                      className="bg-gray-600 outline-none border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4"
+                      className="field"
                       placeholder="First name"
                       onChange={(e) => handelChange(e)}
                       value={newUserDetails.firstName}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
-                    <label className="font-semibold tracking-tight">
+                    <label className="field-label">
                       Last name
                     </label>
                     <input
                       type="text"
                       name="lastName"
-                      className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
+                      className="field"
                       placeholder="last name"
                       onChange={(e) => handelChange(e)}
                       value={newUserDetails?.lastName}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
-                    <label className="font-semibold tracking-tight">
+                    <label className="field-label">
                       Username
                     </label>
                     <input
                       type="text"
                       name="username"
-                      className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
+                      className="field"
                       placeholder="Username"
                       onChange={(e) => handelChange(e)}
                       value={newUserDetails?.username}
@@ -150,37 +150,37 @@ const UpdateDetails = () => {
                 </div>
                 <div>
                   <div className="flex flex-col mb-4">
-                    <label className="font-semibold tracking-tight">
+                    <label className="field-label">
                       Birthday
                     </label>
                     <input
                       type="date"
                       name="birthday"
-                      className="bg-gray-600 outline-none border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4"
+                      className="field"
                       placeholder="your birth date"
                       onChange={(e) => handelChange(e)}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
-                    <label className="font-semibold tracking-tight">
+                    <label className="field-label">
                       Phone Number
                     </label>
                     <input
                       type="text"
                       name="phoneNumber"
-                      className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
+                      className="field"
                       placeholder="phone number"
                       onChange={(e) => handelChange(e)}
                     />
                   </div>
                   <div className="flex flex-col mb-4">
-                    <label className="font-semibold tracking-tight">
+                    <label className="field-label">
                       Email
                     </label>
                     <input
                       type="text"
                       name="email"
-                      className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
+                      className="field"
                       placeholder="Email"
                       onChange={(e) => handelChange(e)}
                     />

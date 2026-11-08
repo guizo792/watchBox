@@ -31,13 +31,14 @@ const SearchResults = () => {
 
   return (
     <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
-      <div className="sticky top-16 z-30 w-full bg-white/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
+      <div className="sticky top-16 z-30 w-full bg-surface/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
-      <div className="px-8 pt-4 border-l-2 border-gray-300 w-full">
+      <main className="min-w-0 flex-1 space-y-5 px-4 pb-12 pt-4 sm:pr-6">
         {videosFiltered?.map((video, index) => {
           return (
             <SearchResultsItem
+              key={video?.id ?? index}
               title={video?.title}
               thumbline={video?.thumbnailUrl}
               desc={video?.description}
@@ -47,7 +48,7 @@ const SearchResults = () => {
             />
           );
         })}
-      </div>
+      </main>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { ReactComponent as UploadIcon } from "../../assets/upload.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNotificationPanel } from "../../store/notifications/notification.action";
 import SearchBar from "../search/SearchBar";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import { CiStreamOn } from "react-icons/ci";
 import { BiVideoPlus } from "react-icons/bi";
 import {
@@ -16,7 +17,7 @@ import {
 const iconButton =
   "relative rounded-full p-2 text-muted transition-colors hover:bg-surface-sunken hover:text-ink";
 const menuPanel =
-  "absolute right-0 top-full z-50 mt-2 w-52 origin-top-right overflow-hidden rounded-xl border border-line bg-white p-1 shadow-card-hover";
+  "absolute right-0 top-full z-50 mt-2 w-52 origin-top-right overflow-hidden rounded-xl border border-line bg-surface p-1 shadow-card-hover";
 const menuItem =
   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-ink transition-colors hover:bg-surface-sunken";
 
@@ -59,7 +60,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-white/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-line bg-surface/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-3 sm:px-6 lg:px-8">
         <button
           type="button"
@@ -84,7 +85,7 @@ const NavBar = () => {
           id="mobile-search"
           className={
             (navShow
-              ? "absolute inset-x-0 top-full border-b border-line bg-white px-3 py-3 "
+              ? "absolute inset-x-0 top-full border-b border-line bg-surface px-3 py-3 "
               : "hidden ") +
             "sm:static sm:mx-auto sm:block sm:w-full sm:max-w-xl sm:flex-1 sm:border-0 sm:bg-transparent sm:p-0"
           }
@@ -93,6 +94,7 @@ const NavBar = () => {
         </div>
 
         <div className="ml-auto flex items-center gap-1 sm:ml-0">
+          <ThemeToggle className={iconButton} />
           {appUser?.isLoggedIn && (
             <>
               <div className="relative" ref={uploadRef}>
@@ -133,7 +135,7 @@ const NavBar = () => {
               >
                 <MdOutlineNotificationsNone size={26} />
                 {notification?.newNotificationReceived && (
-                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-brand ring-2 ring-white" />
+                  <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-brand ring-2 ring-surface" />
                 )}
               </button>
             </>

@@ -4,39 +4,21 @@ import ButtonMain from "../Constants/ButtonMain";
 
 const ImageProfile = () => {
   const appUser = useSelector((state) => state.appUser);
-  return (
-    <div className="bg-gray-800 rounded-t-lg sm:rounded-md py-3 gap-4 px-4 flex sm:flex-col items-center text-white">
-      <div>
-        <img
-          src={appUser?.currentUser?.profilePicture}
-          alt="profile"
-          className=" h-40 sm:h-32 rounded-lg  shadow-lg"
-        />
-        <div className="sm:hidden mt-2">
-          <p className="text-lg font-bold">
-            {appUser?.currentUser?.firstName +
-              " " +
-              appUser?.currentUser?.lastName}
-          </p>
-          <p className="text-sm font-normal">
-            {"@" + appUser?.currentUser?.username}
-          </p>
-        </div>
-      </div>
+  const user = appUser?.currentUser;
+  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ");
 
-      <div className="hidden sm:mt-2 sm:flex sm:flex-col sm:items-center">
-        <p className="text-lg font-bold">
-          {appUser?.currentUser?.firstName +
-            " " +
-            appUser?.currentUser?.lastName}
-        </p>
-        <p className="text-sm font-normal">
-          {"@" + appUser?.currentUser?.username}
-        </p>
+  return (
+    <div className="panel flex h-full flex-col items-center gap-3 px-4 py-6 text-center">
+      <img
+        src={user?.profilePicture || "/images/defaultProfile.jpg"}
+        alt="Your profile"
+        className="h-28 w-28 rounded-full bg-surface-sunken object-cover shadow-card ring-4 ring-brand-soft"
+      />
+      <div>
+        <p className="text-lg font-bold">{fullName}</p>
+        <p className="text-sm text-muted">{user?.username && "@" + user.username}</p>
       </div>
-      <div className=" sm:mt-4">
-        <ButtonMain name="change profile pic" icon="" upload={true} />
-      </div>
+      <ButtonMain name="Change photo" upload={true} />
     </div>
   );
 };

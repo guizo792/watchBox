@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import LoadingSpinner from "../../loadingSpinner/spinner";
 import { getAllComments } from "../../../services/commentService";
 import {
   fetchCommentsFailure,
@@ -121,13 +120,22 @@ const Comments = ({ commentsUrl, currentUserId }) => {
   };
 
   return (
-    <div className="mt-[20px] ml-14">
-      <h3 className="text-2xl mb-[20px]">Comments</h3>
-      <div className="text-xl">Write comment</div>
-      <CommentForm submitLabel="Write" handleSubmit={addComment} />
-      <div className="mt-[40px] flex flex-col gap-6">
+    <section className="mt-2" aria-label="Comments">
+      <h2 className="mb-4 text-lg font-semibold">
+        {currentRootComments.current?.length || 0} Comments
+      </h2>
+      <CommentForm submitLabel="Comment" handleSubmit={addComment} />
+      <div className="mt-8 flex flex-col gap-6">
         {commentsDetails.isFetching ? (
-          <LoadingSpinner />
+          Array.from({ length: 3 }, (_, i) => (
+            <div key={i} className="flex gap-3" aria-hidden="true">
+              <div className="skeleton h-9 w-9 shrink-0 !rounded-full" />
+              <div className="flex-1 space-y-2">
+                <div className="skeleton h-3 w-1/4" />
+                <div className="skeleton h-4 w-3/4" />
+              </div>
+            </div>
+          ))
         ) : (
           <>
             {currentRootComments.current?.map((currentVideoComment) => (
@@ -147,7 +155,7 @@ const Comments = ({ commentsUrl, currentUserId }) => {
           </>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

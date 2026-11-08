@@ -46,23 +46,23 @@ const Subscriptions = () => {
 
   return (
     <div className="flex gap-[20px] flex-wrap sm:flex-nowrap">
-      <div className="sticky top-16 z-30 w-full bg-white/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
+      <div className="sticky top-16 z-30 w-full bg-surface/90 backdrop-blur sm:w-56 sm:shrink-0 sm:self-start">
         <SidebarNav />
       </div>
-      <div className="videos-section pl-5 min-h-[92vh] flex-col w-[100%] !items-start !justify-start">
+      <div className="videos-section min-h-[80vh] w-full flex-col !items-start !justify-start gap-8 px-4 pb-12 pt-8">
         <div className="flex flex-col gap-2">
           {!loading && !loadingError && (
             <>
-              <div className="font-bold text-pink-700">Subscribed to</div>
+              <div className="text-sm font-semibold uppercase tracking-wide text-brand">Subscribed to</div>
               {subscribedToUsers?.map((user, index) => (
                 <div
-                  className="flex items-center gap-5 justify-start font-medium"
+                  className="flex items-center justify-start gap-4 text-sm font-medium"
                   key={index}
                 >
                   <img
                     src={`${user.profilePicture}`}
                     alt="profile pic"
-                    className="h-[2.4rem] w-[2.4rem] rounded-full shadow-lg"
+                    className="h-10 w-10 rounded-full bg-surface-sunken object-cover shadow-card"
                   />
                   <div>{user?.username}</div>
                   <div>
@@ -76,16 +76,16 @@ const Subscriptions = () => {
         <div className="flex flex-col gap-2">
           {!loading && (
             <>
-              <div className="font-bold text-pink-700">Subscribers</div>{" "}
+              <div className="text-sm font-semibold uppercase tracking-wide text-brand">Subscribers</div>{" "}
               {subscribers?.map((subscriber, index) => (
                 <div
-                  className="flex items-center gap-5 justify-start font-medium"
+                  className="flex items-center justify-start gap-4 text-sm font-medium"
                   key={index}
                 >
                   <img
                     src={`${subscriber.profilePicture}`}
                     alt="profile pic"
-                    className="h-[2.4rem] w-[2.4rem] rounded-full shadow-lg"
+                    className="h-10 w-10 rounded-full bg-surface-sunken object-cover shadow-card"
                   />
                   <div>{subscriber?.username}</div>
                 </div>

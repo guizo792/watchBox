@@ -1,6 +1,10 @@
-import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
-import { ReactComponent as Share } from "../../../assets/share.svg";
-import { ReactComponent as Download } from "../../../assets/download.svg";
+import {
+  AiOutlineLike,
+  AiFillLike,
+  AiOutlineDislike,
+  AiFillDislike,
+} from "react-icons/ai";
+import { MdShare, MdFileDownload, MdClose } from "react-icons/md";
 import { countFormatter } from "../../../utils/countFormatter";
 import { dislikeVideo, likeVideo } from "../../../services/videoService";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +15,6 @@ import { getUser, updateUser } from "../../../services/userService";
 import ButtonLoadingSpinner from "../../loadingSpinner/buttonSpinner/buttonSpinner";
 import Alert from "../../Alert/Alert";
 
-import "./videoInfosStyles.css";
 
 const VideoInfos = ({ video }) => {
   // console.log(video);
@@ -29,6 +32,7 @@ const VideoInfos = ({ video }) => {
     msg: "",
   });
   const [showPopUp, setShowPopUp] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -156,34 +160,44 @@ const VideoInfos = ({ video }) => {
       });
   };
 
+  const pill =
+    "inline-flex items-center gap-2 rounded-full bg-surface-sunken px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-line";
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(document.location.href).then(
+      () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      },
+      () => setALert({ show: true, msg: "Could not copy the link" })
+    );
+  };
+
   return (
-    <div className="video-infos-container flex flex-col gap-y-5 py-3 px-5 relative">
-      <div className="title font-medium text-xl	">{video.title}</div>
-      <div className="other-infos flex gap-5 items-center justify-around basis-1 flex-wrap">
-        <div className="channel flex gap-5 flex-nowrap items-center">
-          <div className="channel-img ">
-            <img
-              src={`${
-                videoUser?.profilePicture || "/images/defaultProfile.jpg"
-              }`}
-              alt="channel"
-              className="w-14 h-14 rounded-full border-[3px] border-pink-700 border-solid"
-            />
-          </div>
-          <div className="flex flex-col justify-around">
-            <div className="channel-name font-medium text-[16px]">
+    <div className="relative flex flex-col gap-4 py-4">
+      <h1 className="text-xl font-bold leading-snug sm:text-2xl">
+        {video.title}
+      </h1>
+
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <img
+            src={videoUser?.profilePicture || "/images/defaultProfile.jpg"}
+            alt=""
+            className="h-11 w-11 rounded-full bg-surface-sunken object-cover"
+          />
+          <div className="min-w-0 leading-tight">
+            <div className="truncate font-semibold">
               {videoUser?.username || "No name"}
             </div>
-            <div className="channel-subscribers text-[16px]">
-              {countFormatter(videoUser?.subscribers?.length || 0)} subs
+            <div className="text-xs text-muted">
+              {countFormatter(videoUser?.subscribers?.length || 0)} subscribers
             </div>
           </div>
-        </div>
-        <div className="subscribe-btn">
           {subscribed ? (
             <button
               type="button"
-              className=" focus:outline-none border-solid border-2 border-[#C2C2C2] text-gray-800 bg-[#C2C2C255] hover:bg-gray-800 focus:ring-[1px] focus:ring-gray-300 rounded-lg px-3 py-1 dark:bg-gray-[#C2C2C255] dark:hover:bg-[#C2C2C2] dark:focus:ring-[#ADADAD] text-[20px]"
+              className="ml-2 rounded-full border border-line bg-surface-sunken px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-line"
               onClick={() => {
                 if (window.confirm("Are you sure you want to unsubsribe 🛑"))
                   handleSubscription();
@@ -194,7 +208,7 @@ const VideoInfos = ({ video }) => {
           ) : (
             <button
               type="button"
-              className=" focus:outline-none text-white bg-pink-700 hover:bg-pink-800 focus:ring-[1px] focus:ring-pink-300 rounded-lg px-3 py-1 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-900 text-[20px]"
+              className="ml-2 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
               onClick={handleSubscription}
             >
               {subscribeLoading ? (
@@ -205,119 +219,148 @@ const VideoInfos = ({ video }) => {
             </button>
           )}
         </div>
-        <div className="like-dislike flex gap-2 flex-nowrap	items-center">
-          <button
-            title="Like"
-            className="like flex flex-nowrap  gap-2 items-center"
-            onClick={handelLike}
-          >
-            <AiOutlineLike
-              size={40}
-              fill={loggedInUserReact.liked ? "blue" : "black"}
-              className="hover:scale-95"
-            />
-            <span className="text-[18px]">{countFormatter(video.likes)}</span>
-          </button>
 
-          <button
-            title="Dislike"
-            className="dislike flex flex-nowrap items-center gap-2 "
-            onClick={handleDislike}
-          >
-            <AiOutlineDislike
-              size={40}
-              fill={loggedInUserReact.disliked ? "red" : "black"}
-              className="hover:scale-95"
-            />
-            <span className="text-[18px]">
-              {countFormatter(video.dislikes)}
-            </span>
-          </button>
-        </div>
-        <button
-          title="Share"
-          className=""
-          onClick={() => {
-            setShowPopUp(true);
-          }}
-        >
-          <Share className="w-9 h-9" />
-        </button>
-
-        <a
-          type="button"
-          title="Download"
-          className="download-btn"
-          href={video.videoUrl}
-          download={video.title}
-        >
-          <Download className="w-9 h-9" />
-        </a>
-      </div>
-      <div className="p-3 border-solid border-black border-[1px] rounded flex flex-col gap-2">
-        <div className="text-md text-gray-600 font-medium">
-          {video.viewsCount && video?.viewsCount?.toLocaleString("en-US")} views
-          {video.createdAt}
-        </div>
-        <div className="text-black-900">
-          {video.description || "No description"}
-        </div>
-        <div className="tags flex gap-4 flex-wrap">
-          {video.tags?.map((tag, index) => (
-            <span
-              key={index}
-              className="bg-gray-800 text-pink-500 font-medium px-2 rounded"
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex overflow-hidden rounded-full bg-surface-sunken">
+            <button
+              title="Like"
+              aria-pressed={loggedInUserReact.liked}
+              className={
+                "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors hover:bg-line " +
+                (loggedInUserReact.liked ? "text-brand" : "text-ink")
+              }
+              onClick={handelLike}
             >
-              {tag}
-            </span>
-          ))}
+              {loggedInUserReact.liked ? (
+                <AiFillLike size={20} />
+              ) : (
+                <AiOutlineLike size={20} />
+              )}
+              {countFormatter(video.likes)}
+            </button>
+            <span className="my-2 w-px bg-line" aria-hidden="true" />
+            <button
+              title="Dislike"
+              aria-pressed={loggedInUserReact.disliked}
+              className={
+                "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition-colors hover:bg-line " +
+                (loggedInUserReact.disliked ? "text-brand" : "text-ink")
+              }
+              onClick={handleDislike}
+            >
+              {loggedInUserReact.disliked ? (
+                <AiFillDislike size={20} />
+              ) : (
+                <AiOutlineDislike size={20} />
+              )}
+              {countFormatter(video.dislikes)}
+            </button>
+          </div>
+
+          <button
+            title="Share"
+            className={pill}
+            onClick={() => setShowPopUp(true)}
+          >
+            <MdShare size={20} />
+            <span className="hidden sm:inline">Share</span>
+          </button>
+
+          <a
+            title="Download"
+            className={pill}
+            href={video.videoUrl}
+            download={video.title}
+          >
+            <MdFileDownload size={20} />
+            <span className="hidden sm:inline">Download</span>
+          </a>
         </div>
       </div>
+
+      <div className="rounded-xl bg-surface-sunken p-4 text-sm">
+        <div className="font-semibold">
+          {video.viewsCount != null &&
+            `${video.viewsCount.toLocaleString("en-US")} views`}
+          {video.createdAt && (
+            <span className="ml-2 font-normal text-muted">
+              {video.createdAt}
+            </span>
+          )}
+        </div>
+        <p className="mt-2 whitespace-pre-line">
+          {video.description || "No description"}
+        </p>
+        {video.tags?.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {video.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="rounded-full bg-brand-soft px-3 py-0.5 text-xs font-medium text-brand"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
       {alert.show && (
-        <span className="absolute top-[2%] left-1/4 right-0 z-40">
+        <span className="fixed bottom-6 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2">
           <Alert msg={alert.msg} show={setALert} />
         </span>
       )}
 
       {showPopUp && (
-        <div className={"popup border border-2 border-black"}>
-          <h2>Share video</h2>
-          <span className={"close"} onClick={() => setShowPopUp(false)}>
-            &times;
-          </span>
-          <a
-            href={`https://twitter.com/share?url=${window.location}`}
-            target="_blank"
-            class="share-btn twitter"
-            rel="noreferrer"
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setShowPopUp(false)}
+          role="presentation"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Share video"
+            className="panel w-full max-w-sm p-5"
+            onClick={(e) => e.stopPropagation()}
           >
-            Twitter
-          </a>
-          <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${window.location}`}
-            target="_blank"
-            class="share-btn facebook"
-            rel="noreferrer"
-          >
-            Facebook
-          </a>
-          <button
-            className="share-btn copy"
-            title="copy link"
-            onClick={() => {
-              let url = document.location.href;
-              navigator.clipboard.writeText(url).then(
-                function () {
-                  window.alert("Copied!");
-                },
-                function () {
-                  window.alert("Copy error");
-                }
-              );
-            }}
-          >
-            Copy link
-          </button>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Share video</h2>
+              <button
+                type="button"
+                className="rounded-full p-1 text-muted hover:bg-surface-sunken hover:text-ink"
+                aria-label="Close"
+                onClick={() => setShowPopUp(false)}
+              >
+                <MdClose size={22} />
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href={`https://twitter.com/share?url=${window.location}`}
+                target="_blank"
+                className="btn bg-[#1f7ec7] text-white hover:opacity-90"
+                rel="noreferrer"
+              >
+                Twitter
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${window.location}`}
+                target="_blank"
+                className="btn bg-[#173981] text-white hover:opacity-90"
+                rel="noreferrer"
+              >
+                Facebook
+              </a>
+              <button
+                className="btn-secondary"
+                title="copy link"
+                onClick={copyLink}
+              >
+                {copied ? "Copied!" : "Copy link"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

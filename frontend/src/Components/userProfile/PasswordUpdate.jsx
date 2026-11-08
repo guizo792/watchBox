@@ -75,8 +75,8 @@ const PasswordUpdate = () => {
       <div className="col-span-1"></div>
       {/*  */}
       <div className="col-span-3">
-        <div className="mt-4 bg-gray-800 py-4 px-6 rounded">
-          <h1 className="font-bold text-xl tracking wider mb-4">
+        <div className="panel mt-4 px-6 py-5">
+          <h1 className="text-lg font-bold tracking-tight mb-4">
             Change Password
           </h1>
 
@@ -86,31 +86,31 @@ const PasswordUpdate = () => {
             <div className="sm:grid sm:grid-cols-2 sm:gap-4">
               <div>
                 <div className="flex flex-col mb-4">
-                  <label className="font-semibold tracking-tight">
+                  <label className="field-label">
                     Current Password
                   </label>
                   <input
                     type="password"
                     name="currentPassword"
-                    className="bg-gray-600 outline-none border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4"
+                    className="field"
                     placeholder="current password"
                     value={passwords.currentPassword}
                     onChange={(e) => handelChange(e)}
                   />
                 </div>
                 <div className="flex flex-col mb-4">
-                  <label className={"font-semibold tracking-tight"}>
+                  <label className={"field-label"}>
                     Confirm Password
                   </label>
                   <input
                     type="password"
                     name="confirmPassword"
                     className={
-                      "bg-gray-600 outline-none border-2 border-gray-600  rounded-md h-10 px-4" +
+                      "field" +
                       (passwords.confirmPassword !== "" &&
                       passwords.newPassword === passwords.confirmPassword
-                        ? " focus:border-green-600"
-                        : " focus:border-red-600")
+                        ? " focus:!border-green-600"
+                        : " focus:!border-red-600")
                     }
                     placeholder="Confirm provided Password"
                     value={passwords.confirmPassword}
@@ -120,13 +120,13 @@ const PasswordUpdate = () => {
               </div>
               <div>
                 <div className="flex flex-col mb-4">
-                  <label className="font-semibold tracking-tight">
+                  <label className="field-label">
                     New Password
                   </label>
                   <input
                     type="password"
                     name="newPassword"
-                    className="bg-gray-600 border-2 border-gray-600 focus:border-blue-600 rounded-md h-10 px-4 outline-none"
+                    className="field"
                     placeholder="New Password"
                     value={passwords.newPassword}
                     onChange={(e) => handelChange(e)}
