@@ -1,5 +1,25 @@
-# Video Sharing App
-This is a video sharing and livestreaming platform that allows users to upload, share, and watch videos as well as stream live content. The platform provides a seamless and engaging user experience, catering to both content creators and viewers.
+# WatchBox
+
+A video sharing and livestreaming platform: upload, share and watch videos, stream live, and interact through likes, comments and subscriptions. Built with **React** on the front end and **Spring Boot + MongoDB** on the back end.
+
+## Screenshots
+
+> Captured from the current UI using sample data. WatchBox follows your system theme and has a light/dark toggle in the navbar.
+
+| Light | Dark |
+| --- | --- |
+| ![Home, light](docs/screenshots/home-light.jpg) | ![Home, dark](docs/screenshots/home-dark.jpg) |
+| ![Watch page, light](docs/screenshots/watch-light.jpg) | ![Watch page, dark](docs/screenshots/watch-dark.jpg) |
+
+| Sign in | Sign up (dark) | Upload |
+| --- | --- | --- |
+| ![Login](docs/screenshots/login-light.jpg) | ![Register](docs/screenshots/register-dark.jpg) | ![Upload](docs/screenshots/upload-light.jpg) |
+
+**On mobile**
+
+| Home (dark) | Watch page (light) |
+| --- | --- |
+| <img src="docs/screenshots/mobile-home-dark.jpg" width="300" alt="Mobile home, dark" /> | <img src="docs/screenshots/mobile-watch-light.jpg" width="300" alt="Mobile watch page, light" /> |
 
 ## Features
 - **User Authentication**: Users can create an account, log in, and manage their profile information.
@@ -13,26 +33,59 @@ This is a video sharing and livestreaming platform that allows users to upload, 
 - **Search Functionality**: Users can search for videos, channels, and specific content.
 - **User Privacy Settings**: Users can control the privacy of their videos and manage their account settings.
 - **User Analytics**: Content creators can access analytics to track video performance, views, and engagement.
+
+## UI highlights
+- **Light and dark themes** with a navbar toggle. It follows the system setting by default, remembers your choice and applies it before first paint (no flash).
+- **Responsive layout**: a sidebar on desktop that becomes a scrollable pill bar on phones, and a search row that opens from the navbar.
+- **Discovery**: tag filter chips on the home page, search suggestions, and an "Up next" list on the watch page.
+- **Polished details**: skeleton loading states, initials avatars when a user has no photo, thumbnails that fade in, a LIVE badge on streams, drag-and-drop video upload, and styled confirm/share dialogs.
+- **Accessibility**: visible keyboard focus, labelled controls, a skip-to-content link, dialogs that close on Escape, and reduced-motion support.
+- **Shortcut**: press `/` anywhere to jump to search.
+
 ## Installation
-To run CureChat App locally on your machine, please follow these instructions:
 
-Clone the repository from GitHub:
+### Prerequisites
+- Node.js and npm
+- JDK and Maven (the backend ships with the Maven wrapper)
+- A running **MongoDB** instance (the backend connects to `localhost:27017`, database `video-sharing-app`)
+- A **Firebase** project with Storage enabled (used for video, thumbnail and profile-picture uploads)
 
-    git clone https://github.com/guizo792/video-sharing-app
-Install the required dependencies:
-#### Frontend (reactJS):
-    cd video-sharing-app/frontend
-    npm install
-#### Backend (spring boot)
-    cd video-sharing-app/backend
+### 1. Clone
+
+    git clone https://github.com/guizo792/watchBox
+    cd watchBox
+
+### 2. Backend (Spring Boot, port 8080)
+
+The backend reads its JWT signing key from `backend/src/main/resources/.properties`. Use your **own** Base64 secret of at least 32 bytes (and keep it out of version control):
+
+    jwt.secret=<your-base64-secret>
+
+You can generate one with `openssl rand -base64 32`. Then:
+
+    cd backend
     mvn clean install
-Start the application:
-#### Frontend :
-    npm start
-#### Backend (spring boot)
     mvn spring-boot:run
 
-Note: Please ensure you have Node.js, npm, and maven installed on your machine before proceeding with the installation.
+### 3. Frontend (React, port 3000)
+
+Create `frontend/.env` with your Firebase settings:
+
+    REACT_APP_API_KEY=
+    REACT_APP_AUTH_DOMAIN=
+    REACT_APP_PROJECT_ID=
+    REACT_APP_STORAGE_BUCKET=
+    REACT_APP_MESSAGINE_SENDER_ID=
+    REACT_APP_APP_ID=
+    REACT_APP_LIVE_STREAMING_KEY=
+
+(`MESSAGINE` is spelled that way in the code.) Then:
+
+    cd frontend
+    npm install
+    npm start
+
+Open http://localhost:3000. The frontend expects the API at `http://localhost:8080`.
 
 ## Technologies used
 [![forthebadge](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDMuMTEiIGhlaWdodD0iMzUiIHZpZXdCb3g9IjAgMCAxMDMuMTEgMzUiPjxyZWN0IGNsYXNzPSJzdmdfX3JlY3QiIHg9IjAiIHk9IjAiIHdpZHRoPSIwIiBoZWlnaHQ9IjM1IiBmaWxsPSIjNTE0NTYzIi8+PHJlY3QgY2xhc3M9InN2Z19fcmVjdCIgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMy4xMSIgaGVpZ2h0PSIzNSIgZmlsbD0iIzM4OUFENSIvPjxwYXRoIGNsYXNzPSJzdmdfX3RleHQiIGQ9IiIgZmlsbD0iI0ZGRkZGRiIvPjxwYXRoIGNsYXNzPSJzdmdfX3RleHQiIGQ9Ik0xNi41NyAyMkwxNC4xOSAyMkwxNC4xOSAxMy42MEwxOC4wMyAxMy42MFExOS4xNyAxMy42MCAyMC4wMSAxMy45OFEyMC44NSAxNC4zNSAyMS4zMSAxNS4wNlEyMS43NiAxNS43NiAyMS43NiAxNi43MUwyMS43NiAxNi43MVEyMS43NiAxNy42MiAyMS4zNCAxOC4zMFEyMC45MSAxOC45OCAyMC4xMiAxOS4zNkwyMC4xMiAxOS4zNkwyMS45MyAyMkwxOS4zOSAyMkwxNy44NiAxOS43N0wxNi41NyAxOS43N0wxNi41NyAyMlpNMTYuNTcgMTUuNDdMMTYuNTcgMTcuOTNMMTcuODkgMTcuOTNRMTguNjIgMTcuOTMgMTguOTkgMTcuNjFRMTkuMzYgMTcuMjkgMTkuMzYgMTYuNzFMMTkuMzYgMTYuNzFRMTkuMzYgMTYuMTIgMTguOTkgMTUuNzlRMTguNjIgMTUuNDcgMTcuODkgMTUuNDdMMTcuODkgMTUuNDdMMTYuNTcgMTUuNDdaTTMzLjMwIDIyTDI2LjU1IDIyTDI2LjU1IDEzLjYwTDMzLjE0IDEzLjYwTDMzLjE0IDE1LjQ0TDI4LjkxIDE1LjQ0TDI4LjkxIDE2Ljg1TDMyLjY0IDE2Ljg1TDMyLjY0IDE4LjYzTDI4LjkxIDE4LjYzTDI4LjkxIDIwLjE3TDMzLjMwIDIwLjE3TDMzLjMwIDIyWk0zOS41MiAyMkwzNy4wOSAyMkw0MC44MCAxMy42MEw0My4xNCAxMy42MEw0Ni44NiAyMkw0NC4zOSAyMkw0My43MyAyMC4zN0w0MC4xOCAyMC4zN0wzOS41MiAyMlpNNDEuOTYgMTUuOTNMNDAuODcgMTguNjFMNDMuMDMgMTguNjFMNDEuOTYgMTUuOTNaTTUwLjU5IDE3LjgwTDUwLjU5IDE3LjgwUTUwLjU5IDE2LjU0IDUxLjE4IDE1LjU0UTUxLjc4IDE0LjU1IDUyLjgzIDEzLjk5UTUzLjg5IDEzLjQzIDU1LjIwIDEzLjQzTDU1LjIwIDEzLjQzUTU2LjM2IDEzLjQzIDU3LjI4IDEzLjg0UTU4LjIwIDE0LjI1IDU4LjgyIDE1LjAyTDU4LjgyIDE1LjAyTDU3LjMxIDE2LjM5UTU2LjQ5IDE1LjQwIDU1LjMzIDE1LjQwTDU1LjMzIDE1LjQwUTU0LjY0IDE1LjQwIDU0LjExIDE1LjcwUTUzLjU3IDE2IDUzLjI4IDE2LjU0UTUyLjk4IDE3LjA5IDUyLjk4IDE3LjgwTDUyLjk4IDE3LjgwUTUyLjk4IDE4LjUxIDUzLjI4IDE5LjA1UTUzLjU3IDE5LjYwIDU0LjExIDE5LjkwUTU0LjY0IDIwLjIwIDU1LjMzIDIwLjIwTDU1LjMzIDIwLjIwUTU2LjQ5IDIwLjIwIDU3LjMxIDE5LjIyTDU3LjMxIDE5LjIyTDU4LjgyIDIwLjU4UTU4LjIxIDIxLjM1IDU3LjI4IDIxLjc2UTU2LjM2IDIyLjE3IDU1LjIwIDIyLjE3TDU1LjIwIDIyLjE3UTUzLjg5IDIyLjE3IDUyLjgzIDIxLjYxUTUxLjc4IDIxLjA1IDUxLjE4IDIwLjA1UTUwLjU5IDE5LjA2IDUwLjU5IDE3LjgwWk02NS4xNSAxNS40OEw2Mi41NiAxNS40OEw2Mi41NiAxMy42MEw3MC4wOSAxMy42MEw3MC4wOSAxNS40OEw2Ny41MiAxNS40OEw2Ny41MiAyMkw2NS4xNSAyMkw2NS4xNSAxNS40OFpNNzMuMzggMjAuOTNMNzMuMzggMjAuOTNMNzQuNjcgMTkuNDBRNzUuMzQgMjAuMjcgNzYuMTIgMjAuMjdMNzYuMTIgMjAuMjdRNzYuMTIgMjAuMjcgNzYuMTMgMjAuMjdMNzYuMTMgMjAuMjdRNzYuNjQgMjAuMjcgNzYuOTEgMTkuOTZRNzcuMTggMTkuNjUgNzcuMTggMTkuMDVMNzcuMTggMTkuMDVMNzcuMTggMTUuNDRMNzQuMjggMTUuNDRMNzQuMjggMTMuNjBMNzkuNTQgMTMuNjBMNzkuNTQgMTguOTFRNzkuNTQgMjAuNTQgNzguNzEgMjEuMzZRNzcuODkgMjIuMTcgNzYuMzAgMjIuMTdMNzYuMzAgMjIuMTdRNzUuMzcgMjIuMTcgNzQuNjIgMjEuODVRNzMuODYgMjEuNTMgNzMuMzggMjAuOTNaTTg0LjA0IDIxLjI0TDg0LjA0IDIxLjI0TDg0LjgyIDE5LjQ5UTg1LjM4IDE5Ljg2IDg2LjEyIDIwLjA5UTg2Ljg3IDIwLjMyIDg3LjU5IDIwLjMyTDg3LjU5IDIwLjMyUTg4Ljk1IDIwLjMyIDg4Ljk2IDE5LjY0TDg4Ljk2IDE5LjY0UTg4Ljk2IDE5LjI4IDg4LjU3IDE5LjExUTg4LjE4IDE4LjkzIDg3LjMxIDE4Ljc0TDg3LjMxIDE4Ljc0UTg2LjM2IDE4LjUzIDg1LjczIDE4LjMwUTg1LjA5IDE4LjA2IDg0LjY0IDE3LjU1UTg0LjE4IDE3LjAzIDg0LjE4IDE2LjE2TDg0LjE4IDE2LjE2UTg0LjE4IDE1LjM5IDg0LjYwIDE0Ljc3UTg1LjAyIDE0LjE1IDg1Ljg2IDEzLjc5UTg2LjY5IDEzLjQzIDg3LjkwIDEzLjQzTDg3LjkwIDEzLjQzUTg4LjcyIDEzLjQzIDg5LjUzIDEzLjYyUTkwLjM0IDEzLjgwIDkwLjk1IDE0LjE3TDkwLjk1IDE0LjE3TDkwLjIyIDE1LjkzUTg5LjAyIDE1LjI4IDg3Ljg5IDE1LjI4TDg3Ljg5IDE1LjI4UTg3LjE4IDE1LjI4IDg2Ljg2IDE1LjQ5UTg2LjUzIDE1LjcwIDg2LjUzIDE2LjA0TDg2LjUzIDE2LjA0UTg2LjUzIDE2LjM3IDg2LjkyIDE2LjU0UTg3LjMwIDE2LjcxIDg4LjE1IDE2Ljg5TDg4LjE1IDE2Ljg5UTg5LjExIDE3LjEwIDg5Ljc0IDE3LjMzUTkwLjM3IDE3LjU2IDkwLjgzIDE4LjA3UTkxLjMwIDE4LjU4IDkxLjMwIDE5LjQ2TDkxLjMwIDE5LjQ2UTkxLjMwIDIwLjIxIDkwLjg4IDIwLjgzUTkwLjQ2IDIxLjQ0IDg5LjYyIDIxLjgwUTg4Ljc4IDIyLjE3IDg3LjU4IDIyLjE3TDg3LjU4IDIyLjE3UTg2LjU2IDIyLjE3IDg1LjYwIDIxLjkyUTg0LjY0IDIxLjY3IDg0LjA0IDIxLjI0WiIgZmlsbD0iI0ZGRkZGRiIgeD0iMzkiLz48L3N2Zz4=)](https://forthebadge.com)  
@@ -47,8 +100,25 @@ Note: Please ensure you have Node.js, npm, and maven installed on your machine b
 
 [![forthebadge](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjIuMzEiIGhlaWdodD0iMzUiIHZpZXdCb3g9IjAgMCAxMjIuMzEgMzUiPjxyZWN0IGNsYXNzPSJzdmdfX3JlY3QiIHg9IjAiIHk9IjAiIHdpZHRoPSIwIiBoZWlnaHQ9IjM1IiBmaWxsPSIjNTE0NTYzIi8+PHJlY3QgY2xhc3M9InN2Z19fcmVjdCIgeD0iMCIgeT0iMCIgd2lkdGg9IjEyMi4zMSIgaGVpZ2h0PSIzNSIgZmlsbD0iI0FGQTJBNSIvPjxwYXRoIGNsYXNzPSJzdmdfX3RleHQiIGQ9IiIgZmlsbD0iI0ZGRkZGRiIvPjxwYXRoIGNsYXNzPSJzdmdfX3RleHQiIGQ9Ik0xMy42MCAyMS4yNEwxMy42MCAyMS4yNEwxNC4zOCAxOS40OVExNC45NCAxOS44NiAxNS42OSAyMC4wOVExNi40MyAyMC4zMiAxNy4xNSAyMC4zMkwxNy4xNSAyMC4zMlExOC41MiAyMC4zMiAxOC41MiAxOS42NEwxOC41MiAxOS42NFExOC41MiAxOS4yOCAxOC4xMyAxOS4xMVExNy43NCAxOC45MyAxNi44OCAxOC43NEwxNi44OCAxOC43NFExNS45MyAxOC41MyAxNS4yOSAxOC4zMFExNC42NiAxOC4wNiAxNC4yMCAxNy41NVExMy43NSAxNy4wMyAxMy43NSAxNi4xNkwxMy43NSAxNi4xNlExMy43NSAxNS4zOSAxNC4xNyAxNC43N1ExNC41OSAxNC4xNSAxNS40MiAxMy43OVExNi4yNiAxMy40MyAxNy40NiAxMy40M0wxNy40NiAxMy40M1ExOC4yOSAxMy40MyAxOS4xMCAxMy42MlExOS45MCAxMy44MCAyMC41MiAxNC4xN0wyMC41MiAxNC4xN0wxOS43OCAxNS45M1ExOC41OCAxNS4yOCAxNy40NSAxNS4yOEwxNy40NSAxNS4yOFExNi43NCAxNS4yOCAxNi40MiAxNS40OVExNi4xMCAxNS43MCAxNi4xMCAxNi4wNEwxNi4xMCAxNi4wNFExNi4xMCAxNi4zNyAxNi40OCAxNi41NFExNi44NyAxNi43MSAxNy43MiAxNi44OUwxNy43MiAxNi44OVExOC42OCAxNy4xMCAxOS4zMSAxNy4zM1ExOS45NCAxNy41NiAyMC40MCAxOC4wN1EyMC44NiAxOC41OCAyMC44NiAxOS40NkwyMC44NiAxOS40NlEyMC44NiAyMC4yMSAyMC40NCAyMC44M1EyMC4wMiAyMS40NCAxOS4xOCAyMS44MFExOC4zNCAyMi4xNyAxNy4xNCAyMi4xN0wxNy4xNCAyMi4xN1ExNi4xMiAyMi4xNyAxNS4xNiAyMS45MlExNC4yMCAyMS42NyAxMy42MCAyMS4yNFpNMjUuMDEgMTcuODBMMjUuMDEgMTcuODBRMjUuMDEgMTYuNTUgMjUuNjEgMTUuNTVRMjYuMjIgMTQuNTYgMjcuMjggMTQuMDBRMjguMzQgMTMuNDMgMjkuNjcgMTMuNDNMMjkuNjcgMTMuNDNRMzEuMDAgMTMuNDMgMzIuMDcgMTQuMDBRMzMuMTMgMTQuNTYgMzMuNzQgMTUuNTVRMzQuMzQgMTYuNTUgMzQuMzQgMTcuODBMMzQuMzQgMTcuODBRMzQuMzQgMTkuMDUgMzMuNzQgMjAuMDRRMzMuMTMgMjEuMDQgMzIuMDcgMjEuNjBRMzEuMDEgMjIuMTcgMjkuNjcgMjIuMTdMMjkuNjcgMjIuMTdRMjguMzQgMjIuMTcgMjcuMjggMjEuNjBRMjYuMjIgMjEuMDQgMjUuNjEgMjAuMDRRMjUuMDEgMTkuMDUgMjUuMDEgMTcuODBaTTI3LjQxIDE3LjgwTDI3LjQxIDE3LjgwUTI3LjQxIDE4LjUxIDI3LjcxIDE5LjA1UTI4LjAxIDE5LjYwIDI4LjUzIDE5LjkwUTI5LjA0IDIwLjIwIDI5LjY3IDIwLjIwTDI5LjY3IDIwLjIwUTMwLjMxIDIwLjIwIDMwLjgzIDE5LjkwUTMxLjM0IDE5LjYwIDMxLjY0IDE5LjA1UTMxLjk0IDE4LjUxIDMxLjk0IDE3LjgwTDMxLjk0IDE3LjgwUTMxLjk0IDE3LjA5IDMxLjY0IDE2LjU0UTMxLjM0IDE2IDMwLjgzIDE1LjcwUTMwLjMxIDE1LjQwIDI5LjY3IDE1LjQwTDI5LjY3IDE1LjQwUTI5LjA0IDE1LjQwIDI4LjUyIDE1LjcwUTI4LjAxIDE2IDI3LjcxIDE2LjU0UTI3LjQxIDE3LjA5IDI3LjQxIDE3LjgwWk0zOC42NCAxNy44MEwzOC42NCAxNy44MFEzOC42NCAxNi41NCAzOS4yNCAxNS41NFEzOS44NCAxNC41NSA0MC44OSAxMy45OVE0MS45NCAxMy40MyA0My4yNiAxMy40M0w0My4yNiAxMy40M1E0NC40MiAxMy40MyA0NS4zNCAxMy44NFE0Ni4yNiAxNC4yNSA0Ni44OCAxNS4wMkw0Ni44OCAxNS4wMkw0NS4zNyAxNi4zOVE0NC41NSAxNS40MCA0My4zOSAxNS40MEw0My4zOSAxNS40MFE0Mi43MCAxNS40MCA0Mi4xNyAxNS43MFE0MS42MyAxNiA0MS4zNCAxNi41NFE0MS4wNCAxNy4wOSA0MS4wNCAxNy44MEw0MS4wNCAxNy44MFE0MS4wNCAxOC41MSA0MS4zNCAxOS4wNVE0MS42MyAxOS42MCA0Mi4xNyAxOS45MFE0Mi43MCAyMC4yMCA0My4zOSAyMC4yMEw0My4zOSAyMC4yMFE0NC41NSAyMC4yMCA0NS4zNyAxOS4yMkw0NS4zNyAxOS4yMkw0Ni44OCAyMC41OFE0Ni4yNyAyMS4zNSA0NS4zNCAyMS43NlE0NC40MiAyMi4xNyA0My4yNiAyMi4xN0w0My4yNiAyMi4xN1E0MS45NCAyMi4xNyA0MC44OSAyMS42MVEzOS44NCAyMS4wNSAzOS4yNCAyMC4wNVEzOC42NCAxOS4wNiAzOC42NCAxNy44MFpNNTMuNzcgMjJMNTEuNDEgMjJMNTEuNDEgMTMuNjBMNTMuNzcgMTMuNjBMNTMuNzcgMTcuMDlMNTcuMDIgMTMuNjBMNTkuNjMgMTMuNjBMNTYuMjEgMTcuMzJMNTkuODEgMjJMNTcuMDYgMjJMNTQuNjUgMTguOTVMNTMuNzcgMTkuOTBMNTMuNzcgMjJaTTcwLjY3IDIyTDYzLjkyIDIyTDYzLjkyIDEzLjYwTDcwLjUxIDEzLjYwTDcwLjUxIDE1LjQ0TDY2LjI4IDE1LjQ0TDY2LjI4IDE2Ljg1TDcwLjAxIDE2Ljg1TDcwLjAxIDE4LjYzTDY2LjI4IDE4LjYzTDY2LjI4IDIwLjE3TDcwLjY3IDIwLjE3TDcwLjY3IDIyWk03Ny4yNiAxNS40OEw3NC42OCAxNS40OEw3NC42OCAxMy42MEw4Mi4yMCAxMy42MEw4Mi4yMCAxNS40OEw3OS42NCAxNS40OEw3OS42NCAyMkw3Ny4yNiAyMkw3Ny4yNiAxNS40OFpNODYuMDYgMjAuNzVMODYuMDYgMjAuNzVRODYuMDYgMjAuMTUgODYuNDUgMTkuNzhRODYuODQgMTkuNDEgODcuNDMgMTkuNDFMODcuNDMgMTkuNDFRODguMDMgMTkuNDEgODguNDEgMTkuNzhRODguODAgMjAuMTUgODguODAgMjAuNzVMODguODAgMjAuNzVRODguODAgMjEuMzQgODguNDEgMjEuNzJRODguMDIgMjIuMTEgODcuNDMgMjIuMTFMODcuNDMgMjIuMTFRODYuODUgMjIuMTEgODYuNDUgMjEuNzJRODYuMDYgMjEuMzQgODYuMDYgMjAuNzVaTTk1LjgzIDIyTDkzLjQ1IDIyTDkzLjQ1IDEzLjYwTDk1LjgzIDEzLjYwTDk1LjgzIDIyWk0xMDAuNTggMTcuODBMMTAwLjU4IDE3LjgwUTEwMC41OCAxNi41NSAxMDEuMTggMTUuNTVRMTAxLjc5IDE0LjU2IDEwMi44NSAxNC4wMFExMDMuOTEgMTMuNDMgMTA1LjI0IDEzLjQzTDEwNS4yNCAxMy40M1ExMDYuNTcgMTMuNDMgMTA3LjY0IDE0LjAwUTEwOC43MCAxNC41NiAxMDkuMzEgMTUuNTVRMTA5LjkxIDE2LjU1IDEwOS45MSAxNy44MEwxMDkuOTEgMTcuODBRMTA5LjkxIDE5LjA1IDEwOS4zMSAyMC4wNFExMDguNzAgMjEuMDQgMTA3LjY0IDIxLjYwUTEwNi41OCAyMi4xNyAxMDUuMjQgMjIuMTdMMTA1LjI0IDIyLjE3UTEwMy45MSAyMi4xNyAxMDIuODUgMjEuNjBRMTAxLjc5IDIxLjA0IDEwMS4xOCAyMC4wNFExMDAuNTggMTkuMDUgMTAwLjU4IDE3LjgwWk0xMDIuOTcgMTcuODBMMTAyLjk3IDE3LjgwUTEwMi45NyAxOC41MSAxMDMuMjggMTkuMDVRMTAzLjU4IDE5LjYwIDEwNC4wOSAxOS45MFExMDQuNjEgMjAuMjAgMTA1LjI0IDIwLjIwTDEwNS4yNCAyMC4yMFExMDUuODggMjAuMjAgMTA2LjQwIDE5LjkwUTEwNi45MSAxOS42MCAxMDcuMjEgMTkuMDVRMTA3LjUxIDE4LjUxIDEwNy41MSAxNy44MEwxMDcuNTEgMTcuODBRMTA3LjUxIDE3LjA5IDEwNy4yMSAxNi41NFExMDYuOTEgMTYgMTA2LjQwIDE1LjcwUTEwNS44OCAxNS40MCAxMDUuMjQgMTUuNDBMMTA1LjI0IDE1LjQwUTEwNC42MCAxNS40MCAxMDQuMDkgMTUuNzBRMTAzLjU4IDE2IDEwMy4yOCAxNi41NFExMDIuOTcgMTcuMDkgMTAyLjk3IDE3LjgwWiIgZmlsbD0iI0ZGRkZGRiIgeD0iMzkiLz48L3N2Zz4=)](https://forthebadge.com)
 
+## Project structure
 
-## Demo
+    backend/    Spring Boot API (controllers, services, Mongo repositories, JWT security, WebSocket notifications)
+    frontend/   React app
+      src/Components/   UI building blocks (navbar, video card, comments, auth, upload, profile ...)
+      src/pages/        Route-level pages (home, watch, search, liked videos, subscriptions ...)
+      src/store/        Redux state
+      src/services/     API clients
+    docs/screenshots/   Images used in this README
+
+### Design system
+The theme lives in CSS variables in `frontend/src/index.css` (light and dark values) and is exposed to Tailwind in `frontend/tailwind.config.js` as `brand`, `ink`, `muted`, `line` and `surface` colors, so utilities like `bg-surface` and `text-ink` follow the active theme automatically. Shared primitives (`.panel`, `.field`, `.btn-primary`, `.btn-secondary`, `.video-grid`, `.skeleton`) are defined there too.
+
+## Other screens (earlier UI)
+
+<details>
+<summary>Screens not yet re-captured with the new design</summary>
+
+These screenshots show the interface before the redesign. The functionality is the same; the look has changed.
 
 Home page (anonymous user)
 
@@ -105,3 +175,5 @@ Liked videos
 Subscription infos
 
 ![](https://i.imgur.com/ITBLD8a.jpg)
+
+</details>
