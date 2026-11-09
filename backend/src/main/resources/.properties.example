@@ -1,0 +1,5 @@
+# Copy this file to ".properties" (same folder) and set your own secret.
+# Required: a Base64 string of at least 32 bytes, e.g. generated with:
+#   openssl rand -base64 48
+# Alternatively set the JWT_SECRET environment variable instead of using this file.
+jwt.secret=REPLACE_WITH_YOUR_OWN_BASE64_SECRET

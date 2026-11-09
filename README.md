@@ -57,11 +57,12 @@ A video sharing and livestreaming platform: upload, share and watch videos, stre
 
 ### 2. Backend (Spring Boot, port 8080)
 
-The backend reads its JWT signing key from `backend/src/main/resources/.properties`. Use your **own** Base64 secret of at least 32 bytes (and keep it out of version control):
+The backend needs a JWT signing key (`jwt.secret`): a **Base64 string of at least 32 bytes**. Generate your own with `openssl rand -base64 48`, then provide it in one of two ways:
 
-    jwt.secret=<your-base64-secret>
+- set the `JWT_SECRET` environment variable, or
+- copy `backend/src/main/resources/.properties.example` to `backend/src/main/resources/.properties` and put your secret there. That file is git-ignored; never commit it.
 
-You can generate one with `openssl rand -base64 32`. Then:
+Then build and run the backend:
 
     cd backend
     mvn clean install
